@@ -3,11 +3,12 @@ $mode		= $this->uri->segment(3);
 
 if ($mode == "edt" || $mode == "act_edt") {
 	$act		= "act_edt";
-	$admin_user	=$this->session->userdata('admin_user');	
-	$judul		= $datpil->judul;	
-	$penerbit	= $datpil->penerbit;	
-	$isbn		= $datpil->isbn;	
-	$halaman		= $datpil->halaman;	
+	$admin_user	=$this->session->userdata('admin_user');
+	
+	$judul		= $datpil[0]->judul;	
+	$penerbit	= $datpil[0]->penerbit;	
+	$isbn		= $datpil[0]->isbn;	
+	$halaman		= $datpil[0]->halaman;	
 } else {
 	$act		= "act_add";
 	
@@ -55,6 +56,9 @@ else
 	{
 	?>	
 	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $admin_user; ?>" style="width: 700px" class="form-control" readonly></b></td></tr>
+
+	<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
+
 	<?php
 		}
 	?>
@@ -63,6 +67,10 @@ else
 	<tr><td width="20%">No ISBN</td><td><b><input type="text" name="isbn" required value="<?php echo $isbn; ?>" style="width: 700px" class="form-control"></b></td></tr>		
 	<tr><td width="20%">Halaman</td><td><b><input type="text" name="halaman" required value="<?php echo $halaman; ?>" style="width: 700px" class="form-control"></b></td></tr>		
 	<tr><td width="20%">File</td><td><b><input type="file" name="file_surat" tabindex="8" class="form-control" style="width: 400px"></b></td></tr>
+
+	<?php if ($act == 'edt' || $act == 'act_edt') : ?>
+		<tr><td></td><td><small><?= $datpil[0]->file ?></small></td></tr>
+	<?php endif; ?>
 		
 	<tr><td width="20%">
 	<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i> Simpan</button>

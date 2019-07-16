@@ -29,12 +29,13 @@
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
-			<th width="10%">No</th>
-			<th width="20%">Nama</th>
-			<th width="20%">Judul</th>
+			<th width="5%">No</th>
+			<th width="15%">Nama</th>
+			<th width="15%">Judul</th>
 			<th width="20%">Buku</th>
 			<th width="10%">File</th>
-			<th width="20%">Keterangan</th>
+			<th width="20%">Status</th>
+			<th width="20%">Aksi</th>
 		</tr>
 	</thead>
 	
@@ -67,6 +68,11 @@
 				<div class="btn-group">
 					Disetujui
 				</div>
+
+				<td class="ctr">
+						<a href="#" class="btn btn-danger btn-sm" role="button" disabled><i class="icon-remove icon-white"> </i></a>
+						<a href="#" class="btn btn-success btn-sm" role="button" disabled><i class="icon-edit icon-white"> </i></a>
+					</td>
 				<?php
 					}
 					else
@@ -76,6 +82,10 @@
 				<div class="btn-group">
 					Menunggu Verifikasi
 				</div>	
+				<td class="ctr">
+						<a href="<?= base_url('index.php/admin/dosenbuku/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
+						<a href="<?= base_url('index.php/admin/dosenbuku/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a>
+					</td>
 				<?php
 					}
 				?>

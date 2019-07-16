@@ -29,11 +29,12 @@
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
-			<th width="10%">No</th>
-			<th width="20%">Nama Dosen</th>
+			<th width="5%">No</th>
+			<th width="15%">Nama Dosen</th>
 			<th width="20%">Judul</th>
-			<th width="20%">Buku</th>
-			<th width="10%">File</th>
+			<th width="15%">Buku</th>
+			<th width="15%">File</th>
+			<th width="20%">Status</th>
 			<th width="20%">Aksi</th>
 		</tr>
 	</thead>
@@ -65,9 +66,10 @@
 					{
 				?>
 				<div class="btn-group">
-					<a href="<?php echo base_URL(); ?>index.php/admin/buku/batal/<?php echo $b->id; ?>" class="btn btn-warning btn-sm"><i class="icon-edit icon-white"> </i> Batal</a>
+					DiSetujui
+					<!-- <a href="<?php echo base_URL(); ?>index.php/admin/buku/batal/<?php echo $b->id; ?>" class="btn btn-warning btn-sm"><i class="icon-edit icon-white"> </i> Batal</a>
 					<a href="<?php echo base_URL(); ?>index.php/admin/buku/del/<?php echo $b->id; ?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
-					<a href="<?php echo base_URL(); ?>index.php/admin/buku/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a>
+					<a href="<?php echo base_URL(); ?>index.php/admin/buku/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a> -->
 				</div>
 				<?php
 					}
@@ -76,9 +78,10 @@
 				?>
 			
 				<div class="btn-group">
-					<a href="<?php echo base_URL(); ?>index.php/admin/buku/ /<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
+					<!-- <a href="<?php echo base_URL(); ?>index.php/admin/buku/ /<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
 					<a href="<?php echo base_URL()?>index.php/admin/buku/del/<?php echo $b->id; ?>" class="btn btn-warning btn-sm" onclick="return confirm('Anda Yakin..?')">
-					<i class="icon-trash icon-white"> </i> Tidak Disetujui</a>
+					<i class="icon-trash icon-white"> </i> Tidak Disetujui</a> -->
+					Belum DiSetujui
 				</div>	
 				<?php
 					}
@@ -89,6 +92,10 @@
 		//		echo "<td class='ctr'> -- </td>";
 		//	}
 			?>
+			<td>
+				<a href="<?= base_url('index.php/admin/buku/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
+				<a href="<?= base_url('index.php/admin/buku/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
+			</td>
 		</tr>
 		<?php 
 			$no++;

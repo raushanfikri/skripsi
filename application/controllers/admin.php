@@ -347,13 +347,15 @@ class Admin extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
+
+
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$penerbit					= addslashes($this->input->post('penerbit'));
 		$isbn					= addslashes($this->input->post('isbn'));
 		$halaman					= addslashes($this->input->post('halaman'));
-		$keterangan				= "Menunggu Verifikasi";
-		$hasilketerangan		= "Disetujui";
+		$keterangan				= addslashes($this->input->post('keterangan'));
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
 		$config['upload_path'] 		= './upload/buku';
@@ -369,19 +371,47 @@ class Admin extends CI_Controller {
 			$a['page']		= "l_buku";
 		}else if ($mau_ke == "add") {
 			$a['page']		= "f_buku";
-		}else if ($mau_ke == "del") {
+		}
+		else if ($mau_ke == "act_add") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','".$up_data['file_name']."','$keterangan')");
+			} else {
+				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','$keterangan')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/admin/hki');
+		}
+		else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM buku WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
 			redirect('index.php/admin/buku');
-		}else if ($mau_ke == "edt") {
-			$this->db->query("UPDATE buku SET keterangan='$hasilketerangan' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Di Setujui</div>");			
-			redirect('index.php/admin/buku');
-		} else if ($mau_ke == "batal") {
-			$this->db->query("UPDATE buku SET keterangan='Menunggu Verifikasi' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Di Setujui</div>");			
+		}
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_buku WHERE id=$idu")->result();
+			$a['page']		= "f_buku";
+		}
+		else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+
+				$this->db->query("UPDATE buku SET judul='$judul', penerbit='$penerbit', isbn='$isbn',halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+
+
+			}else{
+
+				 $query="UPDATE buku SET judul='$judul',  penerbit='$penerbit', isbn='$isbn',halaman='$halaman',keterangan='$keterangan' WHERE id = '$id'";
+
+			$this->db->query($query);
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Di DiUbah</div>");			
+			
+			} 
 			redirect('index.php/admin/buku');  
-		} else {
+		} 
+		else {
 			$a['data']		= $this->db->query("SELECT * FROM v_buku ORDER BY nidn DESC LIMIT $awal, $akhir ")->result();
 			$a['page']		= "l_buku";
 		}
@@ -1591,6 +1621,7 @@ class Admin extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$penerbit					= addslashes($this->input->post('penerbit'));
@@ -1624,10 +1655,33 @@ class Admin extends CI_Controller {
 				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '','$keterangan')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/dosenbuku');
+
+		}else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM publikasiilmiah WHERE id = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/admin/dosenbuku');
+
+		}else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_buku WHERE id=$idu")->result();
+			$a['page']		= "f_bukudosen";
+
+		} else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("UPDATE buku SET nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+			}else{
+				$query="UPDATE buku SET nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',keterangan='$keterangan' WHERE id = '$id'";
+
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");
+			}
+			redirect('index.php/admin/dosenbuku');
 		}
+
 		else {
 			$nidn = $this->session->userdata('admin_nip');
 			$a['data']		= $this->db->query("SELECT * FROM v_buku WHERE nidn = $nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
