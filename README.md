@@ -1,7 +1,7 @@
 # SIM DATA PENELITIAN DAN PKM
 
 
-Lihat penjelasannya di blog Nur Akhwan ==> (http://www.nur-akhwan.web.id/2013/10/aplikasi-sederhana-manajemen-surat.html)
+
 
 
 #Deskripsi
