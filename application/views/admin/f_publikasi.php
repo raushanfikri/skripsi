@@ -2,7 +2,7 @@
 $mode		= $this->uri->segment(3);
 
 if ($mode == "edt" || $mode == "act_edt") {
-	print_r($datpil);
+	
 	$act		= "act_edt";
 	$admin_user	=$this->session->userdata('admin_user');
 	$nidn		= $datpil[0]->nidn;
@@ -64,7 +64,11 @@ else{
 	<tr><td width="20%">Institusi</td><td><b><input type="text" name="institusi" required value="<?php echo $institusi; ?>" style="width: 700px" class="form-control"></b></td></tr>	
 	<tr><td width="20%">Tanggal</td><td><b><input type="text" name="tanggal" tabindex="7" required value="<?php echo $tanggal; ?>" id="tgl_surat" style="width: 300px" class="form-control"></b></td></tr>		
 	<tr><td width="20%">Tempat</td><td><b><input type="text" name="tempat" required value="<?php echo $tempat; ?>" style="width: 700px" class="form-control"></b></td></tr>		
-	<tr><td width="10%">File</td><td><b><input type="file" name="file_surat" tabindex="8" class="form-control" style="width: 400px"></b></td></tr>
+	<tr><td width="20%">File</td><td><b><input type="file" name="file_surat" tabindex="8" class="form-control" style="width: 400px"></b></td></tr>
+
+	<?php if ($act == 'edt' || $act == 'act_edt') : ?>
+		<tr><td></td><td><small><?= $datpil[0]->file ?></small></td></tr>
+	<?php endif; ?>
 
 	<tr><td width="20%">Status</td><td><b>
 			<select name="status" class="form-control" style="width: 200px" required tabindex="6" ><option value=""> - Status - </option>

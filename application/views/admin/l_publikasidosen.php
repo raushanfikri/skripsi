@@ -29,9 +29,9 @@
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
-			<th width="10%">No</th>
-			<th width="20%">Nama</th>
-			<th width="20%">Judul</th>
+			<th width="5%">No</th>
+			<th width="15%">Nama</th>
+			<th width="15%">Judul</th>
 			<th width="20%">Penyelenggara</th>
 			<th width="10%">File</th>
 			<th width="20%">Status</th>

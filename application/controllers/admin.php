@@ -938,13 +938,13 @@ class Admin extends CI_Controller {
 				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/publikasi');
 		}
 		else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM publikasiilmiah WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus </div>");			
 			redirect('index.php/admin/publikasi');
 		}
 		else if ($mau_ke == "edt") {
@@ -960,7 +960,7 @@ class Admin extends CI_Controller {
 				$query = "UPDATE publikasiilmiah SET judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' WHERE id = '$id'";
 
 					$this->db->query($query);
-					$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");	
+					$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Behasil DiUbah</div>");	
 			}
 				
 			redirect('index.php/admin/publikasi');
@@ -1001,14 +1001,15 @@ class Admin extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
+
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$nomorpendaftaran		= addslashes($this->input->post('nomorpendaftaran'));
 		$status					= addslashes($this->input->post('status'));
 		$nohki					= addslashes($this->input->post('nohki'));
-		$keterangan				= "Menunggu Verifikasi";
-		$hasilketerangan		= "Disetujui";
+		$keterangan				= addslashes($this->input->post('keterangan'));
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
 		$config['upload_path'] 		= './upload/hki';
@@ -1022,17 +1023,46 @@ class Admin extends CI_Controller {
 		if ($mau_ke == "cari") {
 			$a['data']		= $this->db->query("SELECT * FROM v_hki WHERE nidn LIKE '%$cari%' OR judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_hki";
-		}  else if ($mau_ke == "del") {
-			$this->db->query("DELETE FROM hki WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
-			redirect('index.php/admin/hki');
-		}else if ($mau_ke == "edt") {
-			$this->db->query("UPDATE hki SET keterangan='$hasilketerangan' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Di Verifikasi</div>");			
-			redirect('index.php/admin/hki');
+		}else if ($mau_ke == "add") {
+			$a['page']		= "f_hki";
 		}  
-		
-		else {
+
+		else if ($mau_ke == "act_add") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','".$up_data['file_name']."','$keterangan')");
+			} else {
+				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','$keterangan')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/admin/hki');
+		}
+
+		else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM hki WHERE id = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/admin/hki');
+
+		}else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_hki WHERE id=$idu")->result();
+			$a['page']		= "f_hki";
+		}
+
+		else if($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+			$this->db->query("UPDATE hki SET judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status',nohki='$nohki',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+			}else{
+				$query = "UPDATE hki SET judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status',nohki='$nohki', keterangan='$keterangan' WHERE id = '$id'";
+
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");		
+			}
+			redirect('index.php/admin/hki');
+		}else {
 			$a['data']		= $this->db->query("SELECT * FROM v_hki ORDER BY id DESC LIMIT $awal, $akhir ")->result();
 			$a['page']		= "l_hki";
 		}
@@ -1247,12 +1277,12 @@ class Admin extends CI_Controller {
 				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/dosenpublikasi');
 		} else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM publikasiilmiah WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
 			redirect('index.php/admin/dosenpublikasi');
 		}else if ($mau_ke == "edt") {
 			$a['datpil']		= $this->db->query("SELECT * FROM v_publikasi WHERE id=$idu")->result();
@@ -1267,7 +1297,7 @@ class Admin extends CI_Controller {
 				$query = "UPDATE publikasiilmiah SET nidn='$nidn', judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' WHERE id = '$id'";
 				
 				$this->db->query($query);
-				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
 			}
 			redirect('index.php/admin/dosenpublikasi');
 		}  
@@ -1390,6 +1420,7 @@ class Admin extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$jenis					= addslashes($this->input->post('jenis'));
@@ -1411,10 +1442,10 @@ class Admin extends CI_Controller {
 		if ($mau_ke == "cari") {
 			$nidn = $this->session->userdata('admin_nip');	
 			$a['data']		= $this->db->query("SELECT * FROM v_hki WHERE nidn=$nidn and judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
-			$a['page']		= "l_publikasidosen";
+			$a['page']		= "l_hkidosen";
 		} else if ($mau_ke == "add") {
 			$a['page']		= "f_hkidosen";
-		}  else if ($mau_ke == "act_add") {
+		} else if ($mau_ke == "act_add") {
 		
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
@@ -1424,19 +1455,32 @@ class Admin extends CI_Controller {
 				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan)");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Disimpan. ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/dosenhki');
 		} else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM hki WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus </div>");			
 			redirect('index.php/admin/dosenhki');
 		}else if ($mau_ke == "edt") {
-			$this->db->query("UPDATE hki SET status='$hasilketerangan' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
-			redirect('index.php/admin/dosenhki');
-		}  
+			$a['datpil']		= $this->db->query("SELECT * FROM v_hki WHERE id=$idu")->result();
+			$a['page']		= "f_hkidosen";
+
+		}else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("UPDATE hki SET nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki',file='$up_data[file_name]', status='$status', keterangan='$keterangan' WHERE id = '$id'");
+			}else{	
+				$query="UPDATE hki SET nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki', status='$status', keterangan='$keterangan' WHERE id = '$id'";
 		
+			$this->db->query($query);
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Diubah </div>");	
+			}		
+			redirect('index.php/admin/dosenhki');
+		
+		}
+
 		else {
 			$nidn = $this->session->userdata('admin_nip');	
 			$a['data']		= $this->db->query("SELECT * FROM v_hki WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
