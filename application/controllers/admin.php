@@ -446,6 +446,7 @@ class Admin extends CI_Controller {
 		$idu					= $this->uri->segment(4);
 		
 		$cari					= addslashes($this->input->post('q'));
+		$id 					= addslashes($this->input->post('id'));
 
 		//ambil variabel Postingan
 		$nidn					= addslashes($this->input->post('nidn'));
@@ -459,8 +460,7 @@ class Admin extends CI_Controller {
 		$nomor					= addslashes($this->input->post('nomor'));
 		$halaman					= addslashes($this->input->post('halaman'));
 		$url					= addslashes($this->input->post('url'));
-		$keterangan				= "Menunggu Verifikasi";
-		$hasilketerangan		= "Disetujui";
+		$keterangan				= addslashes($this->input->post('status'));
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
 		$config['upload_path'] 		= './upload/jurnal';
@@ -474,14 +474,47 @@ class Admin extends CI_Controller {
 		if ($mau_ke == "cari") {
 			$a['data']		= $this->db->query("SELECT * FROM v_jurnal WHERE nidn LIKE '%$cari%' OR judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_jurnal";
-		} 
+		}  else if ($mau_ke == "add") {
+			$a['page']		= "f_jurnal";
+		}  else if ($mau_ke == "act_add") {
+		
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+			} else {
+				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/admin/dosenjurnal');
+		}
+
+
 		else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM jurnal WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
 			redirect('index.php/admin/jurnal');
-		}else if ($mau_ke == "edt") {
-			$this->db->query("UPDATE jurnal SET keterangan='$hasilketerangan' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Di Setujui</div>");			
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_jurnal WHERE id=$idu")->result();
+			$a['page']		= "f_jurnal";
+		}
+
+		else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				
+				$this->db->query("UPDATE jurnal SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+			}else{
+
+				$query="UPDATE jurnal SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url', keterangan='$keterangan' WHERE id = '$id'";
+
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");	
+			}
+				
 			redirect('index.php/admin/jurnal');
 		}  
 		else {
@@ -728,6 +761,8 @@ class Admin extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
+
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$jenis					= addslashes($this->input->post('jenis'));
@@ -739,8 +774,7 @@ class Admin extends CI_Controller {
 		$nomor					= addslashes($this->input->post('nomor'));
 		$halaman					= addslashes($this->input->post('halaman'));
 		$url					= addslashes($this->input->post('url'));
-		$keterangan				= "Menunggu Verifikasi";
-		$hasilketerangan		= "Disetujui";
+		$status				= addslashes($this->input->post('keterangan'));
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
 		$config['upload_path'] 		= './upload/jurnal';
@@ -755,13 +789,47 @@ class Admin extends CI_Controller {
 			$a['data']		= $this->db->query("SELECT * FROM v_seminar WHERE nidn LIKE '%$cari%' OR judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_seminar";
 		} 
+
+		else if ($mau_ke == "add") {
+			$a['page']		= "f_seminar";
+		}  else if ($mau_ke == "act_add") {
+		
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+			} else {
+				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/admin/dosenjurnal');
+		}
+
 		else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM seminar WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Dihapus</div>");			
 			redirect('index.php/admin/seminar');
-		}else if ($mau_ke == "edt") {
-			$this->db->query("UPDATE seminar SET keterangan='$hasilketerangan' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Di Setujui</div>");			
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_seminar WHERE id=$idu")->result();
+			$a['page']		= "f_seminar";
+		}
+
+		else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$this->db->query("UPDATE seminar SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url',file='$up_data[file_name]', keterangan='$status' WHERE id = '$id'");
+			}else{
+
+				$query="UPDATE seminar SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url', keterangan='$status' WHERE id = '$id'";
+
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");	
+
+			}
+						
 			redirect('index.php/admin/seminar');
 		}  
 		else {
@@ -1791,6 +1859,7 @@ class Admin extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$jenis					= addslashes($this->input->post('jenis'));
@@ -1830,10 +1899,38 @@ class Admin extends CI_Controller {
 				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/dosenjurnal');
 		}
+
+		else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM jurnal WHERE id = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/admin/dosenjurnal');
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_jurnal WHERE id=$idu")->result();
+			$a['page']		= "f_jurnaldosen";
+		}
+
+		else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+
+				$this->db->query("UPDATE jurnal SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+				
+			}else{
+				$query="UPDATE jurnal SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url', keterangan='$keterangan' WHERE id = '$id'";
+
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");	
+
+				redirect('index.php/admin/dosenjurnal');
+			}
+		}
+
 		else {
 			$nidn = $this->session->userdata('admin_nip');	
 			$a['data']		= $this->db->query("SELECT * FROM v_jurnal WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
@@ -1949,6 +2046,7 @@ class Admin extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$jenis					= addslashes($this->input->post('jenis'));
@@ -1988,10 +2086,31 @@ class Admin extends CI_Controller {
 				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/dosenseminar');
 		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_seminar WHERE id=$idu")->result();
+			$a['page']		= "f_seminardosen";
+		}
+
+		else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+
+				$this->db->query("UPDATE seminar SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+			}else{
+				$query="UPDATE seminar SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url', keterangan='$keterangan' WHERE id = '$id'";
+
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");	
+
+				redirect('index.php/admin/dosenseminar');
+			}
+		}
+
 		else {
 			$nidn = $this->session->userdata('admin_nip');	
 			$a['data']		= $this->db->query("SELECT * FROM v_seminar WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();

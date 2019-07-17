@@ -56,7 +56,9 @@ else{
 	{
 	?>	
 	<tr><td width="20%">NIDN</td><td><b><input type="text" name="" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" readonly ></b></td></tr>
+
 	<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
+	
 	<?php
 		}
 	?>

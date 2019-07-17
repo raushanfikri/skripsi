@@ -34,7 +34,8 @@
 			<th width="20%">Penulis Publikasi</th>
 			<th width="20%">Jurnal</th>
 			<th width="10%">File</th>
-			<th width="10%">Keterangan</th>
+			<th width="10%">Status</th>
+			<th width="10%">Aksi</th>
 		</tr>
 	</thead>
 	
@@ -55,6 +56,7 @@
 				<?php echo $b->penulis_3; ?><br>
 			</td>
 			<td>Jurnal : <?php echo $b->jurnal; ?><br>
+				Jenis : <?php echo $b->jenis; ?><br>
 				ISSN : <?php echo $b->issn; ?><br>
 				Volume : <?php echo $b->volume; ?><br>
 				Nomor : <?php echo $b->no; ?><br>
@@ -74,6 +76,12 @@
 				<div class="btn-group">
 					Disetujui
 				</div>
+
+				<td class="ctr">
+						<a href="#" class="btn btn-danger btn-sm" role="button" disabled><i class="icon-remove icon-white"> </i></a>
+						<a href="#" class="btn btn-success btn-sm" role="button" disabled><i class="icon-edit icon-white"> </i></a>
+					</td>
+
 				<?php
 					}
 					else
@@ -83,11 +91,21 @@
 				<div class="btn-group">
 					Menunggu Verifikasi
 				</div>	
+				
+
+				<td class="ctr">
+						<a href="<?= base_url('index.php/admin/dosenseminar/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
+						<a href="<?= base_url('index.php/admin/dosenseminar/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a>
+					</td>
+
+
 				<?php
+
 					}
 				?>
-			</td>
-			<td><?php echo $b->url; ?></td>
+			
+
+			</td>	
 		</tr>
 		<?php 
 			$no++;

@@ -34,7 +34,8 @@
 			<th width="20%">Penulis Publikasi</th>
 			<th width="20%">Jurnal</th>
 			<th width="10%">File</th>
-			<th width="10%">Keterangan</th>
+			<th width="10%">Status</th>
+			<th width="10%">Aksi</th>
 
 		</tr>
 	</thead>
@@ -56,6 +57,8 @@
 				<?php echo $b->penulis_3; ?><br>
 			</td>
 			<td>Jurnal : <?php echo $b->jurnal; ?><br>
+
+				Jenis : <?php echo $b->jenis; ?><br>				
 				ISSN : <?php echo $b->issn; ?><br>
 				Volume : <?php echo $b->volume; ?><br>
 				Nomor : <?php echo $b->no; ?><br>
@@ -80,14 +83,18 @@
 					{
 				?>
 			
-				<div class="btn-group">
+				<!-- <div class="btn-group">
 					<a href="<?php echo base_URL(); ?>index.php/admin/jurnal/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
 					<a href="<?php echo base_URL()?>index.php/admin/jurnal/del/<?php echo $b->id; ?>" class="btn btn-warning btn-sm" onclick="return confirm('Anda Yakin..?')">
-					<i class="icon-trash icon-white"> </i> Tidak Disetujui</a>
+					<i class="icon-trash icon-white"> </i> --> 
+				Belum Disetujui</a>
 				</div>	
 				<?php
 					}
 				?>
+			<td>
+				<a href="<?= base_url('index.php/admin/jurnal/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
+				<a href="<?= base_url('index.php/admin/jurnal/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
 			</td>
 		</tr>
 		<?php 

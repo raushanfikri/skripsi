@@ -13,6 +13,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$act		= "act_add";
 	
 	$admin_user	=$this->session->userdata('admin_user');
+	$nidn		= "";
 	$judul		= "";
 	$penerbit	= "";
 	$isbn	= "";

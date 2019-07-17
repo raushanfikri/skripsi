@@ -4,16 +4,16 @@ $mode		= $this->uri->segment(3);
 if ($mode == "edt" || $mode == "act_edt") {
 	$act		= "act_edt";
 	$admin_user	=$this->session->userdata('admin_user');	
-	$judul		= $datpil->judul;	
-	$jenis	= $datpil->jenis;	
-	$penulis_2		= $datpil->penulis_2;	
-	$penulis_3		= $datpil->penulis_3;	
-	$jurnal		= $datpil->jurnal;	
-	$issn		= $datpil->issn;	
-	$volume		= $datpil->volume;	
-	$nomor		= $datpil->nomor;	
-	$halaman		= $datpil->halaman;	
-	$url		= $datpil->url;	
+	$judul		= $datpil[0]->judul;	
+	$jenis		= $datpil[0]->jenis;	
+	$penulis_2	= $datpil[0]->penulis_2;	
+	$penulis_3	= $datpil[0]->penulis_3;	
+	$jurnal		= $datpil[0]->jurnal;	
+	$issn		= $datpil[0]->issn;	
+	$volume		= $datpil[0]->volume;	
+	$nomor		= $datpil[0]->no;	
+	$halaman	= $datpil[0]->halaman;	
+	$url		= $datpil[0]->url;	
 } else {
 	$act		= "act_add";
 	
@@ -45,7 +45,7 @@ else
 ?>
 
 <div class="panel panel-info">
-	<div class="panel-heading"><h3 style="margin-top: 5px"> Tambah Data Jurnal</h3></div>
+	<div class="panel-heading"><h3 style="margin-top: 5px"> Ubah Data Jurnal</h3></div>
 </div>
 <?php
 }
@@ -67,6 +67,9 @@ else
 	{
 	?>	
 	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $admin_user; ?>" style="width: 700px" class="form-control" readonly></b></td></tr>
+	
+	<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
+
 	<?php
 		}
 	?>
@@ -81,10 +84,15 @@ else
 	<tr><td width="20%">Halaman</td><td><b><input type="text" name="halaman" required value="<?php echo $halaman; ?>" style="width: 700px" class="form-control"></b></td></tr>	
 	<tr><td width="20%">URL</td><td><b><input type="text" name="url" required value="<?php echo $url; ?>" style="width: 700px" class="form-control"></b></td></tr>	
 	<tr><td width="20%">File</td><td><b><input type="file" name="file_surat" tabindex="8" class="form-control" style="width: 400px"></b></td></tr>
+
+	<?php if ($act == 'edt' || $act == 'act_edt') : ?>
+		<tr><td></td><td><small><?= $datpil[0]->file ?></small></td></tr>
+	<?php endif; ?>
+
 		
 	<tr><td width="20%">
 	<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i> Simpan</button>
-	<a href="<?php echo base_URL(); ?>index.php/admin/dosenbuku" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
+	<a href="<?php echo base_URL(); ?>index.php/admin/dosenjurnal" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
 	</td></tr>
 	</table>
 </form>
