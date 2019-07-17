@@ -29,13 +29,14 @@
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
-			<th width="10%">No</th>
-			<th width="20%">Judul</th>
-			<th width="20%">Personil</th>
-			<th width="20%">Penelitian</th>
-			<th width="10%">Dana</th>
+			<th width="5%">No</th>
+			<th width="15%">Judul</th>
+			<th width="15%">Personil</th>
+			<th width="15%">Penelitian</th>
+			<th width="15%">Dana</th>
 			<th width="10%">File</th>
-			<th width="10%">Keterangan</th>
+			<th width="10%">Status</th>
+			<th width="10%">Aksi</th>
 		</tr>
 	</thead>
 	
@@ -82,14 +83,19 @@
 				?>
 			
 				<div class="btn-group">
-					<a href="<?php echo base_URL(); ?>index.php/admin/penelitian/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
+					<!-- <a href="<?php echo base_URL(); ?>index.php/admin/penelitian/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
 					<a href="<?php echo base_URL()?>index.php/admin/penelitian/del/<?php echo $b->id; ?>" class="btn btn-warning btn-sm" onclick="return confirm('Anda Yakin..?')">
-					<i class="icon-trash icon-white"> </i> Tidak Disetujui</a>
+					<i class="icon-trash icon-white"> </i> -->
+					Belum Disetujui</a>
 				</div>	
 				<?php
 					}
 				?>
+				<td>
+				<a href="<?= base_url('index.php/admin/penelitian/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
+				<a href="<?= base_url('index.php/admin/penelitian/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
 			</td>
+			
 		</tr>
 		<?php 
 			$no++;

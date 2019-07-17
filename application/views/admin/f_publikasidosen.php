@@ -8,7 +8,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$judul		= $datpil[0]->judul;	
 	$institusi	= $datpil[0]->institusi;	
 	$tempat		= $datpil[0]->tempat;	
-	$tanggal		= $datpil[0]->tanggal;	
+	$tanggal	= $datpil[0]->tanggal;	
 } else {
 	$act		= "act_add";
 	

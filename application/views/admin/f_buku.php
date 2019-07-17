@@ -8,7 +8,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$judul		= $datpil[0]->judul;	
 	$penerbit	= $datpil[0]->penerbit;	
 	$isbn		= $datpil[0]->isbn;	
-	$halaman		= $datpil[0]->halaman;	
+	$halaman	= $datpil[0]->halaman;	
 } else {
 	$act		= "act_add";
 	
