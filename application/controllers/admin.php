@@ -1857,10 +1857,11 @@ else if($mau_ke == "act_edt") {
 
 		$this->load->library('upload', $config);
 		
+		
 		if ($mau_ke == "cari") {
 			$nidn = $this->session->userdata('admin_nip');	
-			$a['data']		= $this->db->query("SELECT * FROM v_hkipkm WHERE nidn=$nind AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
-			$a['page']		= "l_hkidosen_pkm";
+			$a['data']		= $this->db->query("SELECT * FROM v_hkipkm WHERE nidn=$nidn and judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_hkidosen";
 		} else if ($mau_ke == "add") {
 			$a['page']		= "f_hkidosen_pkm";
 		}  else if ($mau_ke == "act_add") {
@@ -1873,7 +1874,7 @@ else if($mau_ke == "act_edt") {
 				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/dosenhki_pkm');
 		}
