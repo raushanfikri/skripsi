@@ -35,7 +35,7 @@
 			<th width="20%">Penyelenggara</th>
 			<th width="10%">File</th>
 			<th width="20%">Status</th>
-			<th width="20%">Aksi</th>
+			<th width="10%">Aksi</th>
 		</tr>
 	</thead>
 	

@@ -1053,7 +1053,7 @@ else if($mau_ke == "act_edt") {
 		}
 		
 		/* pagination */	
-		$total_row		= $this->db->query("SELECT * FROM publikasiilmiah")->num_rows();
+		$total_row		= $this->db->query("SELECT * FROM v_publikasi")->num_rows();
 		$per_page		= 10;
 		
 		$awal	= $this->uri->segment(4); 
@@ -1331,13 +1331,13 @@ else if($mau_ke == "act_edt") {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$institusi				= addslashes($this->input->post('institusi'));
 		$tempat					= addslashes($this->input->post('tempat'));
 		$tanggal					= addslashes($this->input->post('tanggal'));
-		$keterangan				= "Menunggu Verifikasi";
-		$hasilketerangan		= "Disetujui";
+		$keterangan				= addslashes($this->input->post('status'));
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
 		$config['upload_path'] 		= './upload/publikasipkm';
@@ -1363,16 +1363,35 @@ else if($mau_ke == "act_edt") {
 				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/publikasipkm');
 		} else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM publikasiilmiah_pkm WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
 			redirect('index.php/admin/publikasipkm');
-		}else if ($mau_ke == "edt") {
-			$this->db->query("UPDATE publikasiilmiah_pkm SET status='$hasilketerangan' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_publikasipkm WHERE id=$idu")->result();
+			$a['page']		= "f_publikasi_pkm";
+
+		}
+
+
+
+		else if ($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+			$this->db->query("UPDATE publikasiilmiah_pkm SET judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat',file='$up_data[file_name]', status='$keterangan' WHERE id = '$id'");
+			}else{
+				$query = "UPDATE publikasiilmiah_pkm SET judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' WHERE id = '$id'";
+
+					$this->db->query($query);
+					$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Behasil DiUbah</div>");	
+			}
+				
 			redirect('index.php/admin/publikasipkm');
 		}  
 		
@@ -1507,6 +1526,7 @@ else if($mau_ke == "act_edt") {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$institusi				= addslashes($this->input->post('institusi'));
@@ -1529,7 +1549,7 @@ else if($mau_ke == "act_edt") {
 			$a['data']		= $this->db->query("SELECT * FROM v_publikasipkm WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_publikasidosen_pkm";
 		} else if ($mau_ke == "add") {
-			$a['page']		= "f_publikasi_pkm";
+			$a['page']		= "f_publikasidosen_pkm";
 		}  else if ($mau_ke == "act_add") {
 		
 			if ($this->upload->do_upload('file_surat')) {
@@ -1540,16 +1560,30 @@ else if($mau_ke == "act_edt") {
 				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/admin/dosenpublikasipkm');
 		} else if ($mau_ke == "del") {
-			$this->db->query("DELETE FROM publikasiilmiah WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+			$this->db->query("DELETE FROM publikasiilmiah_pkm WHERE id = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
 			redirect('index.php/admin/dosenpublikasipkm');
-		}else if ($mau_ke == "edt") {
-			$this->db->query("UPDATE publikasiilmiah_pkm SET status='$hasilketerangan' WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been deleted</div>");			
+		}
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_publikasipkm WHERE id=$idu")->result();
+			$a['page']		= "f_publikasidosen_pkm";
+
+		}else if($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("UPDATE publikasiilmiah_pkm SET nidn='$nidn', judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat',file='$up_data[file_name]', status='$keterangan' WHERE id = '$id'");
+			}else{
+				
+				$query = "UPDATE publikasiilmiah_pkm SET nidn='$nidn', judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' WHERE id = '$id'";
+				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
+			}
 			redirect('index.php/admin/dosenpublikasipkm');
 		}  
 		
