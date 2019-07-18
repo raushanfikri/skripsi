@@ -83,7 +83,7 @@
 							Menunggu Verifikasi
 						</div>	
 						<td class="ctr">
-							<a href="<?= base_url('index.php/admin/dosenpublikasi/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
+							<a href="<?= base_url('index.php/admin/dosenhki/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
 							<a href="<?= base_url('index.php/admin/dosenhki/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a>
 						</td>
 						<?php

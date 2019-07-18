@@ -7,7 +7,7 @@
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
 		?>
 		<div class="col-md-2">
-			<a href="<?php echo base_URL(); ?>index.php/admin/jurnal_pkm/add" class="btn btn-info"><i class="icon-plus-sign icon-white"> </i> Tambah Data</a>
+			<a href="<?php echo base_URL(); ?>index.php/admin/jurnal/add" class="btn btn-info"><i class="icon-plus-sign icon-white"> </i> Tambah Data</a>
 		</div>
 		<?php 
 		//}
@@ -29,18 +29,20 @@
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
-			<th width="10%">No</th>
+			<th width="5%">No</th>
 			<th width="20%">Judul</th>
 			<th width="20%">Penulis Publikasi</th>
 			<th width="20%">Jurnal</th>
-			<th width="10%">File</th>
-			<th width="10%">Keterangan</th>
+			<th width="15%">File</th>
+			<th width="10%">Status</th>
+			<th width="10%">Aksi</th>
+
 		</tr>
 	</thead>
 	
 	<tbody>
 		<?php 
-		$no=1;
+		$no = 1;
 		if (empty($data)) {
 			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
 		} else {
@@ -55,11 +57,13 @@
 				<?php echo $b->penulis_3; ?><br>
 			</td>
 			<td>Jurnal : <?php echo $b->jurnal; ?><br>
+
+				Jenis : <?php echo $b->jenis; ?><br>				
 				ISSN : <?php echo $b->issn; ?><br>
 				Volume : <?php echo $b->volume; ?><br>
 				Nomor : <?php echo $b->no; ?><br>
 				Halaman : <?php echo $b->halaman; ?><br>
-				Url : <?php echo $b->url; ?><br>
+				url : <?php echo $b->url; ?><br>
 			</td>
 			<td><?php echo $b->file; ?></td>
 		
@@ -79,16 +83,19 @@
 					{
 				?>
 			
-				<div class="btn-group">
-					<a href="<?php echo base_URL(); ?>index.php/admin/jurnal_pkm/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
-					<a href="<?php echo base_URL()?>index.php/admin/jurnal_pkm/del/<?php echo $b->id; ?>" class="btn btn-warning btn-sm" onclick="return confirm('Anda Yakin..?')">
-					<i class="icon-trash icon-white"> </i> Tidak Disetujui</a>
+				<!-- <div class="btn-group">
+					<a href="<?php echo base_URL(); ?>index.php/admin/jurnal/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
+					<a href="<?php echo base_URL()?>index.php/admin/jurnal/del/<?php echo $b->id; ?>" class="btn btn-warning btn-sm" onclick="return confirm('Anda Yakin..?')">
+					<i class="icon-trash icon-white"> </i> --> 
+				Belum Disetujui</a>
 				</div>	
 				<?php
 					}
 				?>
+			<td>
+				<a href="<?= base_url('index.php/admin/jurnal_pkm/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
+				<a href="<?= base_url('index.php/admin/jurnal_pkm/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
 			</td>
-
 		</tr>
 		<?php 
 			$no++;

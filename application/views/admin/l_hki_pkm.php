@@ -7,7 +7,7 @@
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
 		?>
 		<div class="col-md-2">
-			
+			<a href="<?php echo base_URL(); ?>index.php/admin/hki_pkm/add" class="btn btn-info"><i class="icon-plus-sign icon-white"> </i> Tambah Data</a>
 		</div>
 		<?php 
 		//}
@@ -29,12 +29,13 @@
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
-			<th width="10%">No</th>
-			<th width="20%">Nama Dosen</th>
-			<th width="20%">Judul</th>
-			<th width="20%">HKI</th>
+			<th width="5%">No</th>
+			<th width="15%">Nama Dosen</th>
+			<th width="15%">Judul</th>
+			<th width="10%">HKI</th>
 			<th width="10%">File</th>
-			<th width="20%">Aksi</th>
+			<th width="20%">Status</th>
+			<th width="10%">Aksi</th>
 		</tr>
 	</thead>
 	
@@ -74,10 +75,11 @@
 					{
 				?>
 			
-				<div class="btn-group">
+				<!-- <div class="btn-group">
 					<a href="<?php echo base_URL(); ?>index.php/admin/hki_pkm/edt/<?php echo $b->id; ?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i> Setujui</a>
 					<a href="<?php echo base_URL()?>index.php/admin/hki_pkm/del/<?php echo $b->id; ?>" class="btn btn-warning btn-sm" onclick="return confirm('Anda Yakin..?')">
-					<i class="icon-trash icon-white"> </i> Tidak Disetujui</a>
+					<i class="icon-trash icon-white"> </i> --> 
+				Belum Disetujui</a>
 				</div>	
 				<?php
 					}
@@ -88,6 +90,10 @@
 		//		echo "<td class='ctr'> -- </td>";
 		//	}
 			?>
+			<td>
+				<a href="<?= base_url('index.php/admin/hki_pkm/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
+				<a href="<?= base_url('index.php/admin/hki_pkm/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
+			</td>
 		</tr>
 		<?php 
 			$no++;

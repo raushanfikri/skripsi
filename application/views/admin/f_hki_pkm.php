@@ -45,7 +45,7 @@ else
 
 <div class="well">
 
-<form action="<?php echo base_URL(); ?>index.php/admin/hki/<?php echo $act; ?>" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+<form action="<?php echo base_URL(); ?>index.php/admin/hki_pkm/<?php echo $act; ?>" method="post" accept-charset="utf-8" enctype="multipart/form-data">
 	<table width="100%" class="table-form">
 	<?php
 		if ($act=="act_add")
@@ -82,7 +82,7 @@ else
 		
 	<tr><td width="20%">
 	<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i> Simpan</button>
-	<a href="<?php echo base_URL(); ?>index.php/admin/hki" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
+	<a href="<?php echo base_URL(); ?>index.php/admin/hki_pkm" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
 	</td></tr>
 	</table>
 </form>

@@ -116,7 +116,7 @@
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/dosenbuku_pkm"> Buku Ajar / Teks</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/dosenjurnal_pkm"> Jurnal</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/dosenseminar_pkm"> Seminar</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/dosenpenelitian_pkm"> Penelitian</a></li>
+                <!-- <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/dosenpenelitian_pkm"> Penelitian</a></li> -->
                 
               </ul>
             </li>
@@ -153,7 +153,7 @@
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/buku_pkm"> PKM - Buku Ajar / Teks</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/jurnal_pkm"> PKM - Jurnal</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/seminar_pkm"> PKM - Seminar</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/penelitian_pkm"> PKM - Penelitian</a></li>
+                <!-- <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/admin/penelitian_pkm"> PKM - Penelitian</a></li> -->
               </ul>
             </li>
 			
