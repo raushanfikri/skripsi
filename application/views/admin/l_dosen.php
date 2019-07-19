@@ -29,12 +29,13 @@
 <table class="table table-bordered table-hover">
 	<thead>
 		<tr>
-			<th width="10%">No</th>
-			<th width="20%">NID</th>
-			<th width="20%">NIK</th>
-			<th width="20%">Nama Dosen</th>
-			<th width="20%">Jurusan</th>
-			<th width="25%">Aksi</th>
+			<th width="5%">No</th>
+			<th width="15%">NID</th>
+			<th width="15%">NIK</th>
+			<th width="15%">Nama Dosen</th>
+			<th width="10%">Fakultas</th>
+			<th width="20%">Program Studi</th>
+			<th width="20%">Aksi</th>
 		</tr>
 	</thead>
 	
@@ -52,6 +53,7 @@
 			<td><?php echo $b->nidn; ?></td>
 			<td><?php echo $b->nik; ?></td>
 			<td><?php echo $b->namadosen; ?></td>
+			<td><?php echo $b->Fakultas; ?></td>
 			<td><?php echo $b->jurusan; ?></td>
 			
 			<?php 

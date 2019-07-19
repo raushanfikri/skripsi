@@ -2,7 +2,7 @@
 
 <div class="panel panel-info">
 	<div class="panel-heading" style="overflow: auto">
-		<div class="col-md-3"><h3 style="margin-top: 5px">Data Hak Kekayaan Intelektual (HKI)</h3></div>
+		<div class="col-md-6"><h3 style="margin-top: 5px">Data Hak Kekayaan Intelektual (HKI)</h3></div>
 		<?php 
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
 		?>

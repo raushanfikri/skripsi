@@ -9,6 +9,7 @@
 		<div class="col-md-2">
 			<a href="<?php echo base_URL(); ?>index.php/admin/buku/add" class="btn btn-info"><i class="icon-plus-sign icon-white"> </i> Tambah Data</a>
 		</div>
+		
 		<?php 
 		//}
 
@@ -24,10 +25,37 @@
 </div>
 
 
+
+<div class="panel panel-info">
+	<div class="panel-heading" style="overflow: auto">
+		<div class="row" >
+			<form class="form-inline" action="<?php echo base_URL(); ?>index.php/admin/exportPDF/v_buku"
+				method="POST">
+			  	<div class="col-md-1">
+			    	<label for="awal">Periode Awal:</label>
+				</div>
+				<div class="col-md-4">
+			    	<input type="date" placeholder="Periode awal" class="form-control" id="awal" name="awal">
+			  	</div>
+			  	<div class="col-md-1">
+			    	<label for="akhir">Periode Akhir:</label>
+			    </div>
+			    <div class="col-md-4">
+			    	<input type="date" placeholder="Periode akhir" class="form-control" id="akhir" name="akhir">
+			  	</div>
+			  	<div class="col-md-2">
+				  <button type="submit" class="btn btn-default">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <?php echo $this->session->flashdata("k");?>
 
 <table class="table table-bordered table-hover">
 	<thead>
+
 		<tr>
 			<th width="5%">No</th>
 			<th width="15%">Nama Dosen</th>

@@ -23,6 +23,30 @@
 	</div>
 </div>
 
+<div class="panel panel-info">
+	<div class="panel-heading" style="overflow: auto">
+		<div class="row">
+			<form class="form-inline" action="<?php echo base_URL(); ?>index.php/admin/exportPDF/v_publikasi" method="POST">
+			  	<div class="col-md-1">
+			    	<label for="awal">Periode Awal:</label>
+				</div>
+				<div class="col-md-4">
+			    	<input type="date" placeholder="Periode awal" class="form-control" id="awal" name="awal">
+			  	</div>
+			  	<div class="col-md-1">
+			    	<label for="akhir">Periode Akhir:</label>
+			    </div>
+			    <div class="col-md-4">
+			    	<input type="date" placeholder="Periode akhir" class="form-control" id="akhir" name="akhir">
+			  	</div>
+			  	<div class="col-md-2">
+				  <button type="submit" class="btn btn-default">Submit</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 
 <?php echo $this->session->flashdata("k");?>
 
@@ -52,9 +76,9 @@
 			<td><?php echo $no; ?></td>
 			<td><?php echo $b->namadosen; ?></td>
 			<td><?php echo $b->judul; ?></td>
-			<td>Institusi : <?php echo $b->institusi; ?><br>
-				Tanggal : <?php echo $b->tanggal; ?><br>
-				Tempat : <?php echo $b->tempat; ?>
+			<td>Institusi 	: <?php echo $b->institusi; ?><br>
+				Tanggal 	: <?php echo $b->tanggal; ?><br>
+				Tempat 		: <?php echo $b->tempat; ?>
 			</td>
 			<td><?php echo $b->file; ?></td>
 		

@@ -2,7 +2,7 @@
 
 <div class="panel panel-info">
 	<div class="panel-heading" style="overflow: auto">
-		<div class="col-md-3"><h3 style="margin-top: 5px">Data Penelitian</h3></div>
+		<div class="col-md-6"><h3 style="margin-top: 5px">Data Penelitian</h3></div>
 		<?php 
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
 		?>
@@ -18,6 +18,30 @@
 			<form class="navbar-form navbar-left" method="post" action="<?php echo base_URL(); ?>index.php/admin/penelitian/cari" style="margin-top: 0px">
 				<input type="text" class="form-control" name="q" style="width: 200px" placeholder="Kata kunci pencarian ..." required>
 				<button type="submit" class="btn btn-danger"><i class="icon-search icon-white"> </i> Cari</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading" style="overflow: auto">
+		<div class="row">
+			<form class="form-inline" action="<?php echo base_URL(); ?>index.php/admin/exportPDF/v_penelitian" method="POST">
+			  	<div class="col-md-1">
+			    	<label for="awal">Periode Awal:</label>
+				</div>
+				<div class="col-md-4">
+			    	<input type="date" placeholder="Periode awal" class="form-control" id="awal" name="awal">
+			  	</div>
+			  	<div class="col-md-1">
+			    	<label for="akhir">Periode Akhir:</label>
+			    </div>
+			    <div class="col-md-4">
+			    	<input type="date" placeholder="Periode akhir" class="form-control" id="akhir" name="akhir">
+			  	</div>
+			  	<div class="col-md-2">
+				  <button type="submit" class="btn btn-default">Submit</button>
+				</div>
 			</form>
 		</div>
 	</div>

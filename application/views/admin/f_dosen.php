@@ -45,7 +45,7 @@ else
 		if ($act=="act_add")
 		{
 	?>
-	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>	
+	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus maxlength="12"></b></td></tr>	
 	<?php
 	} 
 	else
@@ -57,13 +57,17 @@ else
 	?>
 	<tr><td width="20%">NIK</td><td><b><input type="text" name="nik" required value="<?php echo $nik; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>		
 	<tr><td width="20%">Nama Dosen</td><td><b><input type="text" name="namadosen" required value="<?php echo $namadosen; ?>" style="width: 700px" class="form-control"></b></td></tr>		
-	<tr><td width="20%">Program Studi</td><td><b>
-	<select name="jurusan" class="form-control" required>
-		<option value="INFORMATIKA" selected>INFORMATIKA</option>
-		<option value="SISTEM INFORMASI">SISTEM INFORMASI</option>
-		<option value="SISTEM INFORMASI AKUNTANSI">SISTEM INFORMASI AKUNTANSI</option>
-		<option value="TEKNIK KOMPUTER">TEKNIK KOMPUTER</option>
+	<tr><td width="20%">Fakultas</td><td><b>
+	<select id="fakultas" name="Fakultas" class="form-control" >
+		<option value="FTIK" selected>FTIK</option>
+		<option value="FSIP">FSIP</option>
+		<option value="FEB">FEB</option>
 	</select>
+
+	<tr><td width="20%">Program Studi</td><td><b>
+	<select id="prodi" name="jurusan" class="form-control" required>
+	</select>
+
 	</b></td></tr>		
 		
 	<tr><td width="20%">
@@ -73,3 +77,18 @@ else
 	</table>
 </form>
 </div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+    $("#fakultas").change(function () {
+        var val = $(this).val();
+        if (val == "FTIK") {
+            $("#prodi").html("<option value='INFORMATIKA'>INFORMATIKA</option><option value='SISTEM INFORMASI'>SISTEM INFORMASI</option><option value='SISTEM INFORMASI AKUNTANSI'>SISTEM INFORMASI AKUNTANSI</option><option value='TEKNOLOGI INFORMASI'>TEKNOLOGI INFORMASI</option><option value='TEKNIK KOMPUTER'>TEKNIK KOMPUTER</option><option value='TEKNIK SIPIL'>TEKNIK SIPIL</option> <option value='TEKNIK ELEKTRO'>TEKNIK ELEKTRO</option>");
+        } else if (val == "FSIP") {
+            $("#prodi").html("<option value='SASTRA INGGRIS'>SASTRA INGGRIS</option><option value='PENDIDIKAN MATEMATIKA'>PENDIDIKAN MATEMATIKA</option><option value='PENDIDIKAN BAHASA INGGRIS'>PENDIDIKAN BAHASA INGGRIS</option><option value='PENDIDIKAN OLAHRAGA'>PENDIDIKAN OLAHRAGA</option>");
+        } else if (val == "FEB") {
+            $("#prodi").html("<option value='AKUNTANSI'>AKUNTANSI</option><option value='MANAJEMEN'>MANAJEMEN</option>");
+        }
+    });
+});
+</script>

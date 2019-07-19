@@ -1,6 +1,6 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['base_url']	      = "http://".$_SERVER['SERVER_NAME'].":8080/fikri/";
+$config['base_url']	      = "http://".$_SERVER['SERVER_NAME'].":8080/SIMLPPM/";
 $config['index_page']     = '';
 $config['uri_protocol']	  = 'AUTO';
 

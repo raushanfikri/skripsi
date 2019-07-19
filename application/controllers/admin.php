@@ -3,6 +3,18 @@
 class Admin extends CI_Controller {
 	function __construct() {
 		parent::__construct();
+		// $this->load->library('Pdf');
+		$this->load->library('digipdf');
+
+	}
+
+	public function exportPDF($table){
+		$awal = $this->input->post('awal');
+		$akhir = $this->input->post('akhir');
+		
+		$data['query'] = $this->db->query("SELECT * from $table where date BETWEEN '$awal' and '$akhir'")->result();
+		$this->load->view($table, $data);
+
 	}
 	
 	public function index() {
@@ -277,8 +289,10 @@ class Admin extends CI_Controller {
 		$nidn					= addslashes($this->input->post('nidn'));
 		$nik					= addslashes($this->input->post('nik'));
 		$namadosen				= addslashes($this->input->post('namadosen'));
+		$fakultas				= addslashes($this->input->post('Fakultas'));
 		$jurusan				= addslashes($this->input->post('jurusan'));
 		$password				= md5(addslashes($this->input->post('nidn')));
+
 		$cari					= addslashes($this->input->post('q'));
 		$ket = "Dosen";
 		
@@ -291,7 +305,7 @@ class Admin extends CI_Controller {
 			$a['datpil']	= $this->db->query("SELECT * FROM dosen WHERE nidn = '$idu'")->row();	
 			$a['page']		= "f_dosen";
 		} else if ($mau_ke == "act_edt") {
-			$this->db->query("UPDATE dosen SET namadosen = '$nama', jurusan = '$jurusan' WHERE nidn = '$idp'");
+			$this->db->query("UPDATE dosen SET namadosen = '$namadosen', jurusan = '$jurusan',Fakultas='$fakultas' WHERE nidn = '$nidn'");
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been updated</div>");			
 			redirect('index.php/admin/dosen');
 		} else if ($mau_ke == "act_add") {
@@ -300,7 +314,8 @@ class Admin extends CI_Controller {
 			if ($cek_user_exist > 0) {
 				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">NIDN Sudah Ada. Ganti yang lain..!</div>");
 			} else {
-			$this->db->query("INSERT INTO dosen VALUES('$nidn','$nik', '$namadosen',  '$jurusan')");
+
+			$this->db->query("INSERT INTO dosen VALUES('$nidn','$nik', '$namadosen',  '$jurusan','$fakultas')");
 			$this->db->query("INSERT INTO t_admin VALUES (NULL, '$nidn', '$password', '$namadosen', '$nik', '$ket')");
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added</div>");			
 			}
@@ -363,7 +378,7 @@ class Admin extends CI_Controller {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s'); // 2019-07-19 16:
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -376,14 +391,14 @@ class Admin extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','".$up_data['file_name']."','$keterangan', '$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','$keterangan')");
+				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','$keterangan', '$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
 			
-			redirect('index.php/admin/hki');
+			redirect('index.php/admin/buku');
 		}
 		else if ($mau_ke == "del") {
 			$this->db->query("DELETE FROM buku WHERE id = '$idu'");
@@ -415,7 +430,6 @@ class Admin extends CI_Controller {
 			$a['data']		= $this->db->query("SELECT * FROM v_buku ORDER BY nidn DESC LIMIT $awal, $akhir ")->result();
 			$a['page']		= "l_buku";
 		}
-		
 		$this->load->view('admin/aaa', $a);
 	}
 	/// BUKU
@@ -468,6 +482,7 @@ class Admin extends CI_Controller {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 		
@@ -481,9 +496,9 @@ class Admin extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
@@ -571,7 +586,7 @@ class Admin extends CI_Controller {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -588,9 +603,9 @@ class Admin extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
@@ -682,7 +697,7 @@ else if ($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -697,9 +712,9 @@ else if ($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah',  '','$keterangan')");
+				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah',  '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -786,7 +801,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -857,7 +872,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -872,9 +887,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -961,7 +976,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -976,9 +991,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -1062,7 +1077,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -1078,9 +1093,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','".$up_data['file_name']."','$keterangan',$tanggal)");
 			} else {
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','$keterangan')");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','$keterangan',$tanggal)");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
@@ -1170,7 +1185,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -1184,9 +1199,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
+				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
@@ -1268,7 +1283,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -1282,9 +1297,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','".$up_data['file_name']."','$keterangan',$tanggal)");
 			} else {
-				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','$keterangan')");
+				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','$keterangan',$tanggal)");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
@@ -1363,7 +1378,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -1379,9 +1394,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','$keterangan')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran','$status', '$nohki','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
@@ -1463,7 +1478,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -1476,9 +1491,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
+				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -1564,7 +1579,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -1578,9 +1593,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
+				$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
@@ -1590,6 +1605,7 @@ else if($mau_ke == "act_edt") {
 			$this->db->query("DELETE FROM publikasiilmiah WHERE id = '$idu'");
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
 			redirect('index.php/admin/dosenpublikasi');
+
 		}else if ($mau_ke == "edt") {
 			$a['datpil']		= $this->db->query("SELECT * FROM v_publikasi WHERE id=$idu")->result();
 			$a['page']		= "f_publikasidosen";
@@ -1659,7 +1675,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -1673,9 +1689,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan)");
+				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -1757,6 +1773,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 		
@@ -1771,9 +1788,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan',$tanggal)");
 			} else {
-				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan)");
+				$this->db->query("INSERT INTO hki VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan',$tanggal)");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Disimpan. ".$this->upload->display_errors()."</div>");
@@ -1854,6 +1871,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 		
@@ -1869,9 +1887,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -1952,6 +1970,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 
@@ -1966,9 +1985,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '','$keterangan')");
+				$this->db->query("INSERT INTO buku VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -2049,9 +2068,11 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');		
 
 		$this->load->library('upload', $config);
 		
+
 		if ($mau_ke == "cari") {
 			$nidn = $this->session->userdata('admin_nip');	
 			$a['data']		= $this->db->query("SELECT * FROM v_bukupkm WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
@@ -2063,9 +2084,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '','$keterangan')");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -2157,7 +2178,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-
+		$tanggal = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -2171,9 +2192,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -2265,6 +2286,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 		
@@ -2279,9 +2301,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan',$tanggal)");
 			} else {
-				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','$keterangan',$tanggal)");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -2373,6 +2395,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 		
@@ -2387,9 +2410,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO seminar VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -2473,6 +2496,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 		
@@ -2487,9 +2511,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url', '','$keterangan')");
+				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -2582,6 +2606,7 @@ else if($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
 		
@@ -2596,9 +2621,9 @@ else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."','$keterangan')");
+				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah',  '','$keterangan')");
+				$this->db->query("INSERT INTO penelitian VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah',  '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
