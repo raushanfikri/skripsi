@@ -5,10 +5,13 @@ $hs = ' <table style="text-align:center">
                 </td>
             </tr>
             <tr>
-                <td style="font-size: 18px; font-weight: bold;">Universitas Teknokrat Indonesia</td>
+                <td style="font-size: 20px; font-weight: bold;">Universitas Teknokrat Indonesia</td>
             </tr>
             <tr>
-                <td style="font-size: 12px; font-weight: normal;">Jalan Zainal Abidin Pagaralam </td>
+                <td style="font-size: 12px; font-weight: normal;">Lembaga Penelitian dan Pengabdian Masyarakat </td>
+            </tr>
+            <tr>
+                <td style="font-size: 10px; font-weight: normal;">Jalan Zainal Abidin Pagaralam 9-11 Kedaton Telp. (0721) 702022</td>
             </tr>
             <tr>
                 <td>__________________________________________________</td>
@@ -102,7 +105,7 @@ $hs = ' <table style="text-align:center">
             <br><br><br>
             <tr><td colspan="7"></td><td colspan="2">Mengetahui,</td></tr>
             <tr><td colspan="7" height="50"></td><td colspan="2" height="50">Ketua LPPM</td></tr>
-            <tr><td colspan="7"></td><td colspan="2">Amarudin </td></tr>
+            <tr><td colspan="7"></td><td colspan="2">Amarudin., S.Kom., M.Eng </td></tr>
         </table>
     </body>
 </html>

@@ -35,10 +35,10 @@
 |
 | This route will tell the Router what URI segments to use if those provided
 | in the URL cannot be matched to a valid route.
-|
+|S
 */
 
-$route['default_controller'] = "admin";
+$route['default_controller'] = "dosen";
 $route['404_override'] = '';
 
 
