@@ -3,10 +3,10 @@
 </div>
 
 <div class="panel panel-success">
-	<div class="panel-heading">Statistik Manajemen E-Dokumen <?php echo $this->session->userdata('admin_ta'); ?></div>
+	<div class="panel-heading">Statistik Data Penelititan <?php echo $this->session->userdata('admin_ta'); ?></div>
 	<div class="panel-body">
 		<div class="col-md-6">
-			<b>Data Upload Data E-Dokumen</b>
+			<b>Data Upload Data Publikasi</b>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -17,14 +17,14 @@
 				<tbody>
 					
 					<tr>
-						<td>Jumlah Total E-Dokumen</td>
+						<td>Jumlah Data Publikasi</td>
 						<td>111</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div class="col-md-6">
-			<b>Data Peminjaman Surat Berdasarkan Bulan</b>
+			<b>Data Upload Data HKI</b>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -35,7 +35,7 @@
 				<tbody>
 					
 					<tr>
-						<td>Jumlah Total Peminjaman Surat</td>
+						<td>Jumlah Data HKI</td>
 						<td>111</td>
 					</tr>
 				</tbody>
@@ -45,7 +45,7 @@
 		<div class="clearfix"></div>
 
 		<div class="col-md-6">
-			<b>Data Pengembalian Surat Berdasarkan Bulan</b>
+			<b>Data Upload Jurnal</b>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -56,7 +56,7 @@
 				<tbody>
 					
 					<tr>
-						<td>Jumlah Total Pengembalian Surat</td>
+						<td>Jumlah Data Jurnal</td>
 						<td>1111</td>
 					</tr>
 				</tbody>
@@ -64,7 +64,7 @@
 		</div>
 
 		<div class="col-md-6">
-			<b>Data Surat Belum Dikembalikan</b>
+			<b>Data Penelitian</b>
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -75,7 +75,7 @@
 				<tbody>
 					
 					<tr>
-						<td>Jumlah Total Surat Belum Di Kembalikan</td>
+						<td>Jumlah Data Penelitian</td>
 						<td>1111</td>
 					</tr>
 				</tbody>

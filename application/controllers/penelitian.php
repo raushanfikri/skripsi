@@ -8,11 +8,31 @@ class penelitian extends CI_Controller {
 
 	}
 
+	public function get_datadosen(){
+        if (isset($_GET['term'])){
+            $q = strtolower($_GET['term']);
+            $this->db->select('*');
+			$this->db->like('namadosen', $q);
+			$this->db->from('dosen');
+			$query = $this->db->get();
+
+			if($query->num_rows() > 0){
+				foreach ($query->result_array() as $row){
+					$new_row['label']=htmlentities(stripslashes($row['nidn']));
+					$new_row['value']=htmlentities(stripslashes($row['namadosen']));
+					$new_row['id']=htmlentities(stripslashes($row['nidn']));
+					$row_set[] = $new_row; //build an array
+				}
+			echo json_encode($row_set); //format the array into json data
+			}
+        }
+    }
+
 	public function exportPDF($table){
 		$awal = $this->input->post('awal');
 		$akhir = $this->input->post('akhir');
 		$namadosen  = $this->input->post('namadosen') ? $this->input->post('namadosen') : null;
-		
+		$data['hariini'] = date('d F Y');
 		if ($namadosen == null) {
 			$data['query'] = $this->db->query("SELECT * from $table where date BETWEEN '$awal' and '$akhir'")->result();			
 		} else {

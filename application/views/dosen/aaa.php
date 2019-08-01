@@ -86,7 +86,7 @@
 	</head>
 	
   <body style="">
-    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #c80505">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: #c80505;z-index: 5">
       <div class="container">
        
         <div class="navbar-collapse collapse" id="navbar-main">

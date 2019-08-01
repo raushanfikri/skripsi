@@ -51,13 +51,13 @@ else
 		if ($act=="act_add")
 		{
 	?>
-	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus maxlength="10"></b></td></tr>	
+	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus maxlength="10" onkeypress="return wajibAngka(event)"></b></td></tr>	
 	<?php
 	} 
 	else
 	{
 	?>	
-	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" readonly></b></td></tr>
+	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" ></b></td></tr>
 	<?php
 		}
 	?>
@@ -132,5 +132,13 @@ $('#password, #confirm_password').on('keyup', function () {
     $('#message').html('Not Matching').css('color', 'red');
 });
 
+
+ function wajibAngka(evt) {
+ var charCode = (evt.which) ? evt.which : event.keyCode
+ if (charCode > 31 && (charCode < 48 || charCode > 57))
+ return false;
+ }
+
 </script>
+
 

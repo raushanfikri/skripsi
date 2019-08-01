@@ -50,7 +50,8 @@ else
 	if ($act=="act_add")
 	{
 	?>
-	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn ?> " style="width: 700px" class="form-control" autofocus></b></td></tr>	
+	<tr><td width="20%">NIDN</td><td><b><input type="text" id="nidn" name="nidn" required value="<?php echo $nidn ?> " style="width: 700px" class="form-control" autofocus></b></td></tr>	
+	<tr><td width="20%">Nama</td><td><b><input id="namadosen" type="text" name="namadosen" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr
 	<?php
 	} 
 	else
@@ -83,9 +84,34 @@ else
 
 		
 	<tr><td width="20%">
+
 	<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i> Simpan</button>
 	<a href="<?php echo base_URL(); ?>index.php/penelitian/buku" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
 	</td></tr>
 	</table>
 </form>
 </div>
+
+<script type="text/javascript">
+ function wajibAngka(evt) {
+ var charCode = (evt.which) ? evt.which : event.keyCode
+ if (charCode > 31 && (charCode < 48 || charCode > 57))
+ return false;
+ }
+
+
+ $(document).ready(function () {
+  $(function () {
+    $("#namadosen").autocomplete({    //id kode sebagai key autocomplete yang akan dibawa ke source url
+        minLength:1,
+        delay:0,
+        source:'<?php echo site_url('index.php/penelitian/get_datadosen'); ?>',   //nama source kita ambil langsung memangil fungsi get_allkota
+        select:function(event, ui){
+            $('#namadosen').val(ui.item.value);
+            $('#nidn').val(ui.item.id);
+        }
+    });
+  });
+});
+
+</script>

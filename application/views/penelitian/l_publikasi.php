@@ -1,8 +1,8 @@
 <div class="clearfix">
 
 <div class="panel panel-info">
-	<div class="panel-heading" style="overflow: auto" style="margin-bottom: 0;">
-		<div class="col-md-6"><h3 style="margin-top: 5px">Data Pemakalah Forum Ilmiah</h3></div>
+	<div class="panel-heading" style="overflow: auto">
+		<div class="col-md-6"><h3 style="margin-top: 5px;">Data Pemakalah Forum Ilmiah</h3></div>
 		<?php 
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
 		?>

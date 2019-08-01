@@ -49,7 +49,9 @@ else{
 		if ($act=="act_add")
 		{
 	?>
-	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus maxlength="10"></b></td></tr>	
+	<tr><td width="20%">NIDN</td><td><b><input id="nidn" type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus maxlength="10" onkeypress="return wajibAngka(event)"></b></td></tr>
+	<tr><td width="20%">Nama</td><td><b><input id="namadosen" type="text" name="namadosen" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>	
+		
 	<?php
 	} 
 	else
@@ -87,3 +89,28 @@ else{
 	</table>
 </form>
 </div>
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>aset/ui/jquery-ui.css">
+<script type="text/javascript" src="<?=base_url()?>aset/ui/jquery-ui.js"></script>
+
+<script type="text/javascript">
+ function wajibAngka(evt) {
+ var charCode = (evt.which) ? evt.which : event.keyCode
+ if (charCode > 31 && (charCode < 48 || charCode > 57))
+ return false;
+ }
+
+$(document).ready(function () {
+  $(function () {
+    $("#namadosen").autocomplete({    //id kode sebagai key autocomplete yang akan dibawa ke source url
+        minLength:1,
+        delay:0,
+        source:'<?php echo site_url('index.php/penelitian/get_datadosen'); ?>',   //nama source kita ambil langsung memangil fungsi get_allkota
+        select:function(event, ui){
+            $('#namadosen').val(ui.item.value);
+            $('#nidn').val(ui.item.id);
+        }
+    });
+  });
+});
+
+</script>

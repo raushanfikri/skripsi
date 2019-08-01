@@ -12,7 +12,7 @@ class Pkm extends CI_Controller {
 		$awal = $this->input->post('awal');
 		$akhir = $this->input->post('akhir');
 		$namadosen  = $this->input->post('namadosen') ? $this->input->post('namadosen') : null;
-		
+		$data['hariini'] = date('d F Y');
 		if ($namadosen == null) {
 			$data['query'] = $this->db->query("SELECT * from $table where date BETWEEN '$awal' and '$akhir'")->result();			
 		} else {
@@ -686,7 +686,7 @@ else if ($mau_ke == "act_edt") {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-		$tanggal = date('Y-m-d H:i:s');
+		$date = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -702,14 +702,14 @@ else if ($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','".$up_data['file_name']."','$keterangan',$tanggal)");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','".$up_data['file_name']."','$keterangan','$date')");
 			} else {
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','$keterangan',$tanggal)");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn','$halaman','$keterangan','$date')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
 			
-			redirect('index.php/pkm/hki');
+			redirect('index.php/pkm/buku_pkm');
 		}
 
 

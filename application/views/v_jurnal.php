@@ -109,9 +109,10 @@ $hs = ' <table style="text-align:center">
         <br><br><br>
         <table class="ttd">
             <br><br><br>
-            <tr><td colspan="7"></td><td colspan="2">Mengetahui,</td></tr>
-            <tr><td colspan="7" height="50"></td><td colspan="2" height="50">Ketua LPPM</td></tr>
-            <tr><td colspan="7"></td><td colspan="2">Amarudin., S.Kom., M.Eng </td></tr>
+            <tr><td colspan="5"></td><td colspan="2">Bandar Lampung, <?php echo $hariini;?></td></tr><br>
+            <tr><td colspan="5"></td><td colspan="2">Mengetahui,</td></tr>
+            <tr><td colspan="5" height="50"></td><td colspan="2" height="50">Ketua LPPM</td></tr>
+            <tr><td colspan="5"></td><td colspan="2">Amarudin., S.Kom., M.Eng </td></tr>
         </table>
     </body>
 </html>

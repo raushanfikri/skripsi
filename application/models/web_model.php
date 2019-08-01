@@ -164,6 +164,23 @@ class Web_model extends CI_Model {
         return false;
     }
 
+    function get_dosendata($q){
+		$this->db->select('*');
+		$this->db->like('nidn', $q);
+		$this->db->from('dosen');
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0){
+			foreach ($query->result_array() as $row){
+				$new_row['label']=htmlentities(stripslashes($row['namadosen']));
+				$new_row['value']=htmlentities(stripslashes($row['namadosen']));
+				$new_row['id']=htmlentities(stripslashes($row['nidn']));
+				$row_set[] = $new_row; //build an array
+			}
+		echo json_encode($row_set); //format the array into json data
+		}
+	}
+
 	
 }
 ?>
