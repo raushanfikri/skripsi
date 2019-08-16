@@ -5,7 +5,7 @@
 		<div class="col-md-6"><h3 style="margin-top: 5px">Data Penelitian</h3></div>
 		<?php 
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
-		?>
+		?> 
 		<div class="col-md-2">
 			<a href="<?php echo base_URL(); ?>index.php/penelitian/penelitiann/add" class="btn btn-info"><i class="icon-plus-sign icon-white"> </i> Tambah Data</a>
 		</div>
@@ -58,7 +58,7 @@
 
 <?php echo $this->session->flashdata("k");?>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="id">
 	<thead>
 		<tr>
 			<th width="5%">No</th>
@@ -68,7 +68,7 @@
 			<th width="15%">Dana</th>
 			<th width="10%">File</th>
 			<th width="10%">Status</th>
-			<th width="10%">Aksi</th>
+			<th width="15%">Aksi</th>
 		</tr>
 	</thead>
 	
@@ -80,17 +80,21 @@
 		} else {
 			$no 	= ($this->uri->segment(4) + 1);
 			foreach ($data as $b) {
+				$get_personil = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->join("dosen","dosen.nidn=detail_anggotapenelitian.nidn")->where("penelitian.idpenelitian",$b->idpenelitian)->order_by("ket","DESC")->get()->result();
 		?>
 		<tr>
 			<td><?php echo $no; ?></td>
-			<td><?php echo $b->judul; ?></td>
-			<td><?php echo $b->namadosen; ?><br>
-				<?php echo $b->anggota_1; ?><br>
-				<?php echo $b->anggota_2; ?><br>
+			<td><?php echo $b->judulpenelitian; ?></td>
+			<td>
+				<?php 
+				foreach($get_personil as $pr){
+					echo "<li>$pr->namadosen</li>";
+				}
+				?>	
 			</td>
 			<td>Jenis : <?php echo $b->jenis; ?><br>
 				Bidang : <?php echo $b->bidang; ?><br>
-				TM : <?php echo $b->tm; ?><br>
+				TSE : <?php echo $b->tse; ?><br>
 			</td>
 			<td>Sumber : <?php echo $b->sumber; ?><br>
 				Institusi : <?php echo $b->institusi; ?><br>
@@ -124,9 +128,10 @@
 				<?php
 					}
 				?>
-				<td>
-				<a href="<?= base_url('index.php/penelitian/penelitiann/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
-				<a href="<?= base_url('index.php/penelitian/penelitiann/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
+				<td class="ctr">
+				<a href="<?= base_url('index.php/penelitian/detail_anggota/') . '/' . $b->idpenelitian;?>" class="btn btn-primary btn-sm" title="Tambah Data Anggota"><i class="icon-list icon-white"> </i></a>
+				<a href="<?= base_url('index.php/penelitian/penelitiann/del/') . '/' . $b->idpenelitian;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
+				<a href="<?= base_url('index.php/penelitian/penelitiann/edt/') . '/' . $b->idpenelitian;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
 			</td>
 			
 		</tr>
@@ -139,3 +144,24 @@
 </table>
 <center><ul class="pagination"><?php echo $pagi; ?></ul></center>
 </div>
+
+<!-- <script type="text/javascript">
+	function addRowHandlers() {
+  var table = document.getElementById("id");
+  var rows = table.getElementsByTagName("tr");
+  for (i = 0; i < rows.length; i++) {
+    var currentRow = table.rows[i];
+    var createClickHandler = function(row) {
+      return function() {
+        var cell = row.getElementsByTagName("td")[0];
+        var id = cell.innerHTML;
+        alert("id:" + id);
+      };
+    };
+    currentRow.onclick = createClickHandler(currentRow);
+  }
+}
+
+
+
+</script> -->

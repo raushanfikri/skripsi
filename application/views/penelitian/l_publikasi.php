@@ -118,13 +118,13 @@
 				$no++;
 					}
 				?>
-			</td>
+			</td> 
 			<?php 
 		//	} else {
 		//		echo "<td class='ctr'> -- </td>";
 		//	}
 			?>
-			<td>
+			<td class="ctr" >
 				<a href="<?= base_url('index.php/penelitian/publikasi/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
 				<a href="<?= base_url('index.php/penelitian/publikasi/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
 			</td>

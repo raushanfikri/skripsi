@@ -4,17 +4,19 @@ $mode		= $this->uri->segment(3);
 if ($mode == "edt" || $mode == "act_edt") {
 	$act		= "act_edt";
 	$admin_user	=$this->session->userdata('admin_user');
-	$nidn 		= $datpil[0]->nidn;	
-	$judul		= $datpil[0]->judul;	
-	$penerbit	= $datpil[0]->penerbit;	
-	$isbn		= $datpil[0]->isbn;	
-	$halaman	= $datpil[0]->halaman;	
+	$nidn 				= $datpil[0]->nidn;	
+	$judul				= $datpil[0]->judul;
+	$idpenelitian		= $datpil[0]->idpenelitian;	
+	$penerbit			= $datpil[0]->penerbit;	
+	$isbn				= $datpil[0]->isbn;	
+	$halaman			= $datpil[0]->halaman;	
 } else {
 	$act		= "act_add";
 	
 	$admin_user	=$this->session->userdata('admin_user');
 	$nidn		= "";
 	$judul		= "";
+	$idpenelitian="";
 	$penerbit	= "";
 	$isbn	= "";
 	$halaman	= "";
@@ -50,6 +52,17 @@ else
 	if ($act=="act_add")
 	{
 	?>
+	<tr>
+				<td width="20%">Judul Penelitian</td>
+				<td>
+					<select class="form-control select2" name="idpenelitian">
+						<?php foreach ($data as $val) { ?>
+						<option value="<?php echo $val->idpenelitian; ?>"><?php echo $val->judulpenelitian; ?></option>
+						<?php } ?>
+						?>
+					</select>
+				</td>
+	</tr>
 	<tr><td width="20%">NIDN</td><td><b><input type="text" id="nidn" name="nidn" required value="<?php echo $nidn ?> " style="width: 700px" class="form-control" autofocus></b></td></tr>	
 	<tr><td width="20%">Nama</td><td><b><input id="namadosen" type="text" name="namadosen" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr
 	<?php
@@ -57,10 +70,24 @@ else
 	else
 	{
 	?>	
-	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn ?>" style="width: 700px" class="form-control"readonly autofocus></b></td></tr>
-
-	<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
-
+			<tr>
+				<td width="20%">Judul Penelitian</td>
+				<td>
+					<select class="form-control select2" name="idpenelitian">
+						<?php foreach ($data as $val) { ?>
+						<option value="<?php echo $val->idpenelitian; ?>"><?php echo $val->judulpenelitian; ?></option>
+						<?php } ?>
+						?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td width="20%">NIDN</td>
+				<td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px"
+							class="form-control" readonly></b></td>
+			</tr>
+			<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
+	
 	<?php
 		}
 	?>
@@ -111,6 +138,11 @@ else
             $('#nidn').val(ui.item.id);
         }
     });
+	$('.select2').select2({
+				width: "100%",
+				allowClear: true,
+				placeholder: "Filter"
+			});
   });
 });
 

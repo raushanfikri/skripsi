@@ -65,8 +65,8 @@
       <div class="row-fluid">
 		<div style="width: 400px; margin: 0 auto">
 			<div class="well well-sm">
-				<img src="<?php echo base_url(); ?>upload/<?php echo $q_instansi->logo; ?>"  style="display: inline; float: left; margin-right: 20px; width: 80px; height: 80px">
-				<h3 style="margin: 20px 0 0.4em 0; font-size: 18px; color: #FF0000; font-weight: bold; 		"><?php echo $q_instansi->nama; ?></h3>
+				<img src="..\aset\img\UNIVERSITASTEKNOKRAT.png"  style="display: inline; float: left; margin-right: 20px; width: 80px; height: 80px">
+				<h3 style="margin: 20px 0 0.4em 0; font-size: 16px; color: #FF0000; font-weight: bold; font-family: 'Futura XBlk BT' ;	">Universitas Teknokrat Indonesia</h3>
 				<div style="color: #000; font-size: 13px" class="clearfix"><?php echo $q_instansi->alamat; ?></div>
 			 </div>
 		</div>

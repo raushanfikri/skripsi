@@ -5,31 +5,31 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$act		= "act_edt";
 	$admin_user	=$this->session->userdata('admin_user');	
 	$nidn		= $datpil[0]->nidn;
-	$judul		= $datpil[0]->judul;	
-	$jenis		= $datpil[0]->jenis;	
-	$penulis_2	= $datpil[0]->penulis_2;	
-	$penulis_3	= $datpil[0]->penulis_3;	
-	$jurnal		= $datpil[0]->jurnal;	
-	$issn		= $datpil[0]->issn;	
-	$volume		= $datpil[0]->volume;	
-	$nomor		= $datpil[0]->no;	
-	$halaman	= $datpil[0]->halaman;	
-	$url		= $datpil[0]->url;	
+	$idpenelitian		= $datpil[0]->idpenelitian;	
+	$judul				= $datpil[0]->judul;	
+	$namajurnal			= $datpil[0]->namajurnal;
+	$jenis				= $datpil[0]->jenis;	
+	$peranpenulis		= $datpil[0]->peranpenulis;	
+	$tahun				= $datpil[0]->tahun;	
+	$volume				= $datpil[0]->volume;	
+	$nomor				= $datpil[0]->no;	 
+	$url				= $datpil[0]->url;
+	$issn				= $datpil[0]->issn;	
 } else {
-	$act		= "act_add";
+	$act		= "act_add"; 
 	
 	$admin_user	=$this->session->userdata('admin_user');
 	$nidn		= "";
-	$judul		= "";
-	$jenis		= "";
-	$penulis_2	= "";
-	$penulis_3	= "";
-	$jurnal		= "";
-	$issn		= "";
-	$volume		= "";
-	$nomor		= "";
-	$halaman	= "";
-	$url	= "";
+	$idpenelitian		= "";	
+	$judul				= "";	
+	$namajurnal			= "";
+	$jenis				= "";	
+	$peranpenulis		= "";	
+	$tahun				= "";	
+	$volume				= "";	
+	$nomor				= "";	 
+	$url				= "";
+	$issn				= "";
 }
 ?>
 <?php
@@ -62,6 +62,17 @@ else
 		if ($act=="act_add")
 		{
 	?>
+			<tr>
+				<td width="20%">Judul Penelitian</td>
+				<td>
+					<select class="form-control select2" name="idpenelitian">
+						<?php foreach ($data as $val) { ?>
+						<option value="<?php echo $val->idpenelitian; ?>"><?php echo $val->judulpenelitian; ?></option>
+						<?php } ?>
+						?>
+					</select>
+				</td>
+			</tr>
 	<tr><td width="20%">NIDN</td><td><b><input id="nidn" type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus maxlength="10" onkeypress="return wajibAngka(event)"></b></td></tr>
 	<tr><td width="20%">Nama</td><td><b><input id="namadosen" type="text" name="namadosen" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>>	
 	
@@ -70,24 +81,87 @@ else
 	else
 	{
 	?>	
-	<tr><td width="20">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" readonly></b></td></tr>
+			<tr>
+				<td width="20%">Judul Penelitian</td>
+				<td>
+					<select class="form-control select2" name="idpenelitian">
+						<?php foreach ($data as $val) { ?>
+						<option value="<?php echo $val->idpenelitian; ?>"><?php echo $val->judulpenelitian; ?></option>
+						<?php } ?>
+						?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td width="20%">NIDN</td>
+				<td><b><input type="text" name="nidn" required value="<?php echo $$nidn; ?>" style="width: 700px"
+							class="form-control" readonly></b></td>
+			</tr>
 	
 	<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
 
 	<?php
 		}
 	?>
-	<tr><td width="20%">Judul</td><td><b><input type="text" name="judul" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>		
-	<tr><td width="20%">Jenis</td><td><b><input type="text" name="jenis" required value="<?php echo $jenis; ?>" style="width: 700px" class="form-control"></b></td></tr>				
-	<tr><td width="20%">Penulis 2</td><td><b><input type="text" name="penulis_2" required value="<?php echo $penulis_2; ?>" style="width: 700px" class="form-control"></b></td></tr>		
-	<tr><td width="20%">Penulis 3</td><td><b><input type="text" name="penulis_3" required value="<?php echo $penulis_3; ?>" style="width: 700px" class="form-control"></b></td></tr>		
-	<tr><td width="20%">Jurnal</td><td><b><input type="text" name="jurnal" required value="<?php echo $jurnal; ?>" style="width: 700px" class="form-control"></b></td></tr>			
-	<tr><td width="20%">ISSN</td><td><b><input type="text" name="issn" required value="<?php echo $issn; ?>" style="width: 700px" class="form-control"></b></td></tr>		
-	<tr><td width="20%">Volume</td><td><b><input type="text" name="volume" required value="<?php echo $volume; ?>" style="width: 700px" class="form-control"></b></td></tr>	
-	<tr><td width="20%">Nomor</td><td><b><input type="text" name="nomor" required value="<?php echo $nomor; ?>" style="width: 700px" class="form-control"></b></td></tr>	
-	<tr><td width="20%">Halaman</td><td><b><input type="text" name="halaman" required value="<?php echo $halaman; ?>" style="width: 700px" class="form-control"></b></td></tr>	
-	<tr><td width="20%">URL</td><td><b><input type="text" name="url" required value="<?php echo $url; ?>" style="width: 700px" class="form-control"></b></td></tr>	
-	<tr><td width="20%">File</td><td><b><input type="file" name="file_surat" tabindex="8" class="form-control" style="width: 400px"></b></td></tr>
+		<tr>
+				<td width="20%">Nama Jurnal</td>
+				<td><b><input type="text" name="namajurnal" required value="<?php echo $judul; ?>" style="width: 700px"
+							class="form-control" autofocus></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">Judul</td>
+				<td><b><input type="text" name="judul" required value="<?php echo $judul; ?>" style="width: 700px"
+							class="form-control" autofocus></b></td>
+			</tr>
+		
+			<tr>
+				<td width="20%">Jenis Publikasi</td>
+				<td><b><input type="text" name="jenis" required value="<?php echo $volume; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">Peran Penulis</td>
+				<td><b><input type="text" name="peranpenulis" required value="<?php echo $volume; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">Tahun Publikasi</td>
+				<td><b><input type="text" name="tahun" required value="<?php echo $volume; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">Volume</td>
+				<td><b><input type="text" name="volume" required value="<?php echo $volume; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+			
+			<tr>
+				<td width="20%">Nomor</td>
+				<td><b><input type="text" name="no" required value="<?php echo $nomor; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+		
+			<tr>
+				<td width="20%">URL</td>
+				<td><b><input type="text" name="url" required value="<?php echo $url; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">ISSN</td>
+				<td><b><input type="text" name="issn" required value="<?php echo $issn; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">File</td>
+				<td><b><input type="file" name="file_surat" tabindex="8" class="form-control" style="width: 400px"></b>
+				</td>
+			</tr>
 
 	<?php if ($act == 'edt' || $act == 'act_edt') : ?>
 		<tr><td></td><td><small><?= $datpil[0]->file ?></small></td></tr>
@@ -119,7 +193,7 @@ else
  }
 
 
-$(document).ready(function () {
+ $(document).ready(function () {
   $(function () {
     $("#namadosen").autocomplete({    //id kode sebagai key autocomplete yang akan dibawa ke source url
         minLength:1,
@@ -130,6 +204,11 @@ $(document).ready(function () {
             $('#nidn').val(ui.item.id);
         }
     });
+	$('.select2').select2({
+				width: "100%",
+				allowClear: true,
+				placeholder: "Filter"
+			});
   });
 });
 

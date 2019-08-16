@@ -26,7 +26,7 @@
 
 <?php echo $this->session->flashdata("k");?>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="table">
 	<thead>
 		<tr>
 			<th width="10%">No</th>
@@ -109,3 +109,13 @@
 </table>
 <center><ul class="pagination"><?php echo $pagi; ?></ul></center>
 </div>
+
+<script type="text/javascript">
+	
+$(function () {
+	    $("#table").dataTable({
+	      "iDisplayLength": 10,
+	    });
+	});
+	
+</script>

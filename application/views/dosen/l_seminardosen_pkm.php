@@ -26,7 +26,7 @@
 
 <?php echo $this->session->flashdata("k");?>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="table">
 	<thead>
 		<tr>
 			<th width="5%">No</th>
@@ -52,8 +52,6 @@
 			<td><?php echo $no; ?></td>
 			<td><?php echo $b->judul; ?></td>
 			<td><?php echo $b->namadosen; ?><br>
-				<?php echo $b->penulis_2; ?><br>
-				<?php echo $b->penulis_3; ?><br>
 			</td>
 			<td>Jurnal : <?php echo $b->jurnal; ?><br>
 				Jenis : <?php echo $b->jenis; ?><br>
@@ -94,8 +92,8 @@
 
 
 				<td class="ctr">
-						<a href="<?= base_url('index.php/dosen/dosenseminar_pkm/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
-						<a href="<?= base_url('index.php/dosen/dosenseminar_pkm/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a>
+						<a href="<?= base_url('index.php/dosen/dosenseminar_pkm/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white" target="_blank" title="Hapus"> </i></a>
+						<a href="<?= base_url('index.php/dosen/dosenseminar_pkm/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white" target="_blank" title="Ubah"> </i></a>
 					</td>
 
 				<?php
@@ -112,3 +110,14 @@
 </table>
 <center><ul class="pagination"><?php echo $pagi; ?></ul></center>
 </div>
+
+
+<script type="text/javascript">
+	
+$(function () {
+	    $("#table").dataTable({
+	      "iDisplayLength": 10,
+	    });
+	});
+	
+</script>

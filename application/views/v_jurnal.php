@@ -86,11 +86,9 @@ $hs = ' <table style="text-align:center">
                 <td><?php echo $no; ?></td>
                 <td style="text-align:right"><?php echo $q->judul; ?></td>
                 <td style="text-align:right"><?php echo $q->namadosen; ?><br>
-                                            <?php echo $q->penulis_2; ?><br>
-                                            <?php echo $q->penulis_3; ?><br>
+                                          
                 </td>
-                <td style="text-align:right">Jurnal : <?php echo $q->jurnal; ?><br>
-                                            Jenis : <?php echo $q->jenis; ?><br>                
+                <td style="text-align:right">Jenis : <?php echo $q->jenis; ?><br>                
                                             ISSN : <?php echo $q->issn; ?><br>
                                             Volume : <?php echo $q->volume; ?><br>
                                             Nomor : <?php echo $q->no; ?><br>

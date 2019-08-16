@@ -7,7 +7,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$nik		= $datpil->nik;	
 	$namadosen	= $datpil->namadosen;	
 	$jurusan	= $datpil->jurusan;
-		
+	$fakultas	= $datpil->Fakultas;	
 	$level		= $datpil->level;
 	$password	= $datpil->password;	
 		

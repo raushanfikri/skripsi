@@ -32,12 +32,18 @@
       <script src="../bower_components/bootstrap/assets/js/respond.min.js"></script>
     <![endif]-->
 	<link rel="stylesheet" href="<?php echo base_url(); ?>aset/js/jquery/jquery-ui.css" />
-  
+  	<link href="<?php echo base_url();?>aset/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" /> 
+  	<link href="<?php echo base_url();?>aset/select2/css/select2.min.css" rel="stylesheet" type="text/css" /> 
+  	<link href="<?php echo base_url();?>aset/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" /> 
+  	
     <script src="<?php echo base_url(); ?>aset/js/jquery.min.js"></script>
     <script src="<?php echo base_url(); ?>aset/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>aset/js/bootswatch.js"></script>
+    <script src="<?php echo base_url(); ?>aset/select2/js/select2.full.min.js"></script>
+	<script src="<?php echo base_url(); ?>aset/datatables/jquery.dataTables.js"></script>
+	<script src="<?php echo base_url(); ?>aset/datatables/dataTables.bootstrap.js"></script>
 	<script src="<?php echo base_url(); ?>aset/js/jquery/jquery-ui.js"></script>
-	<script type="text/javascript">
+	<script type="text/javascript"> 
 	// <![CDATA[
 	$(document).ready(function () {
 		$(function () {
@@ -111,24 +117,25 @@
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-th-list icon-white"> </i> Data Master <span class="caret"></span></a>
 				<ul class="dropdown-menu" aria-labelledby="themes">
 				<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/dosen">Data Dosen</a></li>
-				
+				<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/fakultas">Data Fakultas</a></li>
+				<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/jurusan">Data Jurusan</a></li>
 				</ul>
             </li>
 			<li class="dropdown" >
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes" ><i class="icon-file icon-white"> </i> Admin Penelitian  <span class="caret"></span></a>
               <ul class="dropdown-menu" aria-labelledby="themes">
+              	<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitiann"> Penelitian</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/publikasi"> Pemakalah Forum Ilmiah</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/hki"> Hak Kekayaan Intelektual (HKI)</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/buku"> Buku Ajar / Teks</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/jurnal"> Jurnal</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/seminar"> Seminar</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitiann"> Penelitian</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/jurnal"> Artikel Jurnal</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/seminar"> Artikel Prosiding</a></li>
               </ul>
             </li>
 			
 			
 		<li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-wrench icon-white"> </i> Pengaturan <span class="caret"></span></a>
+             <!--  <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-wrench icon-white"> </i> Pengaturan <span class="caret"></span></a>
               <ul class="dropdown-menu" aria-labelledby="themes">
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/pengguna">Instansi Pengguna</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/manage_admin">Manajemen User</a></li>
@@ -136,7 +143,7 @@
             </li>
 			<?php 
 			}
-			?>
+			?> -->
           </ul>
 		
           <ul class="nav navbar-nav navbar-right">

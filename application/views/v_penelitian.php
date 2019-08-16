@@ -67,7 +67,7 @@ $hs = ' <table style="text-align:center">
     <head>
     <body>
         <br><br><br>
-        <h2 style="text-align: center" >Laporan Data Jurnal </h2>
+        <h2 style="text-align: center" >Laporan Data Penelitian </h2>
         <table>
 
             <tr style="text-align: center">
@@ -75,30 +75,32 @@ $hs = ' <table style="text-align:center">
             <th width="15%">Judul</th>
             <th width="15%">Personil</th>
             <th width="15%">Peneliti</th>
-            <th width="15%">File</th>
             <th width="15%">Dana</th>
             <th width="15%">File</th>
+             <th width="15%">File</th>
                 
             </tr>
-            <?php foreach($query as $q) : ?>
+            <?php foreach($query as $q) :
+                
+             ?>
+
             <tr>
                 <<!-- td><?php echo date('Y', strtotime($q->tanggal)) ?></td>
                 <td><?php echo date('F', strtotime($q->tanggal)) ?></td> -->
                 <td><?php echo $no; ?></td>
-                <td style="text-align:right"><?php echo $q->judul; ?></td>
-                <td style="text-align:right"><?php echo $q->namadosen; ?><br>
-                                            <?php echo $q->anggota_1; ?><br>
-                                            <?php echo $q->anggota_2; ?><br>
+                <td style="text-align:left;"><?php echo $q->judulpenelitian; ?></td>
+                <td style="text-align:left;"><?php echo $q->namadosen; ?><br>
+                                             
                 </td>
-                <td style="text-align:right">Jenis : <?php echo $q->jenis; ?><br>
-                                            Bidang : <?php echo $q->bidang; ?><br>                
-                                            TM : <?php echo $q->tm; ?><br></td>
-                <td style="text-align:right">Sumber : <?php echo $q->sumber; ?><br>
-                                            Institusi : <?php echo $q->institusi; ?><br>
-                                            Jumlah : <?php echo $q->jumlah; ?><br>
+                <td style="text-align:left;">Jenis : <?php echo $q->jenis; ?><br>
+                                             Bidang : <?php echo $q->bidang; ?><br>                
+                                             TSE : <?php echo $q->tse; ?><br></td>
+                <td style="text-align:left;">Sumber : <?php echo $q->sumber; ?><br>
+                                             Institusi : <?php echo $q->institusi; ?><br>
+                                             Jumlah : <?php echo $q->jumlah; ?><br>
                 </td>
-                <td style="text-align:right"><?php echo $q->file ?></td>
-                <td style="text-align:right"><?php echo $q->keterangan ?></td>
+                <td style="text-align:left;"><?php echo $q->file ?></td>
+                <td style="text-align:left;"><?php echo $q->keterangan ?></td>
                 
             </tr>
             <?php 

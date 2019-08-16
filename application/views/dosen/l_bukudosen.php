@@ -26,7 +26,7 @@
 
 <?php echo $this->session->flashdata("k");?>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="table">
 	<thead>
 		<tr>
 			<th width="5%">No</th>
@@ -84,8 +84,8 @@
 					Menunggu Verifikasi
 				</div>	
 				<td class="ctr">
-						<a href="<?= base_url('index.php/dosen/dosenbuku/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
-						<a href="<?= base_url('index.php/dosen/dosenbuku/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a>
+						<a href="<?= base_url('index.php/dosen/dosenbuku/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"target="_blank" title="Hapus">> </i></a>
+						<a href="<?= base_url('index.php/dosen/dosenbuku/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"target="_blank" title="Ubah"> </i></a>
 					</td>
 				<?php
 					}
@@ -100,5 +100,15 @@
 		?>
 	</tbody>
 </table>
-<center><ul class="pagination"><?php echo $pagi; ?></ul></center>
+<!-- <center><ul class="pagination"><?php echo $pagi; ?></ul></center> -->
 </div>
+
+<script type="text/javascript">
+	
+$(function () {
+	    $("#table").dataTable({
+	      "iDisplayLength": 10,
+	    });
+	});
+	
+</script>

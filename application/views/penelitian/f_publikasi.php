@@ -6,14 +6,16 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$act		= "act_edt";
 	$admin_user	=$this->session->userdata('admin_user');
 	$nidn		= $datpil[0]->nidn;
-	$judul		= $datpil[0]->judul;	
-	$institusi	= $datpil[0]->institusi;	
-	$tempat		= $datpil[0	]->tempat;	
-	$tanggal		= $datpil[0]->tanggal;	
+	$judul				= $datpil[0]->judul;
+	$idpenelitian		= $datpil[0]->idpenelitian;	
+	$institusi			= $datpil[0]->institusi;	
+	$tempat				= $datpil[0]->tempat;	
+	$tanggal			= $datpil[0]->tanggal;	
 } else {
 	$act		= "act_add";
 	$nidn		= "";
 	$admin_user	=$this->session->userdata('admin_user');
+	$idpenelitian="";
 	$judul		= "";
 	$institusi	= "";
 	$tempat	= "";
@@ -49,6 +51,19 @@ else{
 		if ($act=="act_add")
 		{
 	?>
+
+			<tr>
+				<td width="20%">Judul Penelitian</td>
+				<td>
+					<select class="form-control select2" name="idpenelitian">
+						<?php foreach ($data as $val) { ?>
+						<option value="<?php echo $val->idpenelitian; ?>"><?php echo $val->judulpenelitian; ?></option>
+						<?php } ?>
+						?>
+					</select>
+				</td>
+			</tr>
+
 	<tr><td width="20%">NIDN</td><td><b><input id="nidn" type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" autofocus maxlength="10" onkeypress="return wajibAngka(event)"></b></td></tr>
 	<tr><td width="20%">Nama</td><td><b><input id="namadosen" type="text" name="namadosen" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>	
 		
@@ -57,6 +72,20 @@ else{
 	else
 	{
 	?>	
+
+	
+			<tr>
+				<td width="20%">Judul Penelitian</td>
+				<td>
+					<select class="form-control select2" name="idpenelitian">
+						<?php foreach ($data as $val) { ?>
+						<option value="<?php echo $val->idpenelitian; ?>"><?php echo $val->judulpenelitian; ?></option>
+						<?php } ?>
+						?>
+					</select>
+				</td>
+			</tr>
+
 	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn; ?>" style="width: 700px" class="form-control" readonly ></b></td></tr>
 
 	<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
@@ -64,6 +93,7 @@ else{
 	<?php
 		}
 	?>
+	
 	<tr><td width="20%">Judul</td><td><b><input type="text" name="judul" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>		
 	<tr><td width="20%">Institusi</td><td><b><input type="text" name="institusi" required value="<?php echo $institusi; ?>" style="width: 700px" class="form-control"></b></td></tr>	
 	<tr><td width="20%">Tanggal</td><td><b><input type="text" name="tanggal" tabindex="7" required value="<?php echo $tanggal; ?>" id="tgl_surat" style="width: 300px" class="form-control"></b></td></tr>		
@@ -89,6 +119,7 @@ else{
 	</table>
 </form>
 </div>
+
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>aset/ui/jquery-ui.css">
 <script type="text/javascript" src="<?=base_url()?>aset/ui/jquery-ui.js"></script>
 
@@ -110,6 +141,11 @@ $(document).ready(function () {
             $('#nidn').val(ui.item.id);
         }
     });
+	$('.select2').select2({
+				width: "100%",
+				allowClear: true,
+				placeholder: "Filter"
+			});
   });
 });
 

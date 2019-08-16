@@ -1,16 +1,32 @@
 
 <?php
+
+$fakultas_ = $this->db->get("fakultas");
+$prodi_ = $this->db->get("jurusan");
+
 $mode		= $this->uri->segment(3);
 
 if ($mode == "edt" || $mode == "act_edt") {
-	$act		= "act_edt";
-	$nidn		= $datpil->nidn;
-	$nik		= $datpil->nik;	
-	$namadosen	= $datpil->namadosen;	
-	$jurusan	= $datpil->jurusan;
-		
-	$level		= $datpil->level;
-	$password	= $datpil->password;	
+
+	if($datpil->num_rows()>0){
+		$act		= "act_edt";
+		$nidn		= $datpil->row()->nidn;
+		$nik		= $datpil->row()->nik;	
+		$namadosen	= $datpil->row()->namadosen;	
+		$level		= $datpil->row()->level;
+		$password	= $datpil->row()->password;
+		$kd_fak = $datpil->row()->kodefakultas;
+		$kd_jur = $datpil->row()->kodejurusan;	
+	}else{
+		$act		= "act_edt";
+		$nidn		= "";
+		$nik		= "";
+		$namadosen	= "";
+		$jurusan	= "";
+		$password 	= "";
+		$kd_fak = "";
+		$kd_jur = "";	
+	}
 		
 
 } else {
@@ -18,7 +34,9 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$nidn		= "";
 	$nik		= "";
 	$namadosen	= "";
-	$jurusan	= "";
+	$password 	= "";
+	$kd_fak = "";
+	$kd_jur = "";	
 }
 ?>
 <?php
@@ -64,15 +82,19 @@ else
 	<tr><td width="20%">NIK</td><td><b><input type="text" name="nik" required value="<?php echo $nik; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>		
 	<tr><td width="20%">Nama Dosen</td><td><b><input type="text" name="namadosen" required value="<?php echo $namadosen; ?>" style="width: 700px" class="form-control"></b></td></tr>		
 	<tr><td width="20%">Fakultas</td><td><b>
-	<select id="fakultas" name="Fakultas" class="form-control" >
-		<option value="" selected>--Pilih Jurusan--</option>
-		<option value="FTIK">FTIK</option>
-		<option value="FSIP">FSIP</option>
-		<option value="FEB">FEB</option>
+	<select id="fakultas" name="kodefakultas" class="form-control" >
+		<option value="" selected>--Pilih Fakultas--</option>
+		<?php foreach($fakultas_->result() as $f){ ?>
+		<option value="<?=$f->kodefakultas?>" <?php if($f->kodefakultas==$kd_fak){ echo "selected"; } ?> ><?=$f->namafakultas?></option>
+		<?php } ?>
 	</select>
 
 	<tr><td width="20%">Program Studi</td><td><b>
-	<select id="prodi" name="jurusan" class="form-control" required>
+	<select id="jurusan" name="kodejurusan" class="form-control" >
+		<option value="" selected>--Pilih Jurusan--</option>
+		<?php foreach($prodi_->result() as $r){ ?>
+		<option value="<?=$r->kodejurusan?>"  <?php if($r->kodejurusan==$kd_jur){ echo "selected"; } ?>  class="<?=$r->kodefakultas?>"><?=$r->namajurusan?></option>
+		<?php } ?>
 	</select>
 
 	</b></td></tr>		
@@ -80,7 +102,7 @@ else
 	<tr><td width="20%">Level</td><td><b>
 			<select name="level" class="form-control" style="width: 200px" required tabindex="6" ><option value=""> - Level - </option>
 			<?php
-				$l_sifat	= array('Admin','Dosen');
+				$l_sifat	= array('admin','dosen');
 				
 				for ($i = 0; $i < sizeof($l_sifat); $i++) {
 					if ($l_sifat[$i] == $level) {
@@ -93,26 +115,25 @@ else
 			</select>
 	</b></td></tr>
 
-	<div class="col-lg-6">
-		<table width="100%" class="table-form">
+	
 
-		<tr><td width="20%">Password</td><td><b><input type="password" name="password" value="<?php echo $nidn; ?>" id="password" style="width: 300px" class="form-control" tabindex="2" ></b></td></tr>		
-		<tr><td width="20%">Ulangi Password</td><td><b><input type="password" name="password2" value="<?php echo $nidn; ?>" id="confirm_password" style="width: 300px" class="form-control" tabindex="3	" ></b></td></tr>
-		<tr><td><span id='message'></span></td></tr>		
-		</table>
-	</div>
+	<tr><td width="20%">Password</td><td><b><input type="text" name="password" value="<?php echo $password; ?>" id="password" style="width: 300px" class="form-control" tabindex="2" ></b></td></tr>		
+	<tr><td width="20%">Ulangi Password</td><td><b><input type="text" name="password2" value="<?php echo $password; ?>" id="confirm_password" style="width: 300px" class="form-control" tabindex="3	" ></b></td></tr>
+	<tr><td><span id='message'></span></td></tr>		
 
 
 	<tr><td width="20%">
 	<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i> Simpan</button>
 	<a href="<?php echo base_URL(); ?>index.php/penelitian/dosen" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
 	</td></tr>
+
 	</table>
 </form>
 </div>
-
+<script src="<?=base_url()?>aset/jquery.chained.min.js"></script>
 <script type="text/javascript">
-	$(document).ready(function () {
+
+	/*$(document).ready(function () {
     $("#fakultas").change(function () {
         var val = $(this).val();
         if (val == "FTIK") {
@@ -123,7 +144,9 @@ else
             $("#prodi").html("<option value='AKUNTANSI'>AKUNTANSI</option><option value='MANAJEMEN'>MANAJEMEN</option>");
         }
     });
-});
+});*/
+
+$('#jurusan').chained('#fakultas');
 
 $('#password, #confirm_password').on('keyup', function () {
   if ($('#password').val() == $('#confirm_password').val()) {

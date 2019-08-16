@@ -5,17 +5,17 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$act		= "act_edt";
 	$admin_user	=$this->session->userdata('admin_user');	
 	$nidn 		= $datpil[0]->nidn;
-	$judul		= $datpil[0]->judul;	
+	$judul		= $datpil[0]->judulpenelitian;	
 	$jenis		= $datpil[0]->jenis;	
-	$anggota_1	= $datpil[0]->anggota_1;	
-	$anggota_2	= $datpil[0]->anggota_2;	
+	// $anggota_1	= $datpil[0]->anggota_1;	
+	// $anggota_2	= $datpil[0]->anggota_2;	
 	$bidang		= $datpil[0]->bidang;	
-	$tm			= $datpil[0]->tm;	
+	$tm			= $datpil[0]->tse;	
 	$sumber		= $datpil[0]->sumber;	
 	$institusi	= $datpil[0]->institusi;	
 	$jumlah		= $datpil[0]->jumlah;	
 } else {
-	$act		= "act_add";
+	$act		= "act_add"; 
 	
 	$admin_user	=$this->session->userdata('admin_user');
 	$nidn 		= "";
@@ -69,18 +69,18 @@ else
 	?>	
 	<tr><td width="20%">NIDN</td><td><b><input type="text" name="nidn" required value="<?php echo $nidn?>" style="width: 700px" class="form-control" readonly></b></td></tr>
 
-	<input type="hidden" name="id" value="<?php echo $datpil[0]->id; ?>">
+	<input type="hidden" name="idpenelitian" value="<?php echo $datpil[0]->idpenelitian; ?>">
 
 
 	<?php
 		}
 	?>
-	<tr><td width="20%">Judul</td><td><b><input type="text" name="judul" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>		
+	<tr><td width="20%">Judul</td><td><b><input type="text" name="judulpenelitian" required value="<?php echo $judul; ?>" style="width: 700px" class="form-control" autofocus></b></td></tr>		
 	<tr><td width="20%">Jenis</td><td><b><input type="text" name="jenis" required value="<?php echo $jenis; ?>" style="width: 700px" class="form-control"></b></td></tr>				
-	<tr><td width="20%">Anggota 1</td><td><b><input type="text" name="anggota_1" required value="<?php echo $anggota_1; ?>" style="width: 700px" class="form-control"></b></td></tr>		
-	<tr><td width="20%">Anggota 2</td><td><b><input type="text" name="anggota_2" required value="<?php echo $anggota_2; ?>" style="width: 700px" class="form-control"></b></td></tr>		
+	<!-- <tr><td width="20%">Anggota 1</td><td><b><input type="text" name="anggota_1" required value="<?php echo $anggota_1; ?>" style="width: 700px" class="form-control"></b></td></tr>		
+	<tr><td width="20%">Anggota 2</td><td><b><input type="text" name="anggota_2" required value="<?php echo $anggota_2; ?>" style="width: 700px" class="form-control"></b></td></tr> -->		
 	<tr><td width="20%">Bidang</td><td><b><input type="text" name="bidang" required value="<?php echo $bidang; ?>" style="width: 700px" class="form-control"></b></td></tr>			
-	<tr><td width="20%">TM</td><td><b><input type="text" name="tm" required value="<?php echo $tm; ?>" style="width: 700px" class="form-control"></b></td></tr>		
+	<tr><td width="20%">TM</td><td><b><input type="text" name="tse" required value="<?php echo $tm; ?>" style="width: 700px" class="form-control"></b></td></tr>		
 	<tr><td width="20%">Sumber</td><td><b><input type="text" name="sumber" required value="<?php echo $sumber; ?>" style="width: 700px" class="form-control"></b></td></tr>	
 	<tr><td width="20%">Institusi</td><td><b><input type="text" name="institusi" required value="<?php echo $institusi; ?>" style="width: 700px" class="form-control"></b></td></tr>	
 	

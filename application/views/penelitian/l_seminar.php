@@ -82,18 +82,15 @@
 		?>
 		<tr>
 			<td><?php echo $no; ?></td>
-			<td><?php echo $b->judul; ?></td>
+			<td><?php echo $b->namaprosiding; ?></td>
 			<td><?php echo $b->namadosen; ?><br>
-				<?php echo $b->penulis_2; ?><br>
-				<?php echo $b->penulis_3; ?><br>
 			</td>
-			<td>Jurnal : <?php echo $b->jurnal; ?><br>
-				Jenis : <?php echo $b->jenis; ?><br>
-				ISSN : <?php echo $b->issn; ?><br>
-				Volume : <?php echo $b->volume; ?><br>
-				Nomor : <?php echo $b->no; ?><br>
-				Halaman : <?php echo $b->halaman; ?><br>
-				Url : <?php echo $b->url; ?><br>
+			<td>Tahun  	: <?php echo $b->tahunprosiding; ?><br>
+				Volume 	: <?php echo $b->volume; ?><br>
+				Nomor	: <?php echo $b->no; ?><br>
+				Isbn 	: <?php echo $b->isbn; ?><br>
+				Url 	: <?php echo $b->url; ?><br>
+				Jenis 	: <?php echo $b->jenisprosiding; ?><br>
 			</td>
 			<td><a href="<?= base_url('upload/seminar\/') . $b->file; ?>">
 			<?php echo $b->file; ?></a></td>
@@ -123,7 +120,7 @@
 				<?php
 					}
 				?>
-				<td>
+				<td class="ctr">
 				<a href="<?= base_url('index.php/penelitian/seminar/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" role="button"><i class="icon-remove icon-white"> </i></a>
 				<a href="<?= base_url('index.php/penelitian/seminar/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" role="button"><i class="icon-edit icon-white"> </i></a>
 			</td>

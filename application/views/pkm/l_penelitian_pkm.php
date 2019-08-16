@@ -51,8 +51,6 @@
 			<td><?php echo $b->nidn; ?></td>
 			<td><?php echo $b->judul; ?></td>
 			<td><?php echo $b->nidn; ?><br>
-				<?php echo $b->anggota_1; ?><br>
-				<?php echo $b->anggota_2; ?><br>
 			</td>
 			<td>Jenis : <?php echo $b->jenis; ?><br>
 				Bidang : <?php echo $b->bidang; ?><br>

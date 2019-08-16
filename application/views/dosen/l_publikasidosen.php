@@ -13,20 +13,15 @@
 		//}
 
 		?>
-		<div class="col-md-3"></div>
-		<div class="col-md-4">
-			<form class="navbar-form navbar-left" method="post" action="<?php echo base_URL(); ?>index.php/dosen/dosenpublikasi/cari" style="margin-top: 0px">
-				<input type="text" class="form-control" name="q" style="width: 200px" placeholder="Kata kunci pencarian ..." required>
-				<button type="submit" class="btn btn-danger"><i class="icon-search icon-white"> </i> Cari</button>
-			</form>
-		</div>
+		
 	</div>
 </div>
 
 
 <?php echo $this->session->flashdata("k");?>
 
-<table class="table table-bordered table-hover">
+<div>
+<table class="table table-bordered table-hover" id="table">
 	<thead>
 		<tr>
 			<th width="5%">No</th>
@@ -34,7 +29,7 @@
 			<th width="15%">Judul</th>
 			<th width="20%">Penyelenggara</th>
 			<th width="10%">File</th>
-			<th width="20%">Status</th>
+			<th width="15%">Status</th>
 			<th width="10%">Aksi</th>
 		</tr>
 	</thead>
@@ -42,9 +37,9 @@
 	<tbody>
 		<?php 
 		$no=1;
-		if (empty($data)) {
-			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
-		} else {
+		// if (empty($data)) {
+		// 	echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
+		// } else {
 			$no 	= ($this->uri->segment(4) + 1);
 			foreach ($data as $b) {
 		?>
@@ -70,11 +65,11 @@
 						Disetujui
 					</div>
 					<td class="ctr">
-						<a href="#" class="btn btn-danger btn-sm" role="button" disabled><i class="icon-remove icon-white"> </i></a>
 						<a href="#" class="btn btn-success btn-sm" role="button" disabled><i class="icon-edit icon-white"> </i></a>
+						<a href="#" class="btn btn-danger btn-sm" role="button" disabled><i class="icon-remove icon-white"> </i></a>
 					</td>
 					<?php
-				}
+				} 
 				else
 				{
 					?>
@@ -83,8 +78,8 @@
 						Menunggu Verifikasi
 					</div>	
 					<td class="ctr">
-						<a href="<?= base_url('index.php/dosen/dosenpublikasi/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"><i class="icon-remove icon-white"> </i></a>
-						<a href="<?= base_url('index.php/dosen/dosenpublikasi/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"><i class="icon-edit icon-white"> </i></a>
+						<a href="<?= base_url('index.php/dosen/dosenpublikasi/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm" title="Ubah"><i class="icon-edit icon-white"> </i></a>
+						<a href="<?= base_url('index.php/dosen/dosenpublikasi/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm" title="Hapus"><i class="icon-remove icon-white" > </i></a>
 					</td>
 					<?php
 				}
@@ -99,10 +94,21 @@
 		</tr>
 		<?php 
 			$no++;
-			}
+			// }
 		}
 		?>
 	</tbody>
 </table>
-<center><ul class="pagination"><?php echo $pagi; ?></ul></center>
 </div>
+<!-- <center><ul class="pagination"><?php //	decho $pagi; ?></ul></center> -->
+</div>
+
+<script type="text/javascript">
+	
+$(function () {
+	    $("#table").dataTable({
+	      "iDisplayLength": 10,
+	    });
+	});
+	
+</script>

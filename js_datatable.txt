@@ -1,0 +1,5 @@
+$(function () {
+	    $("#table").dataTable({
+	      "iDisplayLength": 10,
+	    });
+	});

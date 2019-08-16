@@ -75,7 +75,7 @@
 		<legend>Login Dosen</legend>	
 		<?php echo $this->session->flashdata("k"); ?>
 		<table align="center" style="margin-bottom: 0" class="table-form" width="90%">
-			<tr><td width="40%">Username</td><td><input type="text" autofocus name="u" required style="width: 200px" autofocus class="form-control"></td></tr>
+			<tr><td width="40%">NIDN</td><td><input type="text" autofocus name="u" required style="width: 200px" autofocus class="form-control"></td></tr>
 			<tr><td>Password</td><td><input type="password" name="p" required style="width: 200px" class="form-control"></td></tr>
 			
 			<tr><td></td><td><input type="submit" class="btn btn-success" value="Login"></td></tr>

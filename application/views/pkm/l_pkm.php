@@ -133,15 +133,15 @@
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/publikasipkm"> PKM - Pemakalah Forum Ilmiah</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/hki_pkm"> PKM - Hak Kekayaan Intelektual (HKI)</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/buku_pkm"> PKM - Buku Ajar / Teks</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/jurnal_pkm"> PKM - Jurnal</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/seminar_pkm"> PKM - Seminar</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/jurnal_pkm"> PKM - Artikel Jurnal</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/seminar_pkm"> PKM - Artikel Seminar</a></li>
                 <!-- <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/penelitian_pkm"> PKM - Penelitian</a></li> -->
               </ul>
             </li>
 			
 			
 		<li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-wrench icon-white"> </i> Pengaturan <span class="caret"></span></a>
+             <!--  <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-wrench icon-white"> </i> Pengaturan <span class="caret"></span></a>
               <ul class="dropdown-menu" aria-labelledby="themes">
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/pengguna">Instansi Pengguna</a></li>
                 <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/pkm/manage_admin">Manajemen User</a></li>
@@ -149,7 +149,7 @@
             </li>
 			<?php 
 			}
-			?>
+			?> -->
           </ul>
 		
           <ul class="nav navbar-nav navbar-right">
@@ -177,7 +177,7 @@
         <div class="row">
           <div class="" style="padding: 15px 15px 0 15px;">
 			<div class="well well-sm">
-				<img src="<?php echo base_url(); ?>upload/<?php echo $q_instansi->logo; ?>"  style="display: inline; float: left; margin-right: 20px; width: 100px; height: 100px">
+				<img src="..\aset\img\UNIVERSITASTEKNOKRAT.png"  style="display: inline; float: left; margin-right: 20px; width: 100px; height: 100px">
                 <h2 style="margin: 15px 0 10px 0; color: #000; font-family: 'Futura XBlk BT'; color:#FF0000; "><?php echo $q_instansi->nama; ?></h2>
                 <div style="color: #000; font-size: 16px; font-family: Tahoma" class="clearfix"><b><?php echo $q_instansi->alamat; ?></b></div>
              </div>
