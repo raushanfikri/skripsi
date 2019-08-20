@@ -117,10 +117,21 @@
 			?>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i
-								class="icon-file icon-white"> </i> Penelitian <span class="caret"></span></a>
+								class="icon-th-list icon-white"> </i> Proposal <span class="caret"></span></a>
 						<ul class="dropdown-menu" aria-labelledby="themes">
-							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitian">
-									Penelitian</a></li>
+						<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitian">
+									Proposal Penelitian</a></li>
+						<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdian">
+									Proposal Pengabdian</a></li>
+							
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i
+								class="icon-file icon-white"> </i> Luaran Penelitian <span class="caret"></span></a>
+						<ul class="dropdown-menu" aria-labelledby="themes">
+							<!-- <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitian">
+									Penelitian</a></li> -->
 							<li><a tabindex="-1"
 									href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitianpublikasi"> Publikasi
 									Forum Ilmiah</a></li>
@@ -130,7 +141,8 @@
 									Buku Ajar / Teks</a></li>
 							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitianjurnal">
 									Artikel Jurnal</a></li>
-							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitianseminar"> Artike
+							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitianseminar">
+									Artike
 									Prosiding</a></li>
 
 
@@ -138,17 +150,17 @@
 					</li>
 					<li class="dropdown">
 						<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i
-								class="icon-file icon-white"> </i> PKM <span class="caret"></span></a>
+								class="icon-file icon-white"> </i> Luaran Pengabdian <span class="caret"></span></a>
 						<ul class="dropdown-menu" aria-labelledby="themes">
-							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpublikasipkm">
-									Pemakalah Forum Ilmiah</a></li>
-							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenhki_pkm"> Hak
+							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdianpublikasi">
+									Publikasi Forum Ilmiah</a></li>
+							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdianhki"> Hak
 									Kekayaan Intelektual (HKI)</a></li>
-							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenbuku_pkm"> Buku
+							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdianbuku"> Buku
 									Ajar / Teks</a></li>
-							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenjurnal_pkm">
+							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdianjurnal">
 									Artikel Jurnal</a></li>
-							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenseminar_pkm">
+							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdianseminar">
 									Artikel Seminar</a></li>
 							<li><a tabindex="-1" href="<?php echo base_url(); ?>"> Dokumentasi</a></li>
 							<!-- <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitian_pkm"> Penelitian</a></li> -->
@@ -161,7 +173,7 @@
 			// print_r($this->session->userdata('admin_nidn'));
 			?>
 
-			<?php
+					<?php
 			if ($this->session->userdata('admin_level') == "Super Admin") {
 			?>
 					<li class="dropdown">

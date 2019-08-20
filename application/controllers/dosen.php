@@ -311,12 +311,13 @@ class dosen extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
 		$institusi				= addslashes($this->input->post('institusi'));
 		$tempat					= addslashes($this->input->post('tempat'));
-		$tanggal					= addslashes($this->input->post('tanggal'));
+		$tanggal				= addslashes($this->input->post('tanggal'));
 		$keterangan				= "Menunggu Verifikasi";
 		$hasilketerangan		= "Disetujui";
 		$cari					= addslashes($this->input->post('q'));
@@ -326,7 +327,7 @@ class dosen extends CI_Controller {
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-		$tanggal = date('Y-m-d H:i:s');
+		$date = date('Y-m-d H:i:s');
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
@@ -334,51 +335,84 @@ class dosen extends CI_Controller {
 			$a['data']		= $this->db->query("SELECT * FROM v_publikasipkm WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_publikasidosen_pkm";
 		} else if ($mau_ke == "add") {
-			$a['page']		= "f_publikasidosen_pkm";
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$a['page']	= "f_publikasidosen_pkm";
 		}  else if ($mau_ke == "act_add") {
-		
+			$idp = $this->input->post('idp');
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL,'$idp', '$nidn', '$judul', 
+				'$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$date')");
 			} else {
-				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL, '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL,'$idp', '$nidn', '$judul', 
+				'$institusi', '$tanggal', '$tempat','$keterangan','$date')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
-			
-			redirect('index.php/dosen/dosenpublikasipkm');
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
+			Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			redirect('index.php/dosen/detail_publikasipkm/'.$this->input->post('idp'));
+
 		} else if ($mau_ke == "del") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$idp = $this->session->userdata('idpengabdian');
+
+			
 			$this->db->query("DELETE FROM publikasiilmiah_pkm WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
-			redirect('index.php/dosen/dosenpublikasipkm');
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
+			Berhasil DiHapus</div>");			
+			redirect('index.php/dosen/detail_publikasipkm/'.$idp);
 		}
 		else if ($mau_ke == "edt") {
-			$a['datpil']		= $this->db->query("SELECT * FROM v_publikasipkm WHERE id=$idu")->result();
-			$a['page']		= "f_publikasidosen_pkm";
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pegabdian",$where);
+			$a['datpil']	= $this->db->query("SELECT * FROM v_publikasipkm WHERE id=$idu")->result();
+			$a['page']	= "f_publikasidosen_pkm";
 
 		}else if($mau_ke == "act_edt") {
+
+			$idp = $this->input->post('idp');
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("UPDATE publikasiilmiah_pkm SET nidn='$nidn', judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat',file='$up_data[file_name]', status='$keterangan' WHERE id = '$id'");
+				$this->db->query("UPDATE publikasiilmiah_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', 
+				institusi='$institusi', tanggal='$tanggal', tempat='$tempat',file='$up_data[file_name]',
+				 status='$keterangan' WHERE id = '$id'");
 			}else{
 				
-				$query = "UPDATE publikasiilmiah_pkm SET nidn='$nidn', judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' WHERE id = '$id'";
+				$query = "UPDATE publikasiilmiah_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul', 
+				institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' 
+				WHERE id = '$id'";
 				
 				$this->db->query($query);
-				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
+				Berhasil DiUbah</div>");			
 			}
-			redirect('index.php/dosen/dosenpublikasipkm');
+			redirect('index.php/dosen/detail_publikasipkm/'.$this->input->post('idp'));
 		}  
 		
-		else {
-			$nidn = $this->session->userdata('admin_nidn');	
-			$a['data']		= $this->db->query("SELECT * FROM v_publikasipkm WHERE nidn=$nidn ORDER BY nidn DESC LIMIT $awal, $akhir ")->result();
-			$a['page']		= "l_publikasidosen_pkm";
-		}
+		// else {
+		// 	$nidn = $this->session->userdata('admin_nidn');	
+		// 	$a['data']		= $this->db->query("SELECT * FROM v_publikasipkm WHERE nidn=$nidn ORDER BY nidn DESC LIMIT $awal, $akhir ")->result();
+		// 	$a['page']		= "l_publikasidosen_pkm";
+		// }
 		
 		$this->load->view('dosen/aaa', $a);
+	}
+
+	public function detail_publikasipkm($id){
+		if(isset($id) && !empty($id)){
+			$sess['idpengabdian'] = $id;
+			$this->session->set_userdata($sess);
+			$nidn = $this->session->userdata('admin_nidn');
+			$a['data']= $this->db->query("SELECT * FROM v_publikasipkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			$x=$this->db->query("SELECT * FROM v_publikasipkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			var_dump($id);
+			$a['page']		= "l_publikasidosen_pkm";
+			$this->load->view('dosen/aaa', $a);
+		}
 	}
 	///DOSEN PUBLIKASI ILMIAH PKM
 	
@@ -442,9 +476,9 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan',$tanggal)");
+				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan',$tanggal)");
+				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Disimpan. ".$this->upload->display_errors()."</div>");
@@ -534,6 +568,7 @@ class dosen extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
@@ -545,7 +580,7 @@ class dosen extends CI_Controller {
 		$hasilketerangan		= "Disetujui";
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
-		$config['upload_path'] 		= './upload/hkipkm';
+		$config['upload_path'] 		= './upload/hki';
 		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
@@ -554,60 +589,85 @@ class dosen extends CI_Controller {
 
 		$this->load->library('upload', $config);
 		
-		
 		if ($mau_ke == "cari") {
 			$nidn = $this->session->userdata('admin_nidn');	
-			$a['data']		= $this->db->query("SELECT * FROM v_hkipkm WHERE nidn=$nidn and judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
-			$a['page']		= "l_hkidosen";
+			$a['data']		= $this->db->query("SELECT * FROM v_hki WHERE nidn=$nidn and judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_hkidosen_pkm";
 		} else if ($mau_ke == "add") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
 			$a['page']		= "f_hkidosen_pkm";
-		}  else if ($mau_ke == "act_add") {
-		
+		} else if ($mau_ke == "act_add") {
+			$idp = $this->input->post('idp');
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Disimpan. ".$this->upload->display_errors()."</div>");
 			
-			redirect('index.php/dosen/dosenhki_pkm');
-		}
-		else if ($mau_ke == "del") {
+			redirect('index.php/dosen/detail_hkipkm/'.$this->input->post('idp'));
+
+		} else if ($mau_ke == "del") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$idp = $this->session->userdata('idpengabdian');
+
 			$this->db->query("DELETE FROM hki_pkm WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus </div>");			
-			redirect('index.php/dosen/dosenhki_pkm');
-		}
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus </div>");
 
-		else if ($mau_ke == "edt") {
-			$a['datpil']		= $this->db->query("SELECT * FROM v_hkipkm WHERE id=$idu")->result();
-			$a['page']		= "f_hkidosen_pkm";
+			redirect('index.php/dosen/detail_hkipkm/'.$idp);
 
-		}
-		else if ($mau_ke == "act_edt") {
+		}else if ($mau_ke == "edt") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$a['datpil']		= $this->db->query("SELECT * FROM v_hki WHERE id=$idu")->result();
+			$a['page']		= "f_hkidosen";
+
+		}else if ($mau_ke == "act_edt") {
+			$idp = $this->input->post('idp');
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("UPDATE hki_pkm SET nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki',file='$up_data[file_name]', status='$status', keterangan='$keterangan' WHERE id = '$id'");
+				$this->db->query("UPDATE hki_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki',file='$up_data[file_name]', status='$status', keterangan='$keterangan' WHERE id = '$id'");
 			}else{	
-				$query="UPDATE hki_pkm SET nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki', status='$status', keterangan='$keterangan' WHERE id = '$id'";
+				$query="UPDATE hki_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki', status='$status', keterangan='$keterangan' WHERE id = '$id'";
 		
 			$this->db->query($query);
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Diubah </div>");	
 			}		
-			redirect('index.php/dosen/dosenhki_pkm');
-		}else {
-			$nidn = $this->session->userdata('admin_nidn');	
-			$a['data']		= $this->db->query("SELECT * FROM v_hkipkm WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
-			$a['page']		= "l_hkidosen_pkm";
+
+			redirect('index.php/dosen/detail_hkipkm/'.$this->input->post('idp'));
+		
 		}
+
+		// else {
+		// 	$nidn = $this->session->userdata('admin_nidn');	
+		// 	$a['data']		= $this->db->query("SELECT * FROM v_hki WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
+		// 	$a['page']		= "l_hkidosen";
+		// }
 		
 		$this->load->view('dosen/aaa', $a);
 	}
 	///DOSEN HKI PKM
 	
+	public function detail_hkipkm($id){
+		if(isset($id) && !empty($id)){
+			$sess['idpengabdian'] = $id;
+			$this->session->set_userdata($sess);
+			$nidn = $this->session->userdata('admin_nidn');
+			$a['data']= $this->db->query("SELECT * FROM v_hkipkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			$x=$this->db->query("SELECT * FROM v_hkipkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			var_dump($id);
+			$a['page']		= "l_hkidosen_pkm";
+			$this->load->view('dosen/aaa', $a);
+		}
+	}
+
+
 	///DOSEN BUKU
 	public function dosenbuku() {
 		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
@@ -739,8 +799,8 @@ class dosen extends CI_Controller {
 		}
 		
 		/* pagination */	
-		$nidn = $this->session->userdata('admin_nidn');	
-		$total_row		= $this->db->query("SELECT * FROM v_bukupkm WHERE nidn='$nidn'")->num_rows();
+		$nidn = $this->session->userdata('admin_nidn');
+		$total_row		= $this->db->query("SELECT * FROM v_bukupkm WHERE nidn = $nidn ")->num_rows();
 		$per_page		= 10;
 		
 		$awal	= $this->uri->segment(4); 
@@ -758,6 +818,7 @@ class dosen extends CI_Controller {
 		$cari					= addslashes($this->input->post('q'));
 
 		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$id 					= addslashes($this->input->post('id'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
@@ -768,74 +829,94 @@ class dosen extends CI_Controller {
 		$hasilketerangan		= "Disetujui";
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
-		$config['upload_path'] 		= './upload/bukupkm';
+		$config['upload_path'] 		= './upload/buku';
 		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
 		$config['max_size']			= '10000';
 		$config['max_width']  		= '13000';
 		$config['max_height'] 		= '13000';
-		$tanggal = date('Y-m-d H:i:s');		
+		$tanggal = date('Y-m-d H:i:s');
 
 		$this->load->library('upload', $config);
-		
 
+		$nidn = $this->session->userdata('admin_nidn');
 		if ($mau_ke == "cari") {
-			$nidn = $this->session->userdata('admin_nidn');	
-			$a['data']		= $this->db->query("SELECT * FROM v_bukupkm WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['data']		= $this->db->query("SELECT * FROM v_bukupkm WHERE nidn=$nidn and judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_bukudosen_pkm";
 		} else if ($mau_ke == "add") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
 			$a['page']		= "f_bukudosen_pkm";
 		}  else if ($mau_ke == "act_add") {
-		
+			$idp = $this->input->post('idp');		
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL,'$idp', '$nidn', '$judul', 
+				'$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO buku_pkm VALUES (NULL, '$idp','$nidn', '$judul',
+				 '$penerbit', '$isbn', '$halaman', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
-			redirect('index.php/dosen/dosenbuku_pkm');
-		}
+			redirect('index.php/dosen/detail_bukupkm/'.$this->input->post('idp'));
 
-		else if ($mau_ke == "del") {
+		}else if ($mau_ke == "del") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$idp = $this->session->userdata('idpengabdian');
+
 			$this->db->query("DELETE FROM buku_pkm WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
-			redirect('index.php/dosen/dosenbuku_pkm');
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");	
 
-		}
+			redirect('index.php/dosen/detail_bukupkm/'.$idp);
 
-		else if ($mau_ke == "edt") {
-			$a['datpil']		= $this->db->query("SELECT * FROM v_bukupkm WHERE id=$idu")->result();
+		}else if ($mau_ke == "edt") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$a['datpil']		= $this->db->query("SELECT * FROM v_buku WHERE id=$idu")->result();
 			$a['page']		= "f_bukudosen_pkm";
 
-		}
-
-		else if ($mau_ke == "act_edt") {
+		} else if ($mau_ke == "act_edt") {
+			$idp = $this->input->post('idp');
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("UPDATE buku_pkm SET nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+				$this->db->query("UPDATE buku_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
 			}else{
-				$query="UPDATE buku_pkm SET nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',keterangan='$keterangan' WHERE id = '$id'";
+				$query="UPDATE buku_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',keterangan='$keterangan' WHERE id = '$id'";
 
 				$this->db->query($query);
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");
 			}
-			redirect('index.php/dosen/dosenbuku_pkm');
+			redirect('index.php/dosen/detail_bukupkm/'.$this->input->post('idp'));
 		}
 
-		else {
-			$nidn = $this->session->userdata('admin_nidn');	
-			$a['data']		= $this->db->query("SELECT * FROM v_bukupkm WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
-			$a['page']		= "l_bukudosen_pkm";
-		}
+		// else {
+		// 	$nidn = $this->session->userdata('admin_nidn');
+		// 	$a['data']		= $this->db->query("SELECT * FROM v_buku WHERE nidn = $nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
+		// 	$a['page']		= "l_bukudosen";
+		// }
 		
 		$this->load->view('dosen/aaa', $a);
 	}
 	///DOSEN BUKU PKM
 	
+
+	public function detail_bukupkm($id){
+		if(isset($id) && !empty($id)){
+			$sess['idpengabdian'] = $id;
+			$this->session->set_userdata($sess);
+			$nidn = $this->session->userdata('admin_nidn');
+			$a['data']= $this->db->query("SELECT * FROM v_bukupkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			$x=$this->db->query("SELECT * FROM v_bukupkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			var_dump($id);
+			$a['page']		= "l_bukudosen_pkm";
+			$this->load->view('dosen/aaa', $a);
+		}
+	}
+
 	///DOSEN JURNAL
 	public function dosenjurnal() {
 		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
@@ -985,7 +1066,7 @@ class dosen extends CI_Controller {
 		}
 		
 		/* pagination */	
-		$nidn = $this->session->userdata('admin_nidn');
+		$nidn = $this->session->userdata('admin_nidn');	
 		$total_row		= $this->db->query("SELECT * FROM v_jurnalpkm WHERE nidn='$nidn'")->num_rows();
 		$per_page		= 10;
 		
@@ -1005,88 +1086,124 @@ class dosen extends CI_Controller {
 
 		//ambil variabel Postingan
 		$id 					= addslashes($this->input->post('id'));
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judul					= addslashes($this->input->post('judul'));
+		$namajurnal				= addslashes($this->input->post('namajurnal'));
 		$jenis					= addslashes($this->input->post('jenis'));
-		$penulis_2					= addslashes($this->input->post('penulis_2'));
-		$penulis_3					= addslashes($this->input->post('penulis_3'));
-		$jurnal					= addslashes($this->input->post('jurnal'));
-		$issn					= addslashes($this->input->post('issn'));
+		$peranpenulis			= addslashes($this->input->post('peranpenulis'));
+		$tahun					= addslashes($this->input->post('tahun'));
 		$volume					= addslashes($this->input->post('volume'));
-		$nomor					= addslashes($this->input->post('nomor'));
-		$halaman					= addslashes($this->input->post('halaman'));
+		$nomor					= addslashes($this->input->post('no'));
 		$url					= addslashes($this->input->post('url'));
+		$issn					= addslashes($this->input->post('issn'));
 		$keterangan				= "Menunggu Verifikasi";
 		$hasilketerangan		= "Disetujui";
 		$cari					= addslashes($this->input->post('q'));
 		//upload config 
-		$config['upload_path'] 		= './upload/jurnalpkm';
+		$config['upload_path'] 		= './upload/jurnal';
 		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
-		$config['max_size']			= '10000';
-		$config['max_width']  		= '13000';
-		$config['max_height'] 		= '13000';
+		$config['max_size']			= '5120';
+		// $config['max_width']  		= '13000';
+		// $config['max_height'] 		= '13000';
 		$tanggal = date('Y-m-d H:i:s');
-
 		$this->load->library('upload', $config);
 		
 		if ($mau_ke == "cari") {
-			$nidn = $this->session->userdata('admin_nidn');
+			$nidn = $this->session->userdata('admin_nidn');	
 			$a['data']		= $this->db->query("SELECT * FROM v_jurnalpkm WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_jurnaldosen_pkm";
 		} else if ($mau_ke == "add") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
 			$a['page']		= "f_jurnaldosen_pkm";
 		}  else if ($mau_ke == "act_add") {
-		
+			$idp = $this->input->post('idp');
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan',$tanggal)");
+				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL,'$idp', '$nidn', '$judul','$namajurnal',
+				 '$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','$keterangan',$tanggal)");
+				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$idp', '$nidn', '$judul','$namajurnal',
+				'$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
-			redirect('index.php/dosen/dosenjurnal_pkm');
+			redirect('index.php/dosen/detail_jurnalpkm/'.$this->input->post('idp'));
 		}
 
 		else if ($mau_ke == "del") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$idp = $this->session->userdata('idpengabdian');
+
 			$this->db->query("DELETE FROM jurnal_pkm WHERE id = '$idu'");
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
-			redirect('index.php/dosen/dosenjurnal_pkm');
+			
+			redirect('index.php/dosen/detail_jurnalpkm/'.$idp);
 		}
 
 		else if ($mau_ke == "edt") {
-			$a['datpil']		= $this->db->query("SELECT * FROM v_jurnalpkm WHERE id=$idu")->result();
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdian",$where);
+			$a['datpil']		= $this->db->query("SELECT * FROM v_jurnalpkm WHERE id='$idu'")->result();
 			$a['page']		= "f_jurnaldosen_pkm";
 		}
+
 		else if ($mau_ke == "act_edt") {
+			$idp = $this->input->post('idp');
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
-
-				$this->db->query("UPDATE jurnal_pkm SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+				// die(print_r($up_data));
+				$query = "UPDATE jurnal_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', 
+				namajurnal='$namajurnal',jenis='$jenis',peranpenulis='$peranpenulis',tahun='$tahun',
+				volume='$volume',no='$nomor',url='$url',issn='$issn',file='$up_data[file_name]', 
+				keterangan='$keterangan' WHERE id = '$id'";
 				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
+				Berhasil DiUbah</div>");
 			}else{
-				$query="UPDATE jurnal_pkm SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url', keterangan='$keterangan' WHERE id = '$id'";
+				// die('blah');
+				$query = "UPDATE jurnal_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', 
+				namajurnal='$namajurnal',jenis='$jenis',peranpenulis='$peranpenulis',tahun='$tahun',
+				volume='$volume',no='$nomor',url='$url',issn='$issn',
+				keterangan='$keterangan' WHERE id = '$id'";
 
 				$this->db->query($query);
-				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");	
-
-				redirect('index.php/dosen/dosenjurnal_pkm');
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data
+				 Berhasil DiUbah</div>");	
 			}
+			redirect('index.php/dosen/detail_jurnalpkm/'.$this->input->post('idp'));
 		}
 
-
-		else {
-			$nidn = $this->session->userdata('admin_nidn');
-			$a['data']		= $this->db->query("SELECT * FROM v_jurnalpkm WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
-			$a['page']		= "l_jurnaldosen_pkm";
-		}
+		// else {
+		// 	$nidn = $this->session->userdata('admin_nidn');	
+		// 	$a['data']		= $this->db->query("SELECT * FROM v_jurnal WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
+		// 	$a['page']		= "l_jurnaldosen";
+		// }
 		
 		$this->load->view('dosen/aaa', $a);
 	}
 	///DOSEN JURNAL PKM
 	
+
+	public function detail_jurnalpkm($id){
+		if(isset($id) && !empty($id)){
+			$sess['idpengabdian'] = $id;
+			$this->session->set_userdata($sess);
+			$nidn = $this->session->userdata('admin_nidn');
+			$a['data']= $this->db->query("SELECT * FROM v_jurnalpkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			$x=$this->db->query("SELECT * FROM v_jurnalpkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			var_dump($id);
+			$a['page']		= "l_jurnaldosen_pkm";
+			$this->load->view('dosen/aaa', $a);
+		}
+	}
+
+
 	///DOSEN SEMINAR
 	public function dosenseminar() {
 		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
@@ -1257,20 +1374,20 @@ class dosen extends CI_Controller {
 
 		//ambil variabel Postingan
 		$id 					= addslashes($this->input->post('id'));
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
-		$judul					= addslashes($this->input->post('judul'));
-		$jenis					= addslashes($this->input->post('jenis'));
-		$penulis_2					= addslashes($this->input->post('penulis_2'));
-		$penulis_3					= addslashes($this->input->post('penulis_3'));
-		$jurnal					= addslashes($this->input->post('jurnal'));
-		$issn					= addslashes($this->input->post('issn'));
+		$judul					= addslashes($this->input->post('namaprosiding'));
+		$tahunprosiding			= addslashes($this->input->post('tahunprosiding'));
+		$peranpenulis			= addslashes($this->input->post('peranpenulis'));
 		$volume					= addslashes($this->input->post('volume'));
-		$nomor					= addslashes($this->input->post('nomor'));
-		$halaman					= addslashes($this->input->post('halaman'));
+		$nomor					= addslashes($this->input->post('no'));
+		$isbn					= addslashes($this->input->post('isbn'));
 		$url					= addslashes($this->input->post('url'));
+		$jenisprosiding			= addslashes($this->input->post('jenisprosiding'));
 		$keterangan				= "Menunggu Verifikasi";
 		$hasilketerangan		= "Disetujui";
 		$cari					= addslashes($this->input->post('q'));
+		//upload config 
 		$config['upload_path'] 		= './upload/seminar';
 		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
 		$config['max_size']			= '10000';
@@ -1285,60 +1402,261 @@ class dosen extends CI_Controller {
 			$a['data']		= $this->db->query("SELECT * FROM v_seminarpkm WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
 			$a['page']		= "l_seminardosen_pkm";
 		} else if ($mau_ke == "add") {
-			$a['page']		= "f_seminardosen_pkm";
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$a['page']	= "f_seminardosen_pkm";
+		}  else if ($mau_ke == "act_add") {
+			$idp = $this->input->post('idp');
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$idp','$nidn', '$judul', 
+				'$tahunprosiding', '$peranpenulis','$volume', '$nomor', '$isbn',
+				 '$url', '$jenisprosiding','".$up_data['file_name']."','$keterangan','$tanggal')");
+			} else {
+				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$idp','$nidn', '$judul', 
+				'$tahunprosiding',  '$peranpenulis','$volume', '$nomor', '$isbn',
+				 '$url', '$jenisprosiding','$keterangan','$tanggal')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
+			Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/dosen/detail_seminarpkm/'.$this->input->post('idp'));
+		} else if ($mau_ke == "del") {
+
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+			$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$idp = $this->session->userdata('idpengabdian');
+
+			$this->db->query("DELETE FROM seminar_pkm WHERE id = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
+			Berhasil DiHapus</div>");	
+
+			redirect('index.php/dosen/detail_seminarpkm/'.$idp);
+
+		}
+
+		else if ($mau_ke == "edt") {
+			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
+				$a['data']	= $this->db->get_where("pengabdiann",$where);
+			$a['datpil']		= $this->db->query("SELECT * FROM v_seminar WHERE id=$idu")->result();
+			$a['page']		= "f_seminardosen_pengabdian";
+		}
+
+		else if ($mau_ke == "act_edt") {
+			$idp = $this->input->post('idp');
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+
+				$this->db->query("UPDATE seminar_pkm SET idpengabdian='$idp', nidn='$nidn', namaprosiding='$judul', 
+				tahunprosiding='$tahunprosiding',peranpenulis='$peranpenulis',
+				volume='$volume',no='$nomor',isbn='$isbn',url='$url',
+				jenisprosiding='$jenisprosiding',file='$up_data[file_name]', 
+				keterangan='$keterangan' WHERE id = '$id'");
+			}else{
+				$query="UPDATE seminar_pkm SET idpengabdian='$idp', nidn='$nidn', namaprosiding='$judul',
+				 tahunprosiding='$tahunprosiding',peranpenulis='$peranpenulis',
+				 volume='$volume',no='$nomor',isbn='$isbn',url='$url',
+				 jenisprosiding='$jenisprosiding', keterangan='$keterangan' WHERE id = '$id'";
+
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
+				Berhasil DiUbah</div>");	
+			}
+
+			redirect('index.php/dosen/detail_seminarpkm/'.$this->input->post('idp'));
+		}
+
+		// else {
+		// 	$nidn = $this->session->userdata('admin_nidn');	
+		// 	$a['data']		= $this->db->query("SELECT * FROM v_seminar WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
+		// 	$a['page']		= "l_seminardosen";
+		// }
+		
+		$this->load->view('dosen/aaa', $a);
+	}
+	///DOSEN SEMINAR PKM
+
+	public function detail_seminarpkm($id){
+		if(isset($id) && !empty($id)){
+			$sess['idpengabdian'] = $id;
+			$this->session->set_userdata($sess);
+			$nidn = $this->session->userdata('admin_nidn');
+			$a['data']= $this->db->query("SELECT * FROM v_seminarpkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			$x=$this->db->query("SELECT * FROM v_seminarpkm WHERE nidn='$nidn' and idpengabdian='$id' ORDER BY nidn DESC  ")->result();
+			var_dump($id);
+			$a['page']		= "l_seminardosen_pkm";
+			$this->load->view('dosen/aaa', $a);
+		}
+	}
+	
+	public function dosenpengabdian() {
+		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
+			redirect("index.php/dosen/login");
+		}
+		
+		/* pagination */	
+		$nidn = $this->session->userdata('admin_nidn');	
+		$total_row		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn='$nidn'")->num_rows();
+		$per_page		= 10;
+		
+		$awal	= $this->uri->segment(4); 
+		$awal	= (empty($awal) || $awal == 1) ? 0 : $awal;
+		
+		//if (empty($awal) || $awal == 1) { $awal = 0; } { $awal = $awal; }
+		$akhir	= $per_page;
+		
+		$a['pagi']	= _page($total_row, $per_page, 4, base_url()."index.php/dosen/dosenpengabdian/p");
+		
+		//ambil variabel URL
+		$mau_ke					= $this->uri->segment(3);
+		$idu					= $this->uri->segment(4);
+	 	
+		$cari					= addslashes($this->input->post('q'));
+
+		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
+		$nidn					= addslashes($this->input->post('nidn'));
+		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$jenis					= addslashes($this->input->post('jenis'));
+		$bidang					= addslashes($this->input->post('bidang'));
+		$tse					= addslashes($this->input->post('tse'));
+		$sumber					= addslashes($this->input->post('sumber'));
+		$institusi				= addslashes($this->input->post('institusi'));
+		$jumlah					= addslashes($this->input->post('jumlah'));
+		$keterangan				= "Menunggu Verifikasi";
+		$hasilketerangan		= "Disetujui";
+		$cari					= addslashes($this->input->post('q'));
+		//upload config 
+		$config['upload_path'] 		= './upload/penelitian';
+		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
+		$config['max_size']			= '10000';
+		$config['max_width']  		= '13000';
+		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
+
+		$this->load->library('upload', $config);
+		
+		if ($mau_ke == "cari") {
+			$nidn = $this->session->userdata('admin_nidn');	
+			$a['data']		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_pengabdiandosen";
+		} else if ($mau_ke == "add") {
+			$a['page']		= "f_pengabdiandosen";
 		}  else if ($mau_ke == "act_add") {
 		
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
+				'$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$nidn', '$judul', '$jenis', '$penulis_2', '$penulis_3',  '$jurnal', '$issn', '$volume', '$nomor', '$halaman', '$url','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
-			redirect('index.php/dosen/dosenseminar_pkm');
+			redirect('index.php/dosen/dosenpengabdian');
 		}
 
 		else if ($mau_ke == "del") {
-			$this->db->query("DELETE FROM seminar_pkm WHERE id = '$idu'");
+			$this->db->query("DELETE FROM pengabdiann WHERE idpengabdian = '$idu'");
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
-			redirect('index.php/dosen/dosenseminar_pkm');
+			redirect('index.php/dosen/dosenpengabdian');
 		}
 
 		else if ($mau_ke == "edt") {
-			$a['datpil']		= $this->db->query("SELECT * FROM v_seminarpkm WHERE id=$idu")->result();
-			$a['page']		= "f_seminardosen_pkm";
-		}
-
-		else if ($mau_ke == "act_edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_pengabdian WHERE idpengabdian=$idu")->result();
+			$a['page']		= "f_pengabdiandosen";
+		} else if($mau_ke == "act_edt") {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
-
-				$this->db->query("UPDATE seminar_pkm SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
-			}else{
-				$query="UPDATE seminar_pkm SET nidn='$nidn', judul='$judul', jenis='$jenis', penulis_2='$penulis_2', penulis_3='$penulis_3',jurnal='$jurnal',issn='$issn',volume='$volume',no='$nomor',halaman='$halaman',url='$url', keterangan='$keterangan' WHERE id = '$id'";
+				
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
+				'$idpengabdian'";
 
 				$this->db->query($query);
-				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");	
-
-				redirect('index.php/dosen/dosenseminar_pkm');
+				
+			}else{
+				
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
+				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
+				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
 			}
-		}
-
-
+			// die($query);
+			redirect('index.php/dosen/dosenpengabdian');
+		}  
 
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
-			$a['data']		= $this->db->query("SELECT * FROM v_seminarpkm WHERE nidn=$nidn ORDER BY id DESC LIMIT $awal, $akhir ")->result();
-			$a['page']		= "l_seminardosen_pkm";
+			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
+			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
+			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['page']		= "l_pengabdiandosen";
 		}
 		
 		$this->load->view('dosen/aaa', $a);
 	}
-	///DOSEN SEMINAR PKM
-	
+
+
+	public function detail_anggotapengabdian($id){
+		if(isset($id) && !empty($id)){
+			$a['id'] = $id;
+			$a['page']	= "f_detail_anggotapengabdian";
+			$a['anggota'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
+			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->join("dosen","dosen.nidn=detail_anggotapengabdian.nidn")->
+			where("pengabdiann.idpengabdian",$id)->get();
+			$this->load->view('dosen/aaa', $a);
+		}else{
+			$this->dosenpengabdian();
+		}
+	}
+
+	public function simpan_anggotapengabdian(){
+		if(isset($_POST) && !empty($_POST)){
+			$data['nidn'] = $this->input->post('dosen');
+			$data['idpengabdian'] = $this->input->post('id'); 
+
+			$cek = $this->db->get_where("detail_anggotapengabdian",$data);
+			if($cek->num_rows()>0){
+				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">Dosen Sudah Terdaftar </div>");
+			
+				redirect('index.php/dosen/detail_anggotapengabdian/'.$this->input->post('id'));
+			}else{
+				$data_['idpengabdian'] = $this->input->post('id');
+				$data_['nidn'] = $this->input->post('dosen');
+				$data_['ket'] = 'anggota';
+				$this->db->insert("detail_anggotapengabdian",$data_);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Ditambahkan </div>");
+				redirect('index.php/dosen/detail_anggotapengabdian/'.$this->input->post('id'));
+			}
+		}else{
+			$this->dosenpengabdian();
+		}
+	}
+
+	public function hapus_anggotapengabdian($idp,$nidn){
+		$where = array(
+			'idpengabdian' => $idp,
+			'nidn' => $nidn,
+		);
+		$this->db->delete("detail_anggotapengabdian",$where);
+		$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Dihapus </div>");
+				redirect('index.php/dosen/detail_anggotapengabdian/'.$idp);
+	}
+
+
 	///DOSEN PENELITIAN
 	public function dosenpenelitian() {
 		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
@@ -1398,10 +1716,13 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO penelitian VALUES (NULL,'$judulpenelitian','$jenis',  '$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO penelitian VALUES (NULL,'$judulpenelitian','$jenis',  
+				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
+				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapenelitian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO penelitian VALUES (NULL,'$judulpenelitian','$jenis',  '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO penelitian VALUES (NULL,'$judulpenelitian','$jenis', 
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapenelitian VALUES ('$id','$nidn','ketua')");
 			}	
 			
@@ -1423,7 +1744,10 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$query="UPDATE penelitian SET judulpenelitian='$judulpenelitian',jenis='$jenis', bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpenelitian = '$idpenelitian'";
+				$query="UPDATE penelitian SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpenelitian = 
+				'$idpenelitian'";
 
 				$this->db->query($query);
 				
@@ -1448,12 +1772,58 @@ class dosen extends CI_Controller {
 		$this->load->view('dosen/aaa', $a);
 	}
 
+	public function detail_luaran($id){
+		if(isset($id) && !empty($id)){
+			$a['id'] = $id;
+			$a['page']		= "f_detail_luaran";
+			$a['anggota'] = $this->db->select("*")->from("penelitian")->join("detail_luaran",
+			"detail_luaran.idpenelitian=penelitian.idpenelitian")->join("luaran","luaran.idluaran=detail_luaran.idluaran")->
+			where("penelitian.idpenelitian",$id)->get();
+			$this->load->view('dosen/aaa', $a);
+		}else{
+			$this->dosenpenelitian();
+		}
+	}
+
+	public function simpan_luaran(){
+		if(isset($_POST) && !empty($_POST)){
+			$data['idluaran'] = $this->input->post('luaran');
+			$data['idpenelitian'] = $this->input->post('id'); 
+
+			$cek = $this->db->get_where("detail_luaran",$data);
+			if($cek->num_rows()>0){
+				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">Dosen Sudah Terdaftar </div>");
+			
+				redirect('index.php/dosen/detail_luaran/'.$this->input->post('id'));
+			}else{
+				$data_['idpenelitian'] = $this->input->post('id');
+				$data_['idluaran'] = $this->input->post('luaran');
+				$this->db->insert("detail_luaran",$data_);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Ditambahkan </div>");
+				redirect('index.php/dosen/detail_luaran/'.$this->input->post('id'));
+			}
+		}else{
+			$this->dosenpenelitian();
+		}
+	}
+
+	public function hapus_luaran($idp,$idluaran){
+		$where = array(
+			'idpenelitian' => $idp,
+			'idluaran' => $idluaran,
+		);
+		$this->db->delete("detail_luaran",$where);
+		$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Dihapus </div>");
+				redirect('index.php/dosen/detail_luaran/'.$idp);
+	}
 
 	public function detail_anggota($id){
 		if(isset($id) && !empty($id)){
 			$a['id'] = $id;
 			$a['page']		= "f_detail_anggota";
-			$a['anggota'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->join("dosen","dosen.nidn=detail_anggotapenelitian.nidn")->where("penelitian.idpenelitian",$id)->get();
+			$a['anggota'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian",
+			"detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->join("dosen","dosen.nidn=detail_anggotapenelitian.nidn")->
+			where("penelitian.idpenelitian",$id)->get();
 			$this->load->view('dosen/aaa', $a);
 		}else{
 			$this->dosenpenelitian();
@@ -1494,84 +1864,7 @@ class dosen extends CI_Controller {
 	}
 
 
-	///DOSEN PENELITIAN
 	
-	///DOSEN PENELITIAN PKM
-	public function dosenpenelitian_pkm() {
-		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
-			redirect("index.php/dosen/login");
-		}
-		
-		/* pagination */	
-		$total_row		= $this->db->query("SELECT * FROM penelitian_pkm")->num_rows();
-		$per_page		= 10;
-		
-		$awal	= $this->uri->segment(4); 
-		$awal	= (empty($awal) || $awal == 1) ? 0 : $awal;
-		
-		//if (empty($awal) || $awal == 1) { $awal = 0; } { $awal = $awal; }
-		$akhir	= $per_page;
-		
-		$a['pagi']	= _page($total_row, $per_page, 4, base_url()."index.php/dosen/dosenpenelitian_pkm/p");
-		
-		//ambil variabel URL
-		$mau_ke					= $this->uri->segment(3);
-		$idu					= $this->uri->segment(4);
-		
-		$cari					= addslashes($this->input->post('q'));
-
-		//ambil variabel Postingan
-		$nidn					= addslashes($this->input->post('nidn'));
-		$judul					= addslashes($this->input->post('judul'));
-		$anggota_1					= addslashes($this->input->post('anggota_1'));
-		$anggota_2					= addslashes($this->input->post('anggota_2'));
-		$jenis					= addslashes($this->input->post('jenis'));
-		$bidang					= addslashes($this->input->post('bidang'));
-		$tm					= addslashes($this->input->post('tm'));
-		$sumber					= addslashes($this->input->post('sumber'));
-		$institusi					= addslashes($this->input->post('institusi'));
-		$jumlah					= addslashes($this->input->post('jumlah'));
-		$url					= addslashes($this->input->post('url'));
-		$keterangan				= "Menunggu Verifikasi";
-		$hasilketerangan		= "Disetujui";
-		$cari					= addslashes($this->input->post('q'));
-		//upload config 
-		$config['upload_path'] 		= './upload/penelitian_pkm';
-		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
-		$config['max_size']			= '100000';
-		$config['max_width']  		= '130000';
-		$config['max_height'] 		= '130000';
-
-		$this->load->library('upload', $config);
-		
-		if ($mau_ke == "cari") {
-			$a['data']		= $this->db->query("SELECT * FROM penelitian_pkm WHERE nidn LIKE '%$cari%' OR judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
-			$a['page']		= "l_penelitiandosen_pkm";
-		} else if ($mau_ke == "add") {
-			$a['page']		= "f_penelitiandosen_pkm";
-		}  else if ($mau_ke == "act_add") {
-		
-			if ($this->upload->do_upload('file_surat')) {
-				$up_data	 	= $this->upload->data();
-				
-				$this->db->query("INSERT INTO penelitian_pkm VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."','$keterangan')");
-			} else {
-				$this->db->query("INSERT INTO penelitian_pkm VALUES (NULL, '$nidn', '$judul', '$anggota_1', '$anggota_2', '$jenis',  '$bidang', '$tm', '$sumber', '$institusi', '$jumlah',  '','$keterangan')");
-			}	
-			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data has been added. ".$this->upload->display_errors()."</div>");
-			
-			redirect('index.php/dosen/dosenpenelitian_pkm');
-		}
-		else {
-			$a['data']		= $this->db->query("SELECT * FROM penelitian_pkm ORDER BY id DESC LIMIT $awal, $akhir ")->result();
-			$a['page']		= "l_penelitiandosen_pkm";
-		}
-		
-		$this->load->view('dosen/aaa', $a);
-	}
-	///DOSEN PENELITIAN PKM
-
 	public function dosenpenelitianpublikasi() {
 		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
 			redirect("index.php/dosen/login");
@@ -2112,4 +2405,594 @@ class dosen extends CI_Controller {
 		$this->load->view('dosen/aaa', $a);
 	}
 
+	public function dosenpengabdianpublikasi() {
+		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
+			redirect("index.php/dosen/login");
+		}
+		
+		/* pagination */	
+		$nidn = $this->session->userdata('admin_nidn');	
+		$total_row		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn='$nidn'")->num_rows();
+		$per_page		= 10;
+		
+		$awal	= $this->uri->segment(4); 
+		$awal	= (empty($awal) || $awal == 1) ? 0 : $awal;
+		
+		//if (empty($awal) || $awal == 1) { $awal = 0; } { $awal = $awal; }
+		$akhir	= $per_page;
+		
+		$a['pagi']	= _page($total_row, $per_page, 4, base_url()."index.php/dosen/dosenpengabdian/p");
+		
+		//ambil variabel URL
+		$mau_ke					= $this->uri->segment(3);
+		$idu					= $this->uri->segment(4);
+	 	
+		$cari					= addslashes($this->input->post('q'));
+
+		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
+		$nidn					= addslashes($this->input->post('nidn'));
+		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$jenis					= addslashes($this->input->post('jenis'));
+		$bidang					= addslashes($this->input->post('bidang'));
+		$tse					= addslashes($this->input->post('tse'));
+		$sumber					= addslashes($this->input->post('sumber'));
+		$institusi				= addslashes($this->input->post('institusi'));
+		$jumlah					= addslashes($this->input->post('jumlah'));
+		$keterangan				= "Menunggu Verifikasi";
+		$hasilketerangan		= "Disetujui";
+		$cari					= addslashes($this->input->post('q'));
+		//upload config 
+		$config['upload_path'] 		= './upload/penelitian';
+		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
+		$config['max_size']			= '10000';
+		$config['max_width']  		= '13000';
+		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
+
+		$this->load->library('upload', $config);
+		
+		if ($mau_ke == "cari") {
+			$nidn = $this->session->userdata('admin_nidn');	
+			$a['data']		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_pengabdiandosen";
+		} else if ($mau_ke == "add") {
+			$a['page']		= "f_pengabdiandosen";
+		}  else if ($mau_ke == "act_add") {
+		
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
+				'$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			} else {
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM pengabdiann WHERE idpengabdian = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_pengabdian WHERE idpengabdian=$idu")->result();
+			$a['page']		= "f_pengabdiandosen";
+		} else if($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
+				'$idpengabdian'";
+
+				$this->db->query($query);
+				
+			}else{
+				
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
+				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
+				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
+			}
+			// die($query);
+			redirect('index.php/dosen/dosenpengabdian');
+		}  
+
+		else {
+			$nidn = $this->session->userdata('admin_nidn');	
+			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
+			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
+			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['page']		= "l_pengabdiandosenpublikasi";
+		}
+		
+		$this->load->view('dosen/aaa', $a);
+	}
+
+	public function dosenpengabdianhki() {
+		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
+			redirect("index.php/dosen/login");
+		}
+		
+		/* pagination */	
+		$nidn = $this->session->userdata('admin_nidn');	
+		$total_row		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn='$nidn'")->num_rows();
+		$per_page		= 10;
+		
+		$awal	= $this->uri->segment(4); 
+		$awal	= (empty($awal) || $awal == 1) ? 0 : $awal;
+		
+		//if (empty($awal) || $awal == 1) { $awal = 0; } { $awal = $awal; }
+		$akhir	= $per_page;
+		
+		$a['pagi']	= _page($total_row, $per_page, 4, base_url()."index.php/dosen/dosenpengabdian/p");
+		
+		//ambil variabel URL
+		$mau_ke					= $this->uri->segment(3);
+		$idu					= $this->uri->segment(4);
+	 	
+		$cari					= addslashes($this->input->post('q'));
+
+		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
+		$nidn					= addslashes($this->input->post('nidn'));
+		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$jenis					= addslashes($this->input->post('jenis'));
+		$bidang					= addslashes($this->input->post('bidang'));
+		$tse					= addslashes($this->input->post('tse'));
+		$sumber					= addslashes($this->input->post('sumber'));
+		$institusi				= addslashes($this->input->post('institusi'));
+		$jumlah					= addslashes($this->input->post('jumlah'));
+		$keterangan				= "Menunggu Verifikasi";
+		$hasilketerangan		= "Disetujui";
+		$cari					= addslashes($this->input->post('q'));
+		//upload config 
+		$config['upload_path'] 		= './upload/penelitian';
+		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
+		$config['max_size']			= '10000';
+		$config['max_width']  		= '13000';
+		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
+
+		$this->load->library('upload', $config);
+		
+		if ($mau_ke == "cari") {
+			$nidn = $this->session->userdata('admin_nidn');	
+			$a['data']		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_pengabdiandosen";
+		} else if ($mau_ke == "add") {
+			$a['page']		= "f_pengabdiandosen";
+		}  else if ($mau_ke == "act_add") {
+		
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
+				'$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			} else {
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM pengabdiann WHERE idpengabdian = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_pengabdian WHERE idpengabdian=$idu")->result();
+			$a['page']		= "f_pengabdiandosen";
+		} else if($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
+				'$idpengabdian'";
+
+				$this->db->query($query);
+				
+			}else{
+				
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
+				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
+				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
+			}
+			// die($query);
+			redirect('index.php/dosen/dosenpengabdian');
+		}  
+
+		else {
+			$nidn = $this->session->userdata('admin_nidn');	
+			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
+			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
+			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['page']		= "l_pengabdiandosenhki";
+		}
+		
+		$this->load->view('dosen/aaa', $a);
+	}
+
+	public function dosenpengabdianbuku() {
+		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
+			redirect("index.php/dosen/login");
+		}
+		
+		/* pagination */	
+		$nidn = $this->session->userdata('admin_nidn');	
+		$total_row		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn='$nidn'")->num_rows();
+		$per_page		= 10;
+		
+		$awal	= $this->uri->segment(4); 
+		$awal	= (empty($awal) || $awal == 1) ? 0 : $awal;
+		
+		//if (empty($awal) || $awal == 1) { $awal = 0; } { $awal = $awal; }
+		$akhir	= $per_page;
+		
+		$a['pagi']	= _page($total_row, $per_page, 4, base_url()."index.php/dosen/dosenpengabdian/p");
+		
+		//ambil variabel URL
+		$mau_ke					= $this->uri->segment(3);
+		$idu					= $this->uri->segment(4);
+	 	
+		$cari					= addslashes($this->input->post('q'));
+
+		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
+		$nidn					= addslashes($this->input->post('nidn'));
+		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$jenis					= addslashes($this->input->post('jenis'));
+		$bidang					= addslashes($this->input->post('bidang'));
+		$tse					= addslashes($this->input->post('tse'));
+		$sumber					= addslashes($this->input->post('sumber'));
+		$institusi				= addslashes($this->input->post('institusi'));
+		$jumlah					= addslashes($this->input->post('jumlah'));
+		$keterangan				= "Menunggu Verifikasi";
+		$hasilketerangan		= "Disetujui";
+		$cari					= addslashes($this->input->post('q'));
+		//upload config 
+		$config['upload_path'] 		= './upload/penelitian';
+		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
+		$config['max_size']			= '10000';
+		$config['max_width']  		= '13000';
+		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
+
+		$this->load->library('upload', $config);
+		
+		if ($mau_ke == "cari") {
+			$nidn = $this->session->userdata('admin_nidn');	
+			$a['data']		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_pengabdiandosen";
+		} else if ($mau_ke == "add") {
+			$a['page']		= "f_pengabdiandosen";
+		}  else if ($mau_ke == "act_add") {
+		
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
+				'$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			} else {
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM pengabdiann WHERE idpengabdian = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_pengabdian WHERE idpengabdian=$idu")->result();
+			$a['page']		= "f_pengabdiandosen";
+		} else if($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
+				'$idpengabdian'";
+
+				$this->db->query($query);
+				
+			}else{
+				
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
+				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
+				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
+			}
+			// die($query);
+			redirect('index.php/dosen/dosenpengabdian');
+		}  
+
+		else {
+			$nidn = $this->session->userdata('admin_nidn');	
+			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
+			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
+			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['page']		= "l_pengabdiandosenbuku";
+		}
+		
+		$this->load->view('dosen/aaa', $a);
+	}
+
+
+	public function dosenpengabdianjurnal() {
+		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
+			redirect("index.php/dosen/login");
+		}
+		
+		/* pagination */	
+		$nidn = $this->session->userdata('admin_nidn');	
+		$total_row		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn='$nidn'")->num_rows();
+		$per_page		= 10;
+		
+		$awal	= $this->uri->segment(4); 
+		$awal	= (empty($awal) || $awal == 1) ? 0 : $awal;
+		
+		//if (empty($awal) || $awal == 1) { $awal = 0; } { $awal = $awal; }
+		$akhir	= $per_page;
+		
+		$a['pagi']	= _page($total_row, $per_page, 4, base_url()."index.php/dosen/dosenpengabdian/p");
+		
+		//ambil variabel URL
+		$mau_ke					= $this->uri->segment(3);
+		$idu					= $this->uri->segment(4);
+	 	
+		$cari					= addslashes($this->input->post('q'));
+
+		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
+		$nidn					= addslashes($this->input->post('nidn'));
+		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$jenis					= addslashes($this->input->post('jenis'));
+		$bidang					= addslashes($this->input->post('bidang'));
+		$tse					= addslashes($this->input->post('tse'));
+		$sumber					= addslashes($this->input->post('sumber'));
+		$institusi				= addslashes($this->input->post('institusi'));
+		$jumlah					= addslashes($this->input->post('jumlah'));
+		$keterangan				= "Menunggu Verifikasi";
+		$hasilketerangan		= "Disetujui";
+		$cari					= addslashes($this->input->post('q'));
+		//upload config 
+		$config['upload_path'] 		= './upload/penelitian';
+		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
+		$config['max_size']			= '10000';
+		$config['max_width']  		= '13000';
+		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
+
+		$this->load->library('upload', $config);
+		
+		if ($mau_ke == "cari") {
+			$nidn = $this->session->userdata('admin_nidn');	
+			$a['data']		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_pengabdiandosen";
+		} else if ($mau_ke == "add") {
+			$a['page']		= "f_pengabdiandosen";
+		}  else if ($mau_ke == "act_add") {
+		
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
+				'$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			} else {
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM pengabdiann WHERE idpengabdian = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_pengabdian WHERE idpengabdian=$idu")->result();
+			$a['page']		= "f_pengabdiandosen";
+		} else if($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
+				'$idpengabdian'";
+
+				$this->db->query($query);
+				
+			}else{
+				
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
+				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
+				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
+			}
+			// die($query);
+			redirect('index.php/dosen/dosenpengabdian');
+		}  
+
+		else {
+			$nidn = $this->session->userdata('admin_nidn');	
+			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
+			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
+			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['page']		= "l_pengabdiandosenjurnal";
+		}
+		
+		$this->load->view('dosen/aaa', $a);
+	}
+
+	public function dosenpengabdianseminar() {
+		if ($this->session->userdata('admin_valid') == FALSE && $this->session->userdata('admin_id') == "") {
+			redirect("index.php/dosen/login");
+		}
+		
+		/* pagination */	
+		$nidn = $this->session->userdata('admin_nidn');	
+		$total_row		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn='$nidn'")->num_rows();
+		$per_page		= 10;
+		
+		$awal	= $this->uri->segment(4); 
+		$awal	= (empty($awal) || $awal == 1) ? 0 : $awal;
+		
+		//if (empty($awal) || $awal == 1) { $awal = 0; } { $awal = $awal; }
+		$akhir	= $per_page;
+		
+		$a['pagi']	= _page($total_row, $per_page, 4, base_url()."index.php/dosen/dosenpengabdian/p");
+		
+		//ambil variabel URL
+		$mau_ke					= $this->uri->segment(3);
+		$idu					= $this->uri->segment(4);
+	 	
+		$cari					= addslashes($this->input->post('q'));
+
+		//ambil variabel Postingan
+		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
+		$nidn					= addslashes($this->input->post('nidn'));
+		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$jenis					= addslashes($this->input->post('jenis'));
+		$bidang					= addslashes($this->input->post('bidang'));
+		$tse					= addslashes($this->input->post('tse'));
+		$sumber					= addslashes($this->input->post('sumber'));
+		$institusi				= addslashes($this->input->post('institusi'));
+		$jumlah					= addslashes($this->input->post('jumlah'));
+		$keterangan				= "Menunggu Verifikasi";
+		$hasilketerangan		= "Disetujui";
+		$cari					= addslashes($this->input->post('q'));
+		//upload config 
+		$config['upload_path'] 		= './upload/penelitian';
+		$config['allowed_types'] 	= 'gif|jpg|png|pdf|doc|docx';
+		$config['max_size']			= '10000';
+		$config['max_width']  		= '13000';
+		$config['max_height'] 		= '13000';
+		$tanggal = date('Y-m-d H:i:s');
+
+		$this->load->library('upload', $config);
+		
+		if ($mau_ke == "cari") {
+			$nidn = $this->session->userdata('admin_nidn');	
+			$a['data']		= $this->db->query("SELECT * FROM v_pengabdian WHERE nidn=$nidn AND judul LIKE '%$cari%' ORDER BY nidn DESC")->result();
+			$a['page']		= "l_pengabdiandosen";
+		} else if ($mau_ke == "add") {
+			$a['page']		= "f_pengabdiandosen";
+		}  else if ($mau_ke == "act_add") {
+		
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
+				'$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			} else {
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
+			}	
+			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "del") {
+			$this->db->query("DELETE FROM pengabdiann WHERE idpengabdian = '$idu'");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
+			redirect('index.php/dosen/dosenpengabdian');
+		}
+
+		else if ($mau_ke == "edt") {
+			$a['datpil']		= $this->db->query("SELECT * FROM v_pengabdian WHERE idpengabdian=$idu")->result();
+			$a['page']		= "f_pengabdiandosen";
+		} else if($mau_ke == "act_edt") {
+			if ($this->upload->do_upload('file_surat')) {
+				$up_data	 	= $this->upload->data();
+				
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
+				'$idpengabdian'";
+
+				$this->db->query($query);
+				
+			}else{
+				
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
+				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
+				
+				$this->db->query($query);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
+			}
+			// die($query);
+			redirect('index.php/dosen/dosenpengabdian');
+		}  
+
+		else {
+			$nidn = $this->session->userdata('admin_nidn');	
+			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
+			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
+			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['page']		= "l_pengabdiandosenseminar";
+		}
+		
+		$this->load->view('dosen/aaa', $a);
+	}
 }

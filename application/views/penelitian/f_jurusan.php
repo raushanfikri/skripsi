@@ -66,7 +66,7 @@ else
 		<option value="" selected>--Pilih Jurusan--</option>
 		<?php foreach($fakultas->result() as $f){ ?>
 		<option value="<?=$f->kodefakultas?>" <?php if($f->kodefakultas==$kodefakultas){ echo "selected"; } ?> ><?=$f->namafakultas?></option> 
-		<?php } ?>
+		<?php } ?> 
 	</select>
 	</b></td></tr>
 

@@ -90,7 +90,7 @@ else
 					<td><b><input type="text" name="judul" required value="<?php echo $judul; ?>" style="width: 700px"
 								class="form-control" autofocus></b></td>
 				</tr>
-				<tr>
+				<tr> 
 					<td width="20%">Institusi</td>
 					<td><b><input type="text" name="institusi" required value="<?php echo $institusi; ?>"
 								style="width: 700px" class="form-control"></b></td>

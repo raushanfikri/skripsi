@@ -85,16 +85,16 @@
 				</div>
 				<td class="ctr">
 					<a href="<?= base_url('index.php/dosen/dosenhki/del/') . '/' . $b->id;?>"
-						class="btn btn-danger btn-sm"><i class="icon-remove icon-white" target="_blank" title="Hapus">
+						class="btn btn-danger btn-sm"><i class="icon-remove icon-white" title="Hapus">
 						</i></a>
 					<a href="<?= base_url('index.php/dosen/dosenhki/edt/') . '/' . $b->id;?>"
-						class="btn btn-success btn-sm"><i class="icon-edit icon-white" target="_blank" title="Ubah">
+						class="btn btn-success btn-sm"><i class="icon-edit icon-white" title="Ubah">
 						</i></a>
 				</td>
 				<?php
 					}
 				?>
-				</td>
+				</td> 
 				<?php 
 		//	} else {
 		//		echo "<td class='ctr'> -- </td>";

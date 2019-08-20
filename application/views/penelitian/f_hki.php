@@ -87,7 +87,10 @@ else
 				<td width="20%">Judul Penelitian</td>
 				<td>
 					<select class="form-control select2" name="idpenelitian">
+						
+					
 						<?php foreach ($data as $val) { ?>
+						
 						<option value="<?php echo $val->idpenelitian; ?>"><?php echo $val->judulpenelitian; ?></option>
 						<?php } ?>
 						?>
@@ -110,9 +113,22 @@ else
 							class="form-control" autofocus></b></td>
 			</tr>
 			<tr>
-				<td width="20%">Jenis</td>
-				<td><b><input type="text" name="jenis" required value="<?php echo $jenis; ?>" style="width: 700px"
-							class="form-control"></b></td>
+				<td width="20%">Jenis HKI</td>
+				<td><b><select type="text" name="jenis" required value="<?php echo $jenis; ?>" style="width: 700px"
+							class="form-control">
+							<option value="" selected>-- Pilih --</option>
+							<option value="Paten">Paten</option>
+							<option value="Paten Sederhana">Paten Sederhana</option>
+							<option value="Hak Cipta">Hak Cipta</option>
+							<option value="Merk Dagang">Merk Dagang</option>
+							<option value="Rahasia Dagang">Rahasia Dagang</option>
+							<option value="Desain Produksi Industri">Desain Produksi Industri</option>
+							<option value="Indikasi Geografis">Indikasi Geografis</option>
+							<option value="Perlindungan Varietas Tanaman">Perlindungan Varietas Tanaman</option>
+							<option value="Perlindungan Topografi Sirkuit Terpadu">Perlindungan Topografi Sirkuit
+								Terpadu</option>
+
+						</select></b></td>
 			</tr>
 			<tr>
 				<td width="20%">Nomor Pendaftaran</td>
@@ -174,26 +190,21 @@ else
 
 
 	$(document).ready(function () {
-		$(function () {
-			$("#namadosen")
-		.autocomplete({ //id kode sebagai key autocomplete yang akan dibawa ke source url
-				minLength: 1,
-				delay: 0,
-				source: '<?php echo site_url('
-				index.php / penelitian /
-				get_datadosen '); ?>', //nama source kita ambil langsung memangil fungsi get_allkota
-				select: function (event, ui) {
-					$('#namadosen').val(ui.item.value);
-					$('#nidn').val(ui.item.id);
-				}
-			});
-			
-			$('.select2').select2({
+  $(function () {
+    $("#namadosen").autocomplete({    //id kode sebagai key autocomplete yang akan dibawa ke source url
+        minLength:1,
+        delay:0,
+        source:'<?php echo site_url('index.php/penelitian/get_datadosen'); ?>',   //nama source kita ambil langsung memangil fungsi get_allkota
+        select:function(event, ui){
+            $('#namadosen').val(ui.item.value);
+            $('#nidn').val(ui.item.id);
+        }
+    });
+	$('.select2').select2({
 				width: "100%",
 				allowClear: true,
 				placeholder: "Filter"
 			});
-
-		});
-	});
+  });
+});
 </script>

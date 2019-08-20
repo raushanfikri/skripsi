@@ -39,9 +39,9 @@
 		<tbody>
 			<?php 
 		$no=1;
-		if (empty($data)) {
-			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
-		} else {
+		// if (empty($data)) {
+		// 	echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
+		// } else {
 			$no 	= ($this->uri->segment(4) + 1);
 			foreach ($data as $b) {
 		?>
@@ -57,7 +57,7 @@
 					Peran Penulis 		: <?php echo $b->peranpenulis; ?><br>
 					tahun 		: <?php echo $b->tahun; ?><br>
 					ISSN 		: <?php echo $b->issn; ?><br>
-					Volume 		: <?php echo $b->volume; ?><br>
+					Volume 		: <?php echo $b->volume; ?><br> 
 					Nomor 		: <?php echo $b->no; ?><br>
 					Url 		: <?php echo $b->url; ?><br>
 				</td>
@@ -109,7 +109,7 @@
 			</tr>
 			<?php 
 			$no++;
-			}
+			// }
 		}
 		?>
 		</tbody>

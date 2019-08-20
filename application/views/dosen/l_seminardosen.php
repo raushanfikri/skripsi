@@ -47,9 +47,9 @@
 		<tbody>
 			<?php 
 		$no=1;
-		if (empty($data)) {
-			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
-		} else {
+		// if (empty($data)) {
+		// 	echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
+		// } else {
 			$no 	= ($this->uri->segment(4) + 1);
 			foreach ($data as $b) {
 		?>
@@ -118,7 +118,7 @@
 			</tr>
 			<?php 
 			$no++;
-			}
+			// }
 		}
 		?>
 		</tbody>

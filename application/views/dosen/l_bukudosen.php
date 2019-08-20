@@ -40,7 +40,7 @@
 	</thead>
 	
 	<tbody>
-		<?php 
+		<?php  
 		$no=1;
 		if (empty($data)) {
 			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
