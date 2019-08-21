@@ -161,7 +161,7 @@
 							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdianjurnal">
 									Artikel Jurnal</a></li>
 							<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpengabdianseminar">
-									Artikel Seminar</a></li>
+									Artikel Prosiding</a></li>
 							<li><a tabindex="-1" href="<?php echo base_url(); ?>"> Dokumentasi</a></li>
 							<!-- <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/dosen/dosenpenelitian_pkm"> Penelitian</a></li> -->
 

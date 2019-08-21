@@ -5,6 +5,9 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$act					= "act_edt";
 	$admin_user				=$this->session->userdata('admin_nidn');	
 	$judulpenelitian		= $datpil[0]->judulpenelitian;	
+	$mitra					= $datpil[0]->mitra;
+	$alamat					= $datpil[0]->alamatmitra;	
+	$kelompokmitra			= $datpil[0]->kelompokmitra;		
 	$jenis					= $datpil[0]->jenis;	
 	// $anggota_1	= $datpil[0]->anggota_1;	
 	// $anggota_2	= $datpil[0]->anggota_2;	
@@ -19,6 +22,9 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$admin_user	=$this->session->userdata('admin_nidn');
 	$judulpenelitian		= "";
 	$jenis	= "";
+	$mitra					= "";
+	$alamat					= "";	
+	$kelompokmitra			= "";
 	//$anggota_1	= "";
 	//$anggota_2	= "";
 	$bidang	= "";
@@ -90,6 +96,25 @@ else
 				<td><b><input type="text" name="judulpenelitian" required value="<?php echo $judulpenelitian; ?>"
 							style="width: 700px" class="form-control" autofocus></b></td>
 			</tr>
+
+			<tr>
+				<td width="20%">Mitra</td>
+				<td><b><input type="text" name="mitra" required value="<?php echo $mitra; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">Alamat Mitra</td>
+				<td><b><input type="text" name="alamat" required value="<?php echo $alamat; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+
+			<tr>
+				<td width="20%">Kelompok Mitra</td>
+				<td><b><input type="text" name="kelompokmitra" required value="<?php echo $kelompokmitra; ?>" style="width: 700px"
+							class="form-control"></b></td>
+			</tr>
+			
 			<tr>
 				<td width="20%">Jenis</td>
 				<td><b><input type="text" name="jenis" required value="<?php echo $jenis; ?>" style="width: 700px"

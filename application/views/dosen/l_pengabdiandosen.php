@@ -27,10 +27,11 @@
         <thead>
             <tr>
                 <th width="5%">No</th>
-                <th width="15%">Judul</th>
-                <th width="15%">Personil</th>
-                <th width="15%">Penelitian</th>
-                <th width="15%">Dana</th>
+                <th width="15%" >Judul</th>
+                <th width="10%">Personil</th>
+                <th width="15%">Mitra</th>
+                <th width="10%">Penelitian</th>
+                <th width="10%">Dana</th>
                 <th width="10%">File</th>
                 <th width="10%">Status</th>
                 <th width="15%">Aksi</th>
@@ -51,26 +52,30 @@
                 order_by("ket","DESC")->get()->result();
 		?>
             <tr>
-                <td><?php echo $no; ?></td>
-                <td><?php echo $b->judulpenelitian; ?></td>
-                <td>
+                <td style="font-size: 11px"><?php echo $no; ?></td>
+                <td style="font-size: 11px"><?php echo $b->judulpenelitian; ?></td>
+                <td style="font-size: 11px">
                     <?php 
 				foreach($get_personil as $pr){
 					echo "<li>$pr->namadosen</li>";
 				}
 				?>
                 </td>
-                <td>Jenis : <?php echo $b->jenis; ?><br>
+                <td style="font-size: 11px">Mitra           : <?php echo $b->mitra; ?><br>
+                    Alamat Mitra    : <?php echo $b->alamatmitra; ?><br>
+                    Kelompok Mitra  : <?php echo $b->kelompokmitra; ?><br>
+                </td>
+                <td style="font-size: 11px">Jenis : <?php echo $b->jenis; ?><br>
                     Bidang : <?php echo $b->bidang; ?><br>
                     TSE : <?php echo $b->tse; ?><br>
                 </td>
-                <td>Sumber : <?php echo $b->sumber; ?><br>
+                <td style="font-size: 11px">Sumber : <?php echo $b->sumber; ?><br>
                     Institusi : <?php echo $b->institusi; ?><br>
                     Jumlah : <?php echo $b->jumlah; ?><br>
                 </td>
-                <td class="ctr"><a href="<?= base_url('upload/pengabdian\/') . $b->file; ?>">
+                <td style="font-size: 11px" class="ctr"><a href="<?= base_url('upload/pengabdian\/') . $b->file; ?>">
                         <!-- <img src="..\aset\img\123434.png"  style="display: inline; float: left; margin-right: 20px; width: 80px; height: 80px"> -->
-                        <i class="icon-file"></i></a></td>
+                        <i class="icon-file" title="<?php echo $b->file; ?>"></i></a></td>
 
                 <td class="ctr">
                     <?php
@@ -86,6 +91,9 @@
                 <td class="ctr">
                     <a href="<?= base_url('index.php/dosen/detail_anggotapengabdian/') . '/' . $b->idpengabdian;?>"
                         class="btn btn-primary btn-sm" title="Tambah Data Anggota"><i class="icon-list icon-white">
+                        </i></a>
+                    <a href="<?= base_url('index.php/dosen/detail_luaranpengabdian/') . '/' . $b->idpengabdian;?>"
+                        class="btn btn-warning btn-sm" title="Tambah Data Luaran"><i class="icon-file icon-white">
                         </i></a>
                     <a href="#" class="btn btn-success btn-sm" role="button" disabled><i class="icon-edit icon-white">
                         </i></a>
@@ -108,7 +116,7 @@
                     <a href="<?= base_url('index.php/dosen/detail_anggotapengabdian/') . '/' . $b->idpengabdian;?>"
                         class="btn btn-info btn-sm" title="Tambah Data Anggota"><i class="icon-list icon-white">
                         </i></a>
-                    <a href="<?= base_url('index.php/dosen/detail_luaran/') . '/' . $b->idpengabdian;?>"
+                    <a href="<?= base_url('index.php/dosen/detail_luaranpengabdian/') . '/' . $b->idpengabdian;?>"
                         class="btn btn-warning btn-sm" title="Tambah Data Luaran"><i class="icon-file icon-white">
                         </i></a>
                     <a href="<?= base_url('index.php/dosen/dosenpengabdian/edt/') . '/' . $b->idpengabdian;?>"

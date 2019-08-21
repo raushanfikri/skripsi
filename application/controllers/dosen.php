@@ -1519,6 +1519,9 @@ class dosen extends CI_Controller {
 		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$mitra					= addslashes($this->input->post('mitra'));
+		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
 		$tse					= addslashes($this->input->post('tse'));
@@ -1549,12 +1552,14 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat'  ,'$jenis',
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat'  , '$jenis',
 				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
@@ -1577,8 +1582,9 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
-				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis',bidang='$bidang', 
+				tse='$tse', sumber='$sumber',institusi='$institusi', 
 				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
 				'$idpengabdian'";
 
@@ -1586,7 +1592,8 @@ class dosen extends CI_Controller {
 				
 			}else{
 				
-				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', 
+				mitra='$mitra', alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
 				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
 				
@@ -1610,6 +1617,50 @@ class dosen extends CI_Controller {
 	}
 
 
+	public function detail_luaranpengabdian($id){
+		if(isset($id) && !empty($id)){
+			$a['id'] = $id;
+			$a['page']		= "f_detail_luaranpengabdian";
+			$a['anggota'] = $this->db->select("*")->from("pengabdiann")->join("detail_luaranpengabdian",
+			"detail_luaranpengabdian.idpengabdian=pengabdiann.idpengabdian")->join("luaran","luaran.idluaran=detail_luaranpengabdian.idluaran")->
+			where("pengabdiann.idpengabdian",$id)->get();
+			$this->load->view('dosen/aaa', $a);
+		}else{
+			$this->dosenpengabdian();
+		}
+	}
+
+	public function simpan_luaranpengabdian(){
+		if(isset($_POST) && !empty($_POST)){
+			$data['idluaran'] = $this->input->post('luaran');
+			$data['idpengabdian'] = $this->input->post('id'); 
+
+			$cek = $this->db->get_where("detail_luaranpengabdian",$data);
+			if($cek->num_rows()>0){
+				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">Dosen Sudah Terdaftar </div>");
+			
+				redirect('index.php/dosen/detail_luaranpengabdian/'.$this->input->post('id'));
+			}else{
+				$data_['idpengabdian'] = $this->input->post('id');
+				$data_['idluaran'] = $this->input->post('luaran');
+				$this->db->insert("detail_luaranpengabdian",$data_);
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Ditambahkan </div>");
+				redirect('index.php/dosen/detail_luaranpengabdian/'.$this->input->post('id'));
+			}
+		}else{
+			$this->dosenpengabdian();
+		}
+	}
+
+	public function hapus_luaranpengabdian($idp,$idluaran){
+		$where = array(
+			'idpengabdian' => $idp,
+			'idluaran' => $idluaran,
+		);
+		$this->db->delete("detail_luaranpengabdian",$where);
+		$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Dihapus </div>");
+				redirect('index.php/dosen/detail_luaranpengabdian/'.$idp);
+	}
 	public function detail_anggotapengabdian($id){
 		if(isset($id) && !empty($id)){
 			$a['id'] = $id;
@@ -1966,7 +2017,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->get()->result();
+			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->
+			join("detail_luaran","detail_luaran.idpenelitian=penelitian.idpenelitian")->join("luaran","luaran.idluaran=detail_luaran.idluaran")->where
+			("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->
+			where("penelitian.keterangan","Disetujui")->where("luaran.namaluaran","Publikasi")->get()->result();
 			$a['page']		= "l_penelitiandosenpublikasi";
 		}
 		
@@ -2074,7 +2128,9 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->get()->result();
+			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->
+			join("detail_luaran","detail_luaran.idpenelitian=penelitian.idpenelitian")->join("luaran","luaran.idluaran=detail_luaran.idluaran")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->
+			where("penelitian.keterangan","Disetujui")->where("luaran.namaluaran","HKI")->get()->result();
 			$a['page']		= "l_penelitiandosenhki";
 		}
 		
@@ -2182,7 +2238,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->get()->result();
+			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->
+			join("detail_luaran","detail_luaran.idpenelitian=penelitian.idpenelitian")->join("luaran","luaran.idluaran=detail_luaran.idluaran")->where
+			("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->
+			where("penelitian.keterangan","Disetujui")->where("luaran.namaluaran","Buku Ajar")->get()->result();
 			$a['page']		= "l_penelitiandosenbuku";
 		}
 		
@@ -2290,7 +2349,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->get()->result();
+			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->
+			join("detail_luaran","detail_luaran.idpenelitian=penelitian.idpenelitian")->join("luaran","luaran.idluaran=detail_luaran.idluaran")->where
+			("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->
+			where("penelitian.keterangan","Disetujui")->where("luaran.namaluaran","Artikel Jurnal")->get()->result();
 			$a['page']		= "l_penelitiandosenjurnal";
 		}
 		
@@ -2398,7 +2460,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->get()->result();
+			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->
+			join("detail_luaran","detail_luaran.idpenelitian=penelitian.idpenelitian")->join("luaran","luaran.idluaran=detail_luaran.idluaran")->where
+			("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->
+			where("penelitian.keterangan","Disetujui")->where("luaran.namaluaran","Artikel Prosiding")->get()->result();
 			$a['page']		= "l_penelitiandosenseminar";
 		}
 		
@@ -2433,6 +2498,9 @@ class dosen extends CI_Controller {
 		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$mitra					= addslashes($this->input->post('mitra'));
+		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
 		$tse					= addslashes($this->input->post('tse'));
@@ -2463,12 +2531,15 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat', '$jenis', 
+				
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat', '$jenis', 
 				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
@@ -2491,7 +2562,8 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', 
+				mitra='$mitra',alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
 				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
 				'$idpengabdian'";
@@ -2500,7 +2572,8 @@ class dosen extends CI_Controller {
 				
 			}else{
 				
-				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',
+				mitra='$mitra',alamatmitra='$alamat',kelompokmitra='$kelompokmitra', jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
 				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
 				
@@ -2514,9 +2587,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
-			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
-			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian","detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->
+			join("detail_luaranpengabdian","detail_luaranpengabdian.idpengabdian=pengabdiann.idpengabdian")->join("luaran","luaran.idluaran=detail_luaranpengabdian.idluaran")->where
+			("detail_anggotapengabdian.nidn",$nidn)->where("detail_anggotapengabdian.ket","ketua")->
+			where("pengabdiann.keterangan","Disetujui")->where("luaran.namaluaran","Publikasi")->get()->result();
 			$a['page']		= "l_pengabdiandosenpublikasi";
 		}
 		
@@ -2551,6 +2625,9 @@ class dosen extends CI_Controller {
 		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$mitra					= addslashes($this->input->post('mitra'));
+		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
 		$tse					= addslashes($this->input->post('tse'));
@@ -2581,12 +2658,16 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat',  '$jenis',
+				
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat', '$jenis',
+				
 				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
@@ -2609,7 +2690,8 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
 				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
 				'$idpengabdian'";
@@ -2632,9 +2714,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
-			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
-			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian","detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->
+			join("detail_luaranpengabdian","detail_luaranpengabdian.idpengabdian=pengabdiann.idpengabdian")->join("luaran","luaran.idluaran=detail_luaranpengabdian.idluaran")->where
+			("detail_anggotapengabdian.nidn",$nidn)->where("detail_anggotapengabdian.ket","ketua")->
+			where("pengabdiann.keterangan","Disetujui")->where("luaran.namaluaran","HKI")->get()->result();
 			$a['page']		= "l_pengabdiandosenhki";
 		}
 		
@@ -2669,6 +2752,9 @@ class dosen extends CI_Controller {
 		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$mitra					= addslashes($this->input->post('mitra'));
+		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
 		$tse					= addslashes($this->input->post('tse'));
@@ -2699,12 +2785,15 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat' ,'$jenis', 
+				 
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat'   ,'$jenis',
 				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
@@ -2727,7 +2816,8 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
 				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
 				'$idpengabdian'";
@@ -2736,7 +2826,8 @@ class dosen extends CI_Controller {
 				
 			}else{
 				
-				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
 				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
 				
@@ -2750,9 +2841,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
-			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
-			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian","detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->
+			join("detail_luaranpengabdian","detail_luaranpengabdian.idpengabdian=pengabdiann.idpengabdian")->join("luaran","luaran.idluaran=detail_luaranpengabdian.idluaran")->where
+			("detail_anggotapengabdian.nidn",$nidn)->where("detail_anggotapengabdian.ket","ketua")->
+			where("pengabdiann.keterangan","Disetujui")->where("luaran.namaluaran","Buku Ajar")->get()->result();
 			$a['page']		= "l_pengabdiandosenbuku";
 		}
 		
@@ -2788,6 +2880,9 @@ class dosen extends CI_Controller {
 		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$mitra					= addslashes($this->input->post('mitra'));
+		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
 		$tse					= addslashes($this->input->post('tse'));
@@ -2818,12 +2913,14 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat'   ,'$jenis',  
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat'   ,'$jenis', 
 				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
@@ -2846,7 +2943,8 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
 				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
 				'$idpengabdian'";
@@ -2855,7 +2953,8 @@ class dosen extends CI_Controller {
 				
 			}else{
 				
-				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
 				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
 				
@@ -2869,9 +2968,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
-			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
-			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian","detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->
+			join("detail_luaranpengabdian","detail_luaranpengabdian.idpengabdian=pengabdiann.idpengabdian")->join("luaran","luaran.idluaran=detail_luaranpengabdian.idluaran")->where
+			("detail_anggotapengabdian.nidn",$nidn)->where("detail_anggotapengabdian.ket","ketua")->
+			where("pengabdiann.keterangan","Disetujui")->where("luaran.namaluaran","Artikel Jurnal")->get()->result();
 			$a['page']		= "l_pengabdiandosenjurnal";
 		}
 		
@@ -2906,6 +3006,9 @@ class dosen extends CI_Controller {
 		$idpengabdian 			= addslashes($this->input->post('idpengabdian'));
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
+		$mitra					= addslashes($this->input->post('mitra'));
+		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
 		$tse					= addslashes($this->input->post('tse'));
@@ -2936,12 +3039,14 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis',  
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat'   ,'$jenis',  
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
-				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian','$jenis', 
+				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
+				'$mitra','$kelompokmitra','$alamat'   ,'$jenis', 
 				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
@@ -2964,7 +3069,8 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',jenis='$jenis', 
+				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', 
 				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
 				'$idpengabdian'";
@@ -2973,7 +3079,8 @@ class dosen extends CI_Controller {
 				
 			}else{
 				
-				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',mitra='$mitra',
+				alamatmitra='$alamat',kelompokmitra='$kelompokmitra', jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
 				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
 				
@@ -2987,9 +3094,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian",
-			"detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->where("detail_anggotapengabdian.nidn",$nidn)->
-			where("detail_anggotapengabdian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['data'] = $this->db->select("*")->from("pengabdiann")->join("detail_anggotapengabdian","detail_anggotapengabdian.idpengabdian=pengabdiann.idpengabdian")->
+			join("detail_luaranpengabdian","detail_luaranpengabdian.idpengabdian=pengabdiann.idpengabdian")->join("luaran","luaran.idluaran=detail_luaranpengabdian.idluaran")->where
+			("detail_anggotapengabdian.nidn",$nidn)->where("detail_anggotapengabdian.ket","ketua")->
+			where("pengabdiann.keterangan","Disetujui")->where("luaran.namaluaran","Artikel Prosiding")->get()->result();
 			$a['page']		= "l_pengabdiandosenseminar";
 		}
 		

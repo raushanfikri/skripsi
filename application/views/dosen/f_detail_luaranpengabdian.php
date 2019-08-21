@@ -7,7 +7,7 @@
 
   <!-- /.box-header -->
   <!-- form start -->
-  <form method="post" action="<?=base_url()?>index.php/dosen/simpan_luaran">
+  <form method="post" action="<?=base_url()?>index.php/dosen/simpan_luaranpengabdian">
     <div class="box-body">
       <div class="form-group">
         <label for="exampleInputEmail1">Daftar Luaran</label>
@@ -29,7 +29,7 @@
       <tr><td>
         <br><button type="submit" class="btn btn-primary">Tambah Luaran</button>
       </td></tr>
-      <a href="<?php echo base_URL(); ?>index.php/dosen/dosenpenelitian" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
+      <a href="<?php echo base_URL(); ?>index.php/dosen/dosenpengabdian" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
     </div>
   </form>
 </div>
@@ -55,7 +55,8 @@
       <td><?=$no?></td>
       <td><?=$r->namaluaran?></td>
       <td class="ctr">
-        <a href="<?=base_url()?>index.php/dosen/hapus_luaran/<?=$r->idpenelitian?>/<?=$r->idluaran?>" class="btn btn-danger btn-xs">Hapus</a>
+        <a href="<?=base_url()?>index.php/dosen/hapus_luaranpengabdian/<?=$r->idpengabdian?>/<?=$r->idluaran?>"
+         class="btn btn-danger btn-xs">Hapus</a>
        
       </td>
     </tr>

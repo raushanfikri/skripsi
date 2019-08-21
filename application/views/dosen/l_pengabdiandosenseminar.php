@@ -9,8 +9,8 @@
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
 		?>
             <div class="col-md-12">
-                <a href="<?php echo base_URL(); ?>index.php/dosen/dosenpengabdian/add" class="btn btn-info"><i
-                        class="icon-plus-sign icon-white"> </i> Tambah Data</a>
+                <!-- <a href="<?php echo base_URL(); ?>index.php/dosen/dosenpengabdian/add" class="btn btn-info"><i
+                        class="icon-plus-sign icon-white"> </i> Tambah Data</a> -->
             </div>
             <?php 
 		//}
