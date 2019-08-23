@@ -48,28 +48,28 @@
 				$get_personil = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->join("dosen","dosen.nidn=detail_anggotapenelitian.nidn")->where("penelitian.idpenelitian",$b->idpenelitian)->order_by("ket","DESC")->get()->result();
 		?>
 			<tr>
-				<td><?php echo $no; ?></td>
-				<td><?php echo $b->judulpenelitian; ?></td>
-				<td>
+				<td style="font-size: 11px"><?php echo $no; ?></td>
+				<td style="font-size: 11px"><?php echo $b->judulpenelitian; ?></td>
+				<td style="font-size: 11px">
 					<?php 
 				foreach($get_personil as $pr){
 					echo "<li>$pr->namadosen</li>";
 				}
 				?>
 				</td>
-				<td>Jenis : <?php echo $b->jenis; ?><br>
+				<td style="font-size: 11px">Jenis : <?php echo $b->jenis; ?><br>
 					Bidang : <?php echo $b->bidang; ?><br>
 					TSE : <?php echo $b->tse; ?><br>
 				</td>
-				<td>Sumber : <?php echo $b->sumber; ?><br>
+				<td style="font-size: 11px">Sumber : <?php echo $b->sumber; ?><br>
 					Institusi : <?php echo $b->institusi; ?><br>
 					Jumlah : <?php echo $b->jumlah; ?><br>
 				</td>
-				<td class="ctr"><a href="<?= base_url('upload/penelitian\/') . $b->file; ?>">
-						<!-- <img src="..\aset\img\123434.png"  style="display: inline; float: left; margin-right: 20px; width: 80px; height: 80px"> -->
-						<i class="icon-file "></i></a></td>
+				<td style="font-size: 11px" class="ctr"><a href="<?= base_url('upload/penelitian\/') . $b->file; ?>">
+                        <!-- <img src="..\aset\img\123434.png"  style="display: inline; float: left; margin-right: 20px; width: 80px; height: 80px"> -->
+                        <i class="icon-file" title="<?php echo $b->file; ?>"></i></a></td>
 
-				<td class="ctr">
+				<td style="font-size: 11px" class="ctr">
 					<?php
 					$hasil = $b->keterangan;
 					

@@ -93,7 +93,7 @@ class dosen extends CI_Controller {
 		$p3				= md5($this->input->post('p3'));
 		
 		if ($ke == "simpan") {
-			$cek_password_lama	= $this->db->query("SELECT password FROM t_admin WHERE id = $id_user")->row();
+			$cek_password_lama	= $this->db->query("SELECT password FROM dosen WHERE id = $admin_nidn")->row();
 			//echo 
 			
 			if ($cek_password_lama->password != $p1) {
@@ -103,7 +103,7 @@ class dosen extends CI_Controller {
 				$this->session->set_flashdata('k_passwod', '<div id="alert" class="alert alert-error">Password Baru 1 dan 2 tidak cocok</div>');
 				redirect('index.php/dosen/passwod');
 			} else {
-				$this->db->query("UPDATE t_admin SET password = '$p3' WHERE id = ".$id_user."");
+				$this->db->query("UPDATE dosen SET password = '$p3' WHERE id = ".$admin_nidn."");
 				$this->session->set_flashdata('k_passwod', '<div id="alert" class="alert alert-success">Password berhasil diperbaharui</div>');
 				redirect('index.php/dosen/passwod');
 			}
@@ -217,9 +217,11 @@ class dosen extends CI_Controller {
 					$up_data	 	= $this->upload->data();
 					
 					
-					$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL,'$idp', '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$date')");
+					$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL,'$idp', '$nidn', '$judul', 
+					'$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$date')");
 				} else {
-					$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL,'$idp', '$nidn', '$judul', '$institusi', '$tanggal', '$tempat','$keterangan','$date')");
+					$this->db->query("INSERT INTO publikasiilmiah VALUES (NULL,'$idp', '$nidn', '$judul',
+					 '$institusi', '$tanggal', '$tempat','','$keterangan','$date')");
 				}	
 				
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan. ".$this->upload->display_errors()."</div>");
@@ -249,10 +251,14 @@ class dosen extends CI_Controller {
 					$up_data	 	= $this->upload->data();
 					
 					
-					$this->db->query("UPDATE publikasiilmiah SET idpenelitian='$idp',nidn='$nidn', judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat',file='$up_data[file_name]', status='$keterangan' WHERE id = '$id'");
+					$this->db->query("UPDATE publikasiilmiah SET idpenelitian='$idp',nidn='$nidn', 
+					judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat',
+					file='$up_data[file_name]', status='$keterangan' WHERE id = '$id'");
 				}else{
 					
-					$query = "UPDATE publikasiilmiah SET idpenelitian='$idp', nidn='$nidn', judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' WHERE id = '$id'";
+					$query = "UPDATE publikasiilmiah SET idpenelitian='$idp', nidn='$nidn', 
+					judul='$judul', institusi='$institusi', tanggal='$tanggal', tempat='$tempat', 
+					,'',status='$keterangan' WHERE id = '$id'";
 					
 					$this->db->query($query);
 					$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
@@ -347,11 +353,10 @@ class dosen extends CI_Controller {
 				'$institusi', '$tanggal', '$tempat','".$up_data['file_name']."','$keterangan','$date')");
 			} else {
 				$this->db->query("INSERT INTO publikasiilmiah_pkm VALUES (NULL,'$idp', '$nidn', '$judul', 
-				'$institusi', '$tanggal', '$tempat','$keterangan','$date')");
+				'$institusi', '$tanggal', '$tempat','','$keterangan','$date')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
-			Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			redirect('index.php/dosen/detail_publikasipkm/'.$this->input->post('idp'));
 
 		} else if ($mau_ke == "del") {
@@ -361,8 +366,7 @@ class dosen extends CI_Controller {
 
 			
 			$this->db->query("DELETE FROM publikasiilmiah_pkm WHERE id = '$idu'");
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
-			Berhasil DiHapus</div>");			
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiHapus</div>");			
 			redirect('index.php/dosen/detail_publikasipkm/'.$idp);
 		}
 		else if ($mau_ke == "edt") {
@@ -383,12 +387,11 @@ class dosen extends CI_Controller {
 			}else{
 				
 				$query = "UPDATE publikasiilmiah_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul', 
-				institusi='$institusi', tanggal='$tanggal', tempat='$tempat', status='$keterangan' 
+				institusi='$institusi', tanggal='$tanggal', tempat='$tempat','', status='$keterangan' 
 				WHERE id = '$id'";
 				
 				$this->db->query($query);
-				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
-				Berhasil DiUbah</div>");			
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
 			}
 			redirect('index.php/dosen/detail_publikasipkm/'.$this->input->post('idp'));
 		}  
@@ -476,9 +479,11 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', 
+				'$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO hki VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', 
+				'$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Disimpan. ".$this->upload->display_errors()."</div>");
@@ -506,9 +511,13 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("UPDATE hki SET idpenelitian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki',file='$up_data[file_name]', status='$status', keterangan='$keterangan' WHERE id = '$id'");
+				$this->db->query("UPDATE hki SET idpenelitian='$idp', nidn='$nidn', judul='$judul',
+				 jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki',
+				 status='$status',file='$up_data[file_name]',  keterangan='$keterangan' WHERE id = '$id'");
 			}else{	
-				$query="UPDATE hki SET idpenelitian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki', status='$status', keterangan='$keterangan' WHERE id = '$id'";
+				$query="UPDATE hki SET idpenelitian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis', 
+				nomorpendaftaran='$nomorpendaftaran', status='$status',nohki='$nohki', status='$status',
+				'',  keterangan='$keterangan' WHERE id = '$id'";
 		
 			$this->db->query($query);
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Diubah </div>");	
@@ -602,9 +611,11 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis',
+				 '$nomorpendaftaran', '$status', '$nohki','".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO hki_pkm VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', '$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO hki_pkm VALUES (NULL,'$idp', '$nidn', '$judul', '$jenis', 
+				'$nomorpendaftaran', '$status', '$nohki','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Disimpan. ".$this->upload->display_errors()."</div>");
@@ -632,9 +643,11 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("UPDATE hki_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki',file='$up_data[file_name]', status='$status', keterangan='$keterangan' WHERE id = '$id'");
+				$this->db->query("UPDATE hki_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul',
+				 jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki',file='$up_data[file_name]', status='$status', keterangan='$keterangan' WHERE id = '$id'");
 			}else{	
-				$query="UPDATE hki_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis', nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki', status='$status', keterangan='$keterangan' WHERE id = '$id'";
+				$query="UPDATE hki_pkm SET idpengabdian='$idp', nidn='$nidn', judul='$judul', jenis='$jenis',
+				 nomorpendaftaran='$nomorpendaftaran', status='$status', nohki='$nohki', status='$status','', keterangan='$keterangan' WHERE id = '$id'";
 		
 			$this->db->query($query);
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil Diubah </div>");	
@@ -727,9 +740,11 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("INSERT INTO buku VALUES (NULL,'$idp', '$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO buku VALUES (NULL,'$idp', '$nidn', '$judul', 
+				'$penerbit', '$isbn', '$halaman', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
-				$this->db->query("INSERT INTO buku VALUES (NULL, '$idp','$nidn', '$judul', '$penerbit', '$isbn', '$halaman', '','$keterangan','$tanggal')");
+				$this->db->query("INSERT INTO buku VALUES (NULL, '$idp','$nidn', '$judul', 
+				'$penerbit', '$isbn', '$halaman', '','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -757,9 +772,11 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("UPDATE buku SET idpenelitian='$idp',nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+				$this->db->query("UPDATE buku SET idpenelitian='$idp',nidn='$nidn', judul='$judul', 
+				penerbit='$penerbit', isbn='$isbn', halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
 			}else{
-				$query="UPDATE buku SET idpenelitian='$idp',nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',keterangan='$keterangan' WHERE id = '$id'";
+				$query="UPDATE buku SET idpenelitian='$idp',nidn='$nidn', judul='$judul', penerbit='$penerbit',
+				 isbn='$isbn', halaman='$halaman','',keterangan='$keterangan' WHERE id = '$id'";
 
 				$this->db->query($query);
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");
@@ -883,9 +900,11 @@ class dosen extends CI_Controller {
 			if ($this->upload->do_upload('file_surat')) {
 				$up_data	 	= $this->upload->data();
 				
-				$this->db->query("UPDATE buku_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
+				$this->db->query("UPDATE buku_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', 
+				penerbit='$penerbit', isbn='$isbn', halaman='$halaman',file='$up_data[file_name]', keterangan='$keterangan' WHERE id = '$id'");
 			}else{
-				$query="UPDATE buku_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', penerbit='$penerbit', isbn='$isbn', halaman='$halaman',keterangan='$keterangan' WHERE id = '$id'";
+				$query="UPDATE buku_pkm SET idpengabdian='$idp',nidn='$nidn', judul='$judul', 
+				penerbit='$penerbit', isbn='$isbn', halaman='$halaman','',keterangan='$keterangan' WHERE id = '$id'";
 
 				$this->db->query($query);
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");
@@ -984,7 +1003,7 @@ class dosen extends CI_Controller {
 				 '$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
 				$this->db->query("INSERT INTO jurnal VALUES (NULL, '$idp', '$nidn', '$judul','$namajurnal',
-				'$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn','$keterangan','$tanggal')");
+				'$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -1026,7 +1045,7 @@ class dosen extends CI_Controller {
 				// die('blah');
 				$query = "UPDATE jurnal SET idpenelitian='$idp',nidn='$nidn', judul='$judul', 
 				namajurnal='$namajurnal',jenis='$jenis',peranpenulis='$peranpenulis',tahun='$tahun',
-				volume='$volume',no='$nomor',url='$url',issn='$issn',
+				volume='$volume',no='$nomor',url='$url',issn='$issn','',
 				keterangan='$keterangan' WHERE id = '$id'";
 
 				$this->db->query($query);
@@ -1126,7 +1145,7 @@ class dosen extends CI_Controller {
 				 '$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn', '".$up_data['file_name']."','$keterangan','$tanggal')");
 			} else {
 				$this->db->query("INSERT INTO jurnal_pkm VALUES (NULL, '$idp', '$nidn', '$judul','$namajurnal',
-				'$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn','$keterangan','$tanggal')");
+				'$jenis', '$peranpenulis', '$tahun','$volume', '$nomor', '$url', '$issn','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
@@ -1273,11 +1292,10 @@ class dosen extends CI_Controller {
 			} else {
 				$this->db->query("INSERT INTO seminar VALUES (NULL, '$idp','$nidn', '$judul', 
 				'$tahunprosiding',  '$peranpenulis','$volume', '$nomor', '$isbn',
-				 '$url', '$jenisprosiding','$keterangan','$tanggal')");
+				 '$url', '$jenisprosiding','','$keterangan','$tanggal')");
 			}	
 			
-			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
-			Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
+			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/dosen/detail_seminar/'.$this->input->post('idp'));
 		} else if ($mau_ke == "del") {
@@ -1314,7 +1332,7 @@ class dosen extends CI_Controller {
 				$query="UPDATE seminar SET idpenelitian='$idp', nidn='$nidn', namaprosiding='$judul',
 				 tahunprosiding='$tahunprosiding',peranpenulis='$peranpenulis',
 				 volume='$volume',no='$nomor',isbn='$isbn',url='$url',
-				 jenisprosiding='$jenisprosiding', keterangan='$keterangan' WHERE id = '$id'";
+				 jenisprosiding='$jenisprosiding','', keterangan='$keterangan' WHERE id = '$id'";
 
 				$this->db->query($query);
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");	
@@ -1416,7 +1434,7 @@ class dosen extends CI_Controller {
 			} else {
 				$this->db->query("INSERT INTO seminar_pkm VALUES (NULL, '$idp','$nidn', '$judul', 
 				'$tahunprosiding',  '$peranpenulis','$volume', '$nomor', '$isbn',
-				 '$url', '$jenisprosiding','$keterangan','$tanggal')");
+				 '$url', '$jenisprosiding','','$keterangan','$tanggal')");
 			}	
 			
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
@@ -1441,7 +1459,7 @@ class dosen extends CI_Controller {
 			$where['idpengabdian'] = $this->session->userdata('idpengabdian');
 				$a['data']	= $this->db->get_where("pengabdiann",$where);
 			$a['datpil']		= $this->db->query("SELECT * FROM v_seminar WHERE id=$idu")->result();
-			$a['page']		= "f_seminardosen_pengabdian";
+			$a['page']		= "f_seminardosen_pkm";
 		}
 
 		else if ($mau_ke == "act_edt") {
@@ -1458,7 +1476,7 @@ class dosen extends CI_Controller {
 				$query="UPDATE seminar_pkm SET idpengabdian='$idp', nidn='$nidn', namaprosiding='$judul',
 				 tahunprosiding='$tahunprosiding',peranpenulis='$peranpenulis',
 				 volume='$volume',no='$nomor',isbn='$isbn',url='$url',
-				 jenisprosiding='$jenisprosiding', keterangan='$keterangan' WHERE id = '$id'";
+				 jenisprosiding='$jenisprosiding','', keterangan='$keterangan' WHERE id = '$id'";
 
 				$this->db->query($query);
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data 
@@ -1520,7 +1538,7 @@ class dosen extends CI_Controller {
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
 		$mitra					= addslashes($this->input->post('mitra'));
-		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$alamatmitra				= addslashes($this->input->post('alamatmitra'));
 		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
@@ -1553,14 +1571,14 @@ class dosen extends CI_Controller {
 				$up_data	 	= $this->upload->data();
 				
 				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
-				'$mitra','$kelompokmitra','$alamat'  ,'$jenis',
+				'$mitra','$alamatmitra'  ,'$kelompokmitra','$jenis',
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
 				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
-				'$mitra','$kelompokmitra','$alamat'  , '$jenis',
-				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				'$mitra','$alamatmitra'  ,'$kelompokmitra', '$jenis',
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
 			
@@ -1583,7 +1601,7 @@ class dosen extends CI_Controller {
 				$up_data	 	= $this->upload->data();
 				
 				$query="UPDATE pengabdiann SET judulpenelitian='$judulpenelitian',mitra='$mitra',
-				alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis',bidang='$bidang', 
+				alamatmitra='$alamatmitra',kelompokmitra='$kelompokmitra',jenis='$jenis',bidang='$bidang', 
 				tse='$tse', sumber='$sumber',institusi='$institusi', 
 				jumlah='$jumlah',file='$up_data[file_name]', keterangan='$keterangan' WHERE idpengabdian = 
 				'$idpengabdian'";
@@ -1593,9 +1611,9 @@ class dosen extends CI_Controller {
 			}else{
 				
 				$query = "UPDATE pengabdiann SET judulpenelitian='$judulpenelitian', 
-				mitra='$mitra', alamatmitra='$alamat',kelompokmitra='$kelompokmitra',jenis='$jenis', 
+				mitra='$mitra', alamatmitra='$alamatmitra',kelompokmitra='$kelompokmitra',jenis='$jenis', 
 				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi',
-				 jumlah='$jumlah', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
+				 jumlah='$jumlah','', keterangan='$keterangan' WHERE idpengabdian = '$idpengabdian'";
 				
 				$this->db->query($query);
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
@@ -1637,18 +1655,18 @@ class dosen extends CI_Controller {
 
 			$cek = $this->db->get_where("detail_luaranpengabdian",$data);
 			if($cek->num_rows()>0){
-				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">Dosen Sudah Terdaftar </div>");
+				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">Data Luaran 
+				Sudah Terdaftar </div>");
 			
 				redirect('index.php/dosen/detail_luaranpengabdian/'.$this->input->post('id'));
 			}else{
 				$data_['idpengabdian'] = $this->input->post('id');
 				$data_['idluaran'] = $this->input->post('luaran');
 				$this->db->insert("detail_luaranpengabdian",$data_);
-				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Ditambahkan </div>");
+				//echo "sukses";
+				$this->session->set_flashdata("k", "<div class='alert alert-success' id='alert'>Data Luaran Berhasil Ditambahkan </div>");
 				redirect('index.php/dosen/detail_luaranpengabdian/'.$this->input->post('id'));
 			}
-		}else{
-			$this->dosenpengabdian();
 		}
 	}
 
@@ -1658,7 +1676,7 @@ class dosen extends CI_Controller {
 			'idluaran' => $idluaran,
 		);
 		$this->db->delete("detail_luaranpengabdian",$where);
-		$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Dihapus </div>");
+		$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Luaran Berhasil Dihapus </div>");
 				redirect('index.php/dosen/detail_luaranpengabdian/'.$idp);
 	}
 	public function detail_anggotapengabdian($id){
@@ -1773,7 +1791,7 @@ class dosen extends CI_Controller {
 				$this->db->query("INSERT INTO detail_anggotapenelitian VALUES ('$id','$nidn','ketua')");
 			} else {
 				$this->db->query("INSERT INTO penelitian VALUES (NULL,'$judulpenelitian','$jenis', 
-				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
+				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapenelitian VALUES ('$id','$nidn','ketua')");
 			}	
 			
@@ -1804,7 +1822,9 @@ class dosen extends CI_Controller {
 				
 			}else{
 				
-				$query = "UPDATE penelitian SET judulpenelitian='$judulpenelitian', jenis='$jenis', bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', jumlah='$jumlah', keterangan='$keterangan' WHERE idpenelitian = '$idpenelitian'";
+				$query = "UPDATE penelitian SET judulpenelitian='$judulpenelitian', jenis='$jenis', 
+				bidang='$bidang',  tse='$tse', sumber='$sumber',institusi='$institusi', jumlah='$jumlah', 
+				,'',keterangan='$keterangan' WHERE idpenelitian = '$idpenelitian'";
 				
 				$this->db->query($query);
 				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiUbah</div>");			
@@ -1816,7 +1836,10 @@ class dosen extends CI_Controller {
 		else {
 			$nidn = $this->session->userdata('admin_nidn');	
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
-			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->order_by("ket","DESC")->get()->result();
+			$a['data'] = $this->db->select("*")->from("penelitian")->
+			join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->
+			where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->
+			order_by("ket","DESC")->order_by("date","DESC")->get()->result();
 			$a['page']		= "l_penelitiandosen";
 		}
 		
@@ -1843,14 +1866,14 @@ class dosen extends CI_Controller {
 
 			$cek = $this->db->get_where("detail_luaran",$data);
 			if($cek->num_rows()>0){
-				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">Dosen Sudah Terdaftar </div>");
+				$this->session->set_flashdata("k", "<div class=\"alert alert-danger\" id=\"alert\">Data Luaran Sudah Terdaftar </div>");
 			
 				redirect('index.php/dosen/detail_luaran/'.$this->input->post('id'));
 			}else{
 				$data_['idpenelitian'] = $this->input->post('id');
 				$data_['idluaran'] = $this->input->post('luaran');
 				$this->db->insert("detail_luaran",$data_);
-				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Ditambahkan </div>");
+				$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Luaran Berhasil Ditambahkan </div>");
 				redirect('index.php/dosen/detail_luaran/'.$this->input->post('id'));
 			}
 		}else{
@@ -1864,7 +1887,7 @@ class dosen extends CI_Controller {
 			'idluaran' => $idluaran,
 		);
 		$this->db->delete("detail_luaran",$where);
-		$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Dosen Berhasil Dihapus </div>");
+		$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Luaran Berhasil Dihapus </div>");
 				redirect('index.php/dosen/detail_luaran/'.$idp);
 	}
 
@@ -2130,7 +2153,7 @@ class dosen extends CI_Controller {
 			//$a['data']		= $this->db->query("SELECT * FROM v_penelitian WHERE nidn 	= '$nidn' ORDER BY idpenelitian DESC LIMIT $awal, $akhir ")->result();
 			$a['data'] = $this->db->select("*")->from("penelitian")->join("detail_anggotapenelitian","detail_anggotapenelitian.idpenelitian=penelitian.idpenelitian")->
 			join("detail_luaran","detail_luaran.idpenelitian=penelitian.idpenelitian")->join("luaran","luaran.idluaran=detail_luaran.idluaran")->where("detail_anggotapenelitian.nidn",$nidn)->where("detail_anggotapenelitian.ket","ketua")->
-			where("penelitian.keterangan","Disetujui")->where("luaran.namaluaran","HKI")->get()->result();
+			where("penelitian.keterangan","Disetujui")->where("luaran.namaluaran","Publikasi")->get()->result();
 			$a['page']		= "l_penelitiandosenhki";
 		}
 		
@@ -3007,7 +3030,7 @@ class dosen extends CI_Controller {
 		$nidn					= addslashes($this->input->post('nidn'));
 		$judulpenelitian		= addslashes($this->input->post('judulpenelitian'));
 		$mitra					= addslashes($this->input->post('mitra'));
-		$alamat					= addslashes($this->input->post('alamatmitra'));
+		$alamatmitra					= addslashes($this->input->post('alamatmitra'));
 		$kelompokmitra			= addslashes($this->input->post('kelompokmitra'));
 		$jenis					= addslashes($this->input->post('jenis'));
 		$bidang					= addslashes($this->input->post('bidang'));
@@ -3040,17 +3063,18 @@ class dosen extends CI_Controller {
 				$up_data	 	= $this->upload->data();
 				
 				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
-				'$mitra','$kelompokmitra','$alamat'   ,'$jenis',  
+				'$mitra','$alamatmitra' ,'$kelompokmitra',   '$jenis',  
 				'$bidang', '$tse', '$sumber', '$institusi', '$jumlah', '".$up_data['file_name']."',
 				'$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			} else {
 				$this->db->query("INSERT INTO pengabdiann VALUES (NULL,'$judulpenelitian',
-				'$mitra','$kelompokmitra','$alamat'   ,'$jenis', 
+				'$mitra','$alamatmitra' ,'$kelompokmitra','$jenis', 
 				 '$bidang', '$tse', '$sumber', '$institusi', '$jumlah','$keterangan','$tanggal')");
 				$this->db->query("INSERT INTO detail_anggotapengabdian VALUES ('$id','$nidn','ketua')");
 			}	
 			
+			print_r($this);
 			$this->session->set_flashdata("k", "<div class=\"alert alert-success\" id=\"alert\">Data Berhasil DiSimpan ".$this->upload->display_errors()."</div>");
 			
 			redirect('index.php/dosen/dosenpengabdian');

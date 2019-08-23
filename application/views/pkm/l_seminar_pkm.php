@@ -2,7 +2,7 @@
 
 <div class="panel panel-info">
 	<div class="panel-heading" style="overflow: auto">
-		<div class="col-md-6"><h3 style="margin-top: 5px">Data Seminar PKM</h3></div>
+		<div class="col-md-6"><h3 style="margin-top: 5px">Data Artikel Prosiding PKM</h3></div>
 		<?php 
 	//	if ($this->session->userdata('admin_level') == "Super Admin") {
 		?>
@@ -14,51 +14,23 @@
 
 		?>
 		<div class="col-md-3"></div>
-		<div class="col-md-4">
+		<!-- <div class="col-md-4">
 			<form class="navbar-form navbar-left" method="post" action="<?php echo base_URL(); ?>index.php/pkm/seminar_pkm/cari" style="margin-top: 0px">
 				<input type="text" class="form-control" name="q" style="width: 200px" placeholder="Kata kunci pencarian ..." required>
 				<button type="submit" class="btn btn-danger"><i class="icon-search icon-white"> </i> Cari</button>
 			</form>
-		</div>
+		</div> -->
 	</div>
 </div>
 
-<div class="panel panel-info">
-	<div class="panel-heading" style="overflow: auto">
-		<div class="row">
-			<form class="form-inline" action="<?php echo base_URL(); ?>index.php/pkm/exportPDF/v_seminarpkm" method="POST">
-			  <div class="col-md-1">
-			    	<label for="awal">Periode Awal:</label>
-				</div>
-				<div class="col-md-2">
-			    	<input type="date" placeholder="Periode awal" class="form-control" id="awal" name="awal">
-			  	</div>
-			  	<div class="col-md-1">
-			    	<label for="akhir">Periode Akhir:</label>
-			    </div>
-			    <div class="col-md-2">
-			    	<input type="date" placeholder="Periode akhir" class="form-control" id="akhir" name="akhir">
-			  	</div>
-			  	<div class="col-md-1">
-			    	<label for="akhir">Nama Dosen</label>
-			    </div>
-			  	<div class="col-md-2">
-				  	<input type="text" placeholder="Nama Dosen" class="form-control" id="namadosen" name="namadosen">
-				</div>
-		
-			
-			  	<div class="col-md-2">
-				  <button type="submit" class="btn btn-default">Cetak</button>
-				</div>
-			</form>
-		</div>
-	</div>
+<div >
+	
 </div>
 
 
 <?php echo $this->session->flashdata("k");?>
 
-<table class="table table-bordered table-hover">
+<table class="table table-bordered table-hover" id="table">
 	<thead>
 		<tr>
 			<th width="10%">No</th>
@@ -75,30 +47,28 @@
 	<tbody>
 		<?php
 		$no=1; 
-		if (empty($data)) {
-			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
-		} else {
+		// if (empty($data)) {
+		// 	echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
+		// } else {
 			$no 	= ($this->uri->segment(4) + 1);
 			foreach ($data as $b) {
 		?>
 		<tr>
-			<td><?php echo $no; ?></td>
-			<td><?php echo $b->judul; ?></td>
-			<td><?php echo $b->namadosen; ?><br>
-				<?php echo $b->penulis_2; ?><br>
-				<?php echo $b->penulis_3; ?><br>
-			</td>
-			<td>Jurnal : <?php echo $b->jurnal; ?><br>
-				Jenis : <?php echo $b->jenis; ?><br>
-				ISSN : <?php echo $b->issn; ?><br>
-				Volume : <?php echo $b->volume; ?><br>
-				Nomor : <?php echo $b->no; ?><br>
-				Halaman : <?php echo $b->halaman; ?><br>
-				Halaman : <?php echo $b->url; ?><br>
-			</td>
-			<td><a href="<?= base_url('upload/seminarpkm\/') . $b->file; ?>">
-			<?php echo $b->file; ?></a></td>
-		
+				<td style="font-size: 11px"><?php echo $no; ?></td>
+				<td style="font-size: 11px"><?php echo $b->namaprosiding; ?></td>
+				<td style="font-size: 11px"><?php echo $b->namadosen; ?><br>
+				</td>
+				<td style="font-size: 11px">
+					Tahun : <?php echo $b->tahunprosiding; ?><br>
+					Volume : <?php echo $b->volume; ?><br>
+					Nomor : <?php echo $b->no; ?><br>
+					Isbn : <?php echo $b->isbn; ?><br>
+					Url : <?php echo $b->url; ?><br>
+					Jenis : <?php echo $b->jenisprosiding; ?><br>
+				</td>
+			<td style="font-size: 11px" class="ctr"><a href="<?= base_url('upload/seminarpkm\/') . $b->file; ?>">
+			<i class="icon-file" title="<?php echo $b->file; ?>"></i></a></td>
+
 			<td class="ctr">
 				<?php
 					$hasil = $b->keterangan;
@@ -135,10 +105,18 @@
 		</tr>
 		<?php 
 			$no++;
-			}
+			// }
 		}
 		?>
 	</tbody>
 </table>
-<center><ul class="pagination"><?php echo $pagi; ?></ul></center>
+<!-- <center><ul class="pagination"><?php echo $pagi; ?></ul></center> -->
 </div>
+
+<script type="text/javascript">
+	$(function () {
+		$("#table").dataTable({
+			"iDisplayLength": 10,
+		});
+	});
+</script>

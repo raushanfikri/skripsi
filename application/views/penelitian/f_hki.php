@@ -150,7 +150,7 @@ else
 				<td><b><input type="file" name="file_surat" tabindex="8" class="form-control" style="width: 400px"></b>
 				</td>
 			</tr>
-
+ 
 			<?php if ($act == 'edt' || $act == 'act_edt') : ?>
 			<tr>
 				<td></td>
@@ -173,14 +173,14 @@ else
 				<td width="20%">
 					<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i>
 						Simpan</button>
-					<a href="<?php echo base_URL(); ?>index.php/penelitian/hki" class="btn btn-success"><i
-							class="icon icon-arrow-left icon-white"></i> Kembali</a>
+					<a href="<?php echo base_URL(); ?>index.php/penelitian/detail_hki/<?php echo $this->session->userdata('idpenelitian'); ?>"
+							class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
 				</td>
 			</tr>
 		</table>
 	</form>
 </div>
-
+ 
 <script type="text/javascript">
 	function wajibAngka(evt) {
 		var charCode = (evt.which) ? evt.which : event.keyCode

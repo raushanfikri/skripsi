@@ -65,41 +65,40 @@ $hs = ' <table style="text-align:center">
     <head>
     <body>
         <br><br><br>
-        <h2 style="text-align: center" >Laporan Data Publikasi Ilmiah </h2>
+        <h2 style="text-align: center" >Laporan Data Publikasi Ilmiah PKM</h2>
         <table>
             
             <tr style="text-align: center">
                 <th width="5%">No</th>
-                <th width="10%">NIDN</th>
-                <th width="15%">Nama Dosen</th>
-                <th width="10%">Judul </th>
-                <th width="15%">Institusi</th>
+                <th width="20%">Nama Dosen</th> 
+                <th width="20%">Judul Penelitian</th>
+                <th width="15%">Judul Publikasi</th>
+                <th width="10%">Institusi</th>
                 <th width="15%">Tanggal</th>
-                <th width="10%">Tempat</th>
-                <th width="10%">File</th>
-                <th width="10%">Status</th>
+                <th width="15%">Tempat</th>
                 
             </tr>
-            <?php foreach($query as $q) : ?>
+            <?php
+                 $no=0;
+                foreach($result->result() as $q){ $no++;
+            ?>
             <tr>
                 <<!-- td><?php echo date('Y', strtotime($q->tanggal)) ?></td>
                 <td><?php echo date('F', strtotime($q->tanggal)) ?></td> -->
-                <td><?php echo $no ?></td>
-                <td style="text-align:left;"><?php echo $q->nidn ?></td>
-                <td style="text-align:left;"><?php echo $q->namadosen ?></td>
-                <td style="text-align:left;"><?php echo $q->judul ?></td>
-                <td style="text-align:left;"><?php echo $q->institusi ?></td>
-                <td style="text-align:left;"><?php echo $q->tanggal ?></td>
-                <td style="text-align:left;"><?php echo $q->tempat ?></td>
-                <td style="text-align:left;"><?php echo $q->file ?></td>
-                <td style="text-align:left;"><?php echo $q->status ?></td>
+                <td><?=$no?></td>
+                <!-- <td style="text-align:right"><?php echo $q->judul; ?></td> -->
+                <td><?php echo $q->namadosen; ?></td>
+                <td><?php echo $q->judulpenelitian?></td>
+                <td><?php echo $q->judul?></td>
+                <td><?php echo $q->institusi?></td>
+                <td><?php echo $q->tanggal?></td>
+                <td><?php echo $q->tempat?></td>
                 
             </tr>
-            <?php 
-
-            $no++;
-            endforeach; ?>
+            <?php } ?>
         </table>
+
+
         <br><br><br>
         <table class="ttd">
             <br><br><br>

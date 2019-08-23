@@ -1,6 +1,6 @@
 <?php
 $hs = ' <table style="text-align:center">
-           <tr>
+            <tr>
                 <td>
                 </td>
             </tr>
@@ -70,41 +70,39 @@ $hs = ' <table style="text-align:center">
 
         <h2 style="text-align: center" ></h2>
         <table>
-            <h2 style="text-align: center" >Laporan Data Hak Kekayaan Intelektual (HKI)</h2>
+            <h2 style="text-align: center" >Laporan Data Hak Kekayaan Intelektual (HKI) </h2>
            <!--  <h3 style="text-align: center" >Periode Juni 2019</h3> -->
             <tr style="text-align: center">
-                <th width="5%">No</th>
-                <th width="10%">NIDN</th>
-                <th width="10%">Nama Dosen</th>
-                <th width="10%">Judul </th>
-                <th width="10%">Jenis</th>
-                <th width="15%">No Pendaftaran</th>
-                <th width="10%">Status</th>
-                <th width="10%">No HKI</th>
-                <th width="10%">File</th>
-                <th width="10%">Status</th>
+            <th width="5%">No</th>
+            <th width="15%">Nama Dosen</th>
+            <th width="15%">Judul Penelitian</th>
+            <th width="15%">Judul HKI</th>
+            <th width="10%">Jenis HKI</th>
+            <th width="15%">Nomor Pendaftaran</th>
+            <th width="15%">Status</th>
+            <th width="10%">Nomor HKI</th>
                 
             </tr>
-            <?php foreach($query as $q) : ?>
+            <?php
+                 $no=0;
+                foreach($result->result() as $q){ $no++;
+            ?>
             <tr>
                 <<!-- td><?php echo date('Y', strtotime($q->tanggal)) ?></td>
                 <td><?php echo date('F', strtotime($q->tanggal)) ?></td> -->
                 <td><?php echo $no ?></td>
-                <td style="text-align:right"><?php echo $q->nidn ?></td>
-                <td style="text-align:right"><?php echo $q->namadosen ?></td>
-                <td style="text-align:right"><?php echo $q->judul ?></td>
-                <td style="text-align:right"><?php echo $q->jenis ?></td>
-                <td style="text-align:right"><?php echo $q->nomorpendaftaran ?></td>
-                <td style="text-align:right"><?php echo $q->status ?></td>
-                <td style="text-align:right"><?php echo $q->nohki ?></td>
-                <td style="text-align:right"><?php echo $q->file ?></td>
-                <td style="text-align:right"><?php echo $q->keterangan ?></td>
+                <td style="text-align:left"><?php echo $q->namadosen ?></td>
+                <td style="text-align:left"><?php echo $q->judulpenelitian ?></td>
+                <td style="text-align:left"><?php echo $q->judul ?></td>
+                <td style="text-align:left"><?php echo $q->jenis ?></td>
+                <td style="text-align:left"><?php echo $q->nomorpendaftaran ?></td>
+                <td style="text-align:left"><?php echo $q->status ?></td>
+                <td style="text-align:left"><?php echo $q->nohki ?></td>
                 
             </tr>
             <?php 
-
-            $no++;
-            endforeach; ?>
+                }
+            ?>
         </table>
         <br><br><br><br><br><br><br><br>
         <table class="ttd">

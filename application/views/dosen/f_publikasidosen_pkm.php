@@ -53,7 +53,7 @@ else
 		accept-charset="utf-8" enctype="multipart/form-data">
 		<table width="100%" class="table-form">
 			<?php
-		if ($act=="act_add")
+		if ($act=="act_add") 
 		{
 	?>
 			<tr>

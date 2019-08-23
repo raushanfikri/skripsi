@@ -17,55 +17,22 @@
 
 		?>
 			<div class="col-md-3"></div>
-			<div class="col-md-4">
+			<!-- <div class="col-md-4">
 				<form class="navbar-form navbar-left" method="post"
 					action="<?php echo base_URL(); ?>index.php/penelitian/jurnal/cari" style="margin-top: 0px">
 					<input type="text" class="form-control" name="q" style="width: 200px"
 						placeholder="Kata kunci pencarian ..." required>
 					<button type="submit" class="btn btn-danger"><i class="icon-search icon-white"> </i> Cari</button>
 				</form>
-			</div>
+			</div> -->
 		</div>
 	</div>
-	<div class="panel panel-info">
-		<div class="panel-heading" style="overflow: auto">
-			<div class="row">
-				<form class="form-inline" action="<?php echo base_URL(); ?>index.php/penelitian/exportPDF/v_jurnal"
-					method="POST">
-					<div class="col-md-1">
-						<label for="awal">Periode Awal:</label>
-					</div>
-					<div class="col-md-2">
-						<input type="date" placeholder="Periode awal" class="form-control" id="awal" name="awal">
-					</div>
-					<div class="col-md-1">
-						<label for="akhir">Periode Akhir:</label>
-					</div>
-					<div class="col-md-2">
-						<input type="date" placeholder="Periode akhir" class="form-control" id="akhir" name="akhir">
-					</div>
-					<div class="col-md-1">
-						<label for="akhir">Nama Dosen</label>
-					</div>
-					<div class="col-md-2">
-						<input type="text" placeholder="Nama Dosen" class="form-control" id="namadosen"
-							name="namadosen">
-					</div>
-
-					<tr>
-						<td width="20%">
-							<div class="col-md-2">
-								<button type="submit" class="btn btn-default">Submit</button>
-							</div>
-				</form>
-			</div>
-		</div>
-	</div>
+	
 
 
 	<?php echo $this->session->flashdata("k");?>
 
-	<table class="table table-bordered table-hover">
+	<table class="table table-bordered table-hover" id="table">
 		<thead>
 			<tr>
 				<th width="10%">No</th>
@@ -82,19 +49,19 @@
 		<tbody>
 			<?php 
 		$no = 1;
-		if (empty($data)) {
-			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
-		} else {
+		// if (empty($data)) {
+		// 	echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
+		// } else {
 			$no 	= ($this->uri->segment(4) + 1);
 			foreach ($data as $b) {
 		?>
 			<tr>
-				<td><?php echo $no; ?></td>
-				<td><?php echo $b->judul; ?></td>
-				<td><?php echo $b->namadosen; ?><br>
+				<td style="font-size: 11px" ><?php echo $no; ?></td>
+				<td style="font-size: 11px" ><?php echo $b->judul; ?></td>
+				<td style="font-size: 11px" ><?php echo $b->namadosen; ?><br>
 
 				</td>
-				<td>
+				<td style="font-size: 11px" >
 					Nama Jurnal : <?php echo $b->namajurnal; ?><br>
 					Jenis : <?php echo $b->jenis; ?><br>
 					Peran Penulis : <?php echo $b->peranpenulis; ?><br>
@@ -104,10 +71,11 @@
 					Nomor : <?php echo $b->no; ?><br>
 					Url : <?php echo $b->url; ?><br>
 				</td>
-				<td><a href="<?= base_url('upload/jurnal\/') . $b->file; ?>">
-						<?php echo $b->file; ?></a></td>
+				<td style="font-size: 11px" class="ctr"><a href="<?= base_url('upload/jurnal\/') . $b->file; ?>">
+                        <!-- <img src="..\aset\img\123434.png"  style="display: inline; float: left; margin-right: 20px; width: 80px; height: 80px"> -->
+                        <i class="icon-file" title="<?php echo $b->file; ?>"></i></a></td>
 
-				<td class="ctr">
+				<td style="font-size: 11px"  class="ctr"> 
 					<?php
 					$hasil = $b->keterangan;
 					
@@ -133,20 +101,31 @@
 					}
 				?>
 <td class="ctr">
+<a href="<?= base_url('index.php/penelitian/jurnal/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"
+		role="button" title="Ubah"><i class="icon-edit icon-white"> </i></a>
 	<a href="<?= base_url('index.php/penelitian/jurnal/del/') . '/' . $b->id;?>" class="btn btn-danger btn-sm"
-		role="button"><i class="icon-remove icon-white"> </i></a>
-	<a href="<?= base_url('index.php/penelitian/jurnal/edt/') . '/' . $b->id;?>" class="btn btn-success btn-sm"
-		role="button"><i class="icon-edit icon-white"> </i></a>
+		role="button" title="Hapus"><i class="icon-remove icon-white"> </i></a>
+	
 </td>
 </tr>
 <?php 
 			$no++;
-			}
+			// }
 		}
 		?>
 </tbody>
 </table>
-<center>
+<!-- <center>
 	<ul class="pagination"><?php echo $pagi; ?></ul>
-</center>
+</center> -->
 </div>
+
+<script type="text/javascript">
+	
+$(function () {
+	    $("#table").dataTable({
+	      "iDisplayLength": 10,
+	    });
+	});
+	
+</script>

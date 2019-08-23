@@ -15,7 +15,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$jenisprosiding		= $datpil[0]->jenisprosiding;
 
 } else {
-	$act		= "act_add";
+	$act		= "act_add"; 
 	
 	$admin_user		=$this->session->userdata('admin_nidn');
 	$idpengabdian	= "";

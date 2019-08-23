@@ -6,7 +6,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$admin_user				=$this->session->userdata('admin_nidn');	
 	$judulpenelitian		= $datpil[0]->judulpenelitian;	
 	$mitra					= $datpil[0]->mitra;
-	$alamat					= $datpil[0]->alamatmitra;	
+	$alamatmitra				= $datpil[0]->alamatmitra;	
 	$kelompokmitra			= $datpil[0]->kelompokmitra;		
 	$jenis					= $datpil[0]->jenis;	
 	// $anggota_1	= $datpil[0]->anggota_1;	
@@ -23,7 +23,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	$judulpenelitian		= "";
 	$jenis	= "";
 	$mitra					= "";
-	$alamat					= "";	
+	$alamatmitra				= "";	
 	$kelompokmitra			= "";
 	//$anggota_1	= "";
 	//$anggota_2	= "";
@@ -105,7 +105,7 @@ else
 
 			<tr>
 				<td width="20%">Alamat Mitra</td>
-				<td><b><input type="text" name="alamat" required value="<?php echo $alamat; ?>" style="width: 700px"
+				<td><b><input type="text" name="alamatmitra" required value="<?php echo $alamatmitra; ?>" style="width: 700px"
 							class="form-control"></b></td>
 			</tr>
 

@@ -71,40 +71,41 @@ $hs = ' <table style="text-align:center">
         <table>
 
             <tr style="text-align: center">
-            <th width="10%">No</th>
-            <th width="20%">Judul</th>
-            <th width="20%">Penulis Publikasi</th>
-            <th width="20%">Jurnal</th>
-            <th width="15%">File</th>
-            <th width="15%">Status</th>
+            <th width="5%">No</th>
+            <th width="10%">Nama Dosen</th>
+            <th width="10%">Judul Pengabdian</th>
+            <th width="10%">Judul Jurnal</th>
+            <th width="10%">Nama Jurnal</th>
+            <th width="10%">Jenis Jurnal</th>
+            <th width="10%">Peran Penulis</th>
+            <th width="10%">Tahun</th>
+            <th width="10%">Volume</th>
+            <th width="10%">No Jurnal</th>
+            <th width="10%">ISSN</th>
                 
             </tr>
-            <?php foreach($query as $q) : ?>
+            <?php
+                 $no=0;
+                foreach($result->result() as $q){ $no++;
+            ?>
             <tr>
                 <<!-- td><?php echo date('Y', strtotime($q->tanggal)) ?></td>
                 <td><?php echo date('F', strtotime($q->tanggal)) ?></td> -->
                 <td><?php echo $no; ?></td>
-                <td style="text-align:right"><?php echo $q->judul; ?></td>
-                <td style="text-align:right"><?php echo $q->namadosen; ?><br>
-                                            <?php echo $q->penulis_2; ?><br>
-                                            <?php echo $q->penulis_3; ?><br>
-                </td>
-                <td style="text-align:right">Jurnal : <?php echo $q->jurnal; ?><br>
-                                            Jenis : <?php echo $q->jenis; ?><br>                
-                                            ISSN : <?php echo $q->issn; ?><br>
-                                            Volume : <?php echo $q->volume; ?><br>
-                                            Nomor : <?php echo $q->no; ?><br>
-                                            Halaman : <?php echo $q->halaman; ?><br>
-                                            url : <?php echo $q->url; ?><br>
-                </td>
-                <td style="text-align:right"><?php echo $q->file ?></td>
-                <td style="text-align:right"><?php echo $q->keterangan ?></td>
-                
+                <td style="text-align:left"><?php echo $q->judulpenelitian; ?></td>
+                <td style="text-align:left"><?php echo $q->namadosen; ?></td>
+                <td style="text-align:left"><?php echo $q->judul; ?></td>
+                <td style="text-align:left"><?php echo $q->namajurnal; ?></td>
+                <td style="text-align:left"><?php echo $q->jenis ?></td>
+                <td style="text-align:left"><?php echo $q->peranpenulis ?></td>
+                <td style="text-align:left"><?php echo $q->tahun ?></td>
+                <td style="text-align:left"><?php echo $q->volume ?></td>
+                <td style="text-align:left"><?php echo $q->no ?></td>
+                <td style="text-align:left"><?php echo $q->issn ?></td>
             </tr>
             <?php 
-
-            $no++;
-            endforeach; ?>
+                }
+            ?>
         </table>
         <br><br><br>
         <table class="ttd">

@@ -120,40 +120,45 @@
 				<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/fakultas">Data Fakultas</a></li>
 				<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/jurusan">Data Jurusan</a></li>
 				</ul>
-            </li>
+            </li> 
 			<li class="dropdown" >
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes" ><i class="icon-file icon-white"> </i> Admin Penelitian  <span class="caret"></span></a>
               <ul class="dropdown-menu" aria-labelledby="themes">
               	<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitiann"> Penelitian</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/publikasi"> Pemakalah Forum Ilmiah</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/hki"> Hak Kekayaan Intelektual (HKI)</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/buku"> Buku Ajar / Teks</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/jurnal"> Artikel Jurnal</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/seminar"> Artikel Prosiding</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitianpublikasi"> Pemakalah Forum Ilmiah</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitianhki"> Hak Kekayaan Intelektual (HKI)</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitianbuku"> Buku Ajar / Teks</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitianjurnal"> Artikel Jurnal</a></li>
+                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/penelitianseminar"> Artikel Prosiding</a></li>
               </ul>
             </li>
 			
 			
 		<li class="dropdown">
-             <!--  <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-wrench icon-white"> </i> Pengaturan <span class="caret"></span></a>
-              <ul class="dropdown-menu" aria-labelledby="themes">
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/pengguna">Instansi Pengguna</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/manage_admin">Manajemen User</a></li>
-              </ul>
-            </li>
-			<?php 
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-wrench icon-white"> </i>
+				Laporan Penelitian <span class="caret"></span></a>
+			<ul class="dropdown-menu" aria-labelledby="themes">
+				<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/cetaklaporan"> Cetak Laporan</a></li>
+				<!-- <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/pengguna">Instansi Pengguna</a></li>
+				<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/manage_admin">Manajemen User</a></li> -->
+			</ul>
+		</li>
+		<?php 
 			}
-			?> -->
-          </ul>
+			?>
+		</ul>
 		
           <ul class="nav navbar-nav navbar-right">
-			<li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i class="icon-user icon-white"></i> <?= $this->session->userdata('admin_nama') ?> <span class="caret"></span></a>
-              <ul class="dropdown-menu" aria-labelledby="themes">
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/passwod">Ubah Password</a></li>
-                <li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/logout">Logout</a></li>
-              </ul>
-            </li>
+          	<li class="dropdown">
+          		<a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes"><i
+          				class="icon-user icon-white"></i> <?= $this->session->userdata('admin_nama') ?> <span
+          				class="caret"></span></a>
+          		<ul class="dropdown-menu" aria-labelledby="themes">
+          			<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/passwod">Ubah
+          					Password</a></li>
+          			<li><a tabindex="-1" href="<?php echo base_url(); ?>index.php/penelitian/logout">Logout</a></li>
+          		</ul>
+          	</li>
           </ul>
 
         </div>

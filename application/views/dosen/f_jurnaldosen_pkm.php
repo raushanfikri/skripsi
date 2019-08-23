@@ -100,7 +100,7 @@ else
 				<td width="20%">Nama Jurnal</td>
 				<td><b><input type="text" name="namajurnal" required value="<?php echo $judul; ?>" style="width: 700px"
 							class="form-control" autofocus></b></td>
-			</tr>
+			</tr> 
 
 			<tr>
 				<td width="20%">Judul</td>

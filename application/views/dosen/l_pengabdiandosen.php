@@ -31,11 +31,11 @@
                 <th width="10%">Personil</th>
                 <th width="15%">Mitra</th>
                 <th width="10%">Penelitian</th>
-                <th width="10%">Dana</th>
-                <th width="10%">File</th>
+                <th width="15%">Dana</th>
+                <th width="5%">File</th>
                 <th width="10%">Status</th>
                 <th width="15%">Aksi</th>
-            </tr>
+            </tr> 
         </thead>
 
         <tbody>
@@ -61,7 +61,7 @@
 				}
 				?>
                 </td>
-                <td style="font-size: 11px">Mitra           : <?php echo $b->mitra; ?><br>
+                <td style="font-size: 11px">Mitra : <?php echo $b->mitra; ?><br>
                     Alamat Mitra    : <?php echo $b->alamatmitra; ?><br>
                     Kelompok Mitra  : <?php echo $b->kelompokmitra; ?><br>
                 </td>
@@ -90,7 +90,7 @@
 
                 <td class="ctr">
                     <a href="<?= base_url('index.php/dosen/detail_anggotapengabdian/') . '/' . $b->idpengabdian;?>"
-                        class="btn btn-primary btn-sm" title="Tambah Data Anggota"><i class="icon-list icon-white">
+                        class="btn btn-info btn-sm" title="Tambah Data Anggota"><i class="icon-list icon-white">
                         </i></a>
                     <a href="<?= base_url('index.php/dosen/detail_luaranpengabdian/') . '/' . $b->idpengabdian;?>"
                         class="btn btn-warning btn-sm" title="Tambah Data Luaran"><i class="icon-file icon-white">

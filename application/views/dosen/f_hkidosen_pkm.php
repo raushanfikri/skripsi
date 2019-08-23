@@ -76,7 +76,7 @@ else
 
 			<?php
 		}
-	?>
+	?> 
 			<tr>
 				<td width="20%">Judul Penelitian</td>
 				<td><b><input type="text" name="judul" required

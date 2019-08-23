@@ -14,12 +14,12 @@
 
 		?>
 		<div class="col-md-3"></div>
-		<div class="col-md-4">
+		<!-- <div class="col-md-4">
 			<form class="navbar-form navbar-left" method="post" action="<?php echo base_URL(); ?>index.php/dosen/dosenbuku/cari" style="margin-top: 0px">
 				<input type="text" class="form-control" name="q" style="width: 200px" placeholder="Kata kunci pencarian ..." required>
 				<button type="submit" class="btn btn-danger"><i class="icon-search icon-white"> </i> Cari</button>
 			</form>
-		</div>
+		</div> -->
 	</div>
 </div>
 
@@ -42,9 +42,9 @@
 	<tbody>
 		<?php  
 		$no=1;
-		if (empty($data)) {
-			echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
-		} else {
+		// if (empty($data)) {
+		// 	echo "<tr><td colspan='7'  style='text-align: center; font-weight: bold'>--Data tidak ditemukan--</td></tr>";
+		// } else {
 			$no 	= ($this->uri->segment(4) + 1);
 			foreach ($data as $b) {
 		?>
@@ -95,7 +95,7 @@
 		</tr>
 		<?php 
 			$no++;
-			}
+			// }
 		}
 		?>
 	</tbody>

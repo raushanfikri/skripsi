@@ -5,7 +5,7 @@ if ($mode == "edt" || $mode == "act_edt") {
 	
 	$act		= "act_edt";
 	$admin_user	=$this->session->userdata('admin_user');
-	$nidn		= $datpil[0]->nidn;
+	$nidn				= $datpil[0]->nidn;
 	$judul				= $datpil[0]->judul;
 	$idpenelitian		= $datpil[0]->idpenelitian;	
 	$institusi			= $datpil[0]->institusi;	
@@ -114,7 +114,8 @@ else{
 		
 	<tr><td width="20%">
 	<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i> Simpan</button>
-	<a href="<?php echo base_URL(); ?>index.php/penelitian/publikasi" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
+	<a href="<?php echo base_URL(); ?>index.php/penelitian/detail_publikasi/<?php echo $this->session->userdata('idpenelitian'); ?>"
+							class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
 	</td></tr>
 	</table>
 </form>

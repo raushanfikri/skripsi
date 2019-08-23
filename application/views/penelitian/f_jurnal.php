@@ -107,7 +107,7 @@ else
 				<td width="20%">Nama Jurnal</td>
 				<td><b><input type="text" name="namajurnal" required value="<?php echo $judul; ?>" style="width: 700px"
 							class="form-control" autofocus></b></td>
-			</tr>
+			</tr> 
 
 			<tr>
 				<td width="20%">Judul</td>
@@ -179,7 +179,8 @@ else
 		
 	<tr><td width="20%">
 	<br><button type="submit" class="btn btn-primary"><i class="icon icon-ok icon-white"></i> Simpan</button>
-	<a href="<?php echo base_URL(); ?>index.php/penelitian/jurnal" class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
+	<a href="<?php echo base_URL(); ?>index.php/penelitian/detail_jurnal/<?php echo $this->session->userdata('idpenelitian'); ?>"
+							class="btn btn-success"><i class="icon icon-arrow-left icon-white"></i> Kembali</a>
 	</td></tr>
 	</table>
 </form>
